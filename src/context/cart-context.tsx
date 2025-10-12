@@ -1,224 +1,195 @@
-'use client';
+'use client'
 
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { CiglissimeProduct } from '@/types/shopify';
+import React, { createContext, useContext, useState, useEffect } from 'react'
+import { ShopifyCart } from '@/types/shopify'
 
-interface CartItem {
-  product: CiglissimeProduct;
-  quantity: number;
-  variantId: string;
+interface CartContextType {
+	cart: ShopifyCart | null
+	isLoading: boolean
+	isOpen: boolean
+	itemCount: number
+	addToCart: (variantId: string, quantity?: number) => Promise<void>
+	updateCartLine: (lineId: string, quantity: number) => Promise<void>
+	removeFromCart: (lineId: string) => Promise<void>
+	toggleCart: () => void
+	openCart: () => void
+	closeCart: () => void
 }
 
-interface CartState {
-  items: CartItem[];
-  isOpen: boolean;
-  total: number;
-  itemCount: number;
-}
+const CartContext = createContext<CartContextType | undefined>(undefined)
 
-type CartAction =
-  | { type: 'ADD_ITEM'; payload: { product: CiglissimeProduct; variantId: string } }
-  | { type: 'REMOVE_ITEM'; payload: { variantId: string } }
-  | { type: 'UPDATE_QUANTITY'; payload: { variantId: string; quantity: number } }
-  | { type: 'CLEAR_CART' }
-  | { type: 'TOGGLE_CART' }
-  | { type: 'OPEN_CART' }
-  | { type: 'CLOSE_CART' };
-
-const CartContext = createContext<{
-  state: CartState;
-  dispatch: React.Dispatch<CartAction>;
-} | null>(null);
-
-function cartReducer(state: CartState, action: CartAction): CartState {
-  switch (action.type) {
-    case 'ADD_ITEM': {
-      const { product, variantId } = action.payload;
-      const existingItem = state.items.find(item => item.variantId === variantId);
-
-      let newItems;
-      if (existingItem) {
-        newItems = state.items.map(item =>
-          item.variantId === variantId
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        newItems = [...state.items, { product, variantId, quantity: 1 }];
-      }
-
-      const total = newItems.reduce((sum, item) => {
-        const price = parseFloat(item.product.priceRange.minVariantPrice.amount);
-        return sum + (price * item.quantity);
-      }, 0);
-
-      const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
-
-      return {
-        ...state,
-        items: newItems,
-        total,
-        itemCount,
-        isOpen: true, // Auto-open cart when item is added
-      };
-    }
-
-    case 'REMOVE_ITEM': {
-      const newItems = state.items.filter(item => item.variantId !== action.payload.variantId);
-      
-      const total = newItems.reduce((sum, item) => {
-        const price = parseFloat(item.product.priceRange.minVariantPrice.amount);
-        return sum + (price * item.quantity);
-      }, 0);
-
-      const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
-
-      return {
-        ...state,
-        items: newItems,
-        total,
-        itemCount,
-      };
-    }
-
-    case 'UPDATE_QUANTITY': {
-      const { variantId, quantity } = action.payload;
-      
-      if (quantity <= 0) {
-        return cartReducer(state, { type: 'REMOVE_ITEM', payload: { variantId } });
-      }
-
-      const newItems = state.items.map(item =>
-        item.variantId === variantId
-          ? { ...item, quantity }
-          : item
-      );
-
-      const total = newItems.reduce((sum, item) => {
-        const price = parseFloat(item.product.priceRange.minVariantPrice.amount);
-        return sum + (price * item.quantity);
-      }, 0);
-
-      const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
-
-      return {
-        ...state,
-        items: newItems,
-        total,
-        itemCount,
-      };
-    }
-
-    case 'CLEAR_CART':
-      return {
-        ...state,
-        items: [],
-        total: 0,
-        itemCount: 0,
-      };
-
-    case 'TOGGLE_CART':
-      return {
-        ...state,
-        isOpen: !state.isOpen,
-      };
-
-    case 'OPEN_CART':
-      return {
-        ...state,
-        isOpen: true,
-      };
-
-    case 'CLOSE_CART':
-      return {
-        ...state,
-        isOpen: false,
-      };
-
-    default:
-      return state;
-  }
-}
-
-const initialState: CartState = {
-  items: [],
-  isOpen: false,
-  total: 0,
-  itemCount: 0,
-};
+const CART_ID_KEY = 'shopify_cart_id'
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, initialState);
+	const [cart, setCart] = useState<ShopifyCart | null>(null)
+	const [isLoading, setIsLoading] = useState(true)
+	const [isOpen, setIsOpen] = useState(false)
 
-  // Load cart from localStorage on mount
-  useEffect(() => {
-    const savedCart = localStorage.getItem('ciglissime-cart');
-    if (savedCart) {
-      try {
-        const parsed = JSON.parse(savedCart);
-        parsed.items.forEach((item: CartItem) => {
-          dispatch({
-            type: 'ADD_ITEM',
-            payload: {
-              product: item.product,
-              variantId: item.variantId,
-            },
-          });
-          // Update quantity if needed
-          if (item.quantity > 1) {
-            dispatch({
-              type: 'UPDATE_QUANTITY',
-              payload: {
-                variantId: item.variantId,
-                quantity: item.quantity,
-              },
-            });
-          }
-        });
-      } catch (error) {
-        console.error('Error loading cart from localStorage:', error);
-      }
-    }
-  }, []);
+	// Calculate item count from cart lines
+	const itemCount = cart?.lines.edges.reduce(
+		(total, edge) => total + edge.node.quantity,
+		0
+	) || 0
 
-  // Save cart to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('ciglissime-cart', JSON.stringify({
-      items: state.items,
-      total: state.total,
-      itemCount: state.itemCount,
-    }));
-  }, [state.items, state.total, state.itemCount]);
+	// Load cart from localStorage on mount
+	useEffect(() => {
+		async function loadCart() {
+			try {
+				const cartId = localStorage.getItem(CART_ID_KEY)
+				if (cartId) {
+					const response = await fetch('/api/cart', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ action: 'get', cartId }),
+					})
 
-  return (
-    <CartContext.Provider value={{ state, dispatch }}>
-      {children}
-    </CartContext.Provider>
-  );
+					if (response.ok) {
+						const data = await response.json()
+						setCart(data.cart)
+					} else {
+						// Clear invalid cart ID
+						localStorage.removeItem(CART_ID_KEY)
+					}
+				}
+			} catch (error) {
+				console.error('Error loading cart:', error)
+			} finally {
+				setIsLoading(false)
+			}
+		}
+
+		loadCart()
+	}, [])
+
+	const addToCart = async (variantId: string, quantity = 1) => {
+		try {
+			setIsLoading(true)
+
+			const cartId = cart?.id || localStorage.getItem(CART_ID_KEY)
+			const action = cartId ? 'add' : 'create'
+
+			const response = await fetch('/api/cart', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					action,
+					cartId,
+					variantId,
+					quantity,
+				}),
+			})
+
+			if (!response.ok) {
+				throw new Error('Failed to add to cart')
+			}
+
+			const data = await response.json()
+			setCart(data.cart)
+
+			// Save cart ID to localStorage
+			if (data.cart?.id) {
+				localStorage.setItem(CART_ID_KEY, data.cart.id)
+			}
+
+			// Auto-open cart drawer
+			setIsOpen(true)
+		} catch (error) {
+			console.error('Error adding to cart:', error)
+			throw error
+		} finally {
+			setIsLoading(false)
+		}
+	}
+
+	const updateCartLine = async (lineId: string, quantity: number) => {
+		if (!cart?.id) return
+
+		try {
+			setIsLoading(true)
+
+			const response = await fetch('/api/cart', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					action: 'update',
+					cartId: cart.id,
+					lineId,
+					quantity,
+				}),
+			})
+
+			if (!response.ok) {
+				throw new Error('Failed to update cart')
+			}
+
+			const data = await response.json()
+			setCart(data.cart)
+		} catch (error) {
+			console.error('Error updating cart:', error)
+			throw error
+		} finally {
+			setIsLoading(false)
+		}
+	}
+
+	const removeFromCart = async (lineId: string) => {
+		if (!cart?.id) return
+
+		try {
+			setIsLoading(true)
+
+			const response = await fetch('/api/cart', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					action: 'remove',
+					cartId: cart.id,
+					lineId,
+				}),
+			})
+
+			if (!response.ok) {
+				throw new Error('Failed to remove from cart')
+			}
+
+			const data = await response.json()
+			setCart(data.cart)
+		} catch (error) {
+			console.error('Error removing from cart:', error)
+			throw error
+		} finally {
+			setIsLoading(false)
+		}
+	}
+
+	const toggleCart = () => setIsOpen((prev) => !prev)
+	const openCart = () => setIsOpen(true)
+	const closeCart = () => setIsOpen(false)
+
+	return (
+		<CartContext.Provider
+			value={{
+				cart,
+				isLoading,
+				isOpen,
+				itemCount,
+				addToCart,
+				updateCartLine,
+				removeFromCart,
+				toggleCart,
+				openCart,
+				closeCart,
+			}}
+		>
+			{children}
+		</CartContext.Provider>
+	)
 }
 
 export function useCart() {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error('useCart must be used within a CartProvider');
-  }
-  return context;
-}
-
-// Helper hooks
-export function useCartActions() {
-  const { dispatch } = useCart();
-
-  return {
-    addItem: (product: CiglissimeProduct, variantId: string = product.variants[0]?.id || '1') =>
-      dispatch({ type: 'ADD_ITEM', payload: { product, variantId } }),
-    removeItem: (variantId: string) =>
-      dispatch({ type: 'REMOVE_ITEM', payload: { variantId } }),
-    updateQuantity: (variantId: string, quantity: number) =>
-      dispatch({ type: 'UPDATE_QUANTITY', payload: { variantId, quantity } }),
-    clearCart: () => dispatch({ type: 'CLEAR_CART' }),
-    toggleCart: () => dispatch({ type: 'TOGGLE_CART' }),
-    openCart: () => dispatch({ type: 'OPEN_CART' }),
-    closeCart: () => dispatch({ type: 'CLOSE_CART' }),
-  };
+	const context = useContext(CartContext)
+	if (context === undefined) {
+		throw new Error('useCart must be used within a CartProvider')
+	}
+	return context
 }

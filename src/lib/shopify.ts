@@ -1,9 +1,14 @@
-import { ShopifyProduct, ShopifyCollection, CiglissimeProduct } from '@/types/shopify';
+import { ShopifyProduct, ShopifyCollection, CiglissimeProduct, ShopifyCart } from '@/types/shopify';
 import {
   GET_PRODUCTS_QUERY,
   GET_PRODUCT_BY_HANDLE_QUERY,
   GET_COLLECTIONS_QUERY,
   GET_COLLECTION_BY_HANDLE_QUERY,
+  CREATE_CART_MUTATION,
+  ADD_TO_CART_MUTATION,
+  UPDATE_CART_LINES_MUTATION,
+  REMOVE_FROM_CART_MUTATION,
+  GET_CART_QUERY,
 } from './shopify-queries';
 
 const SHOPIFY_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN || '';
@@ -85,6 +90,33 @@ async function shopifyFetch<T>({
   }
 }
 
+// Transform raw Shopify API response to our ShopifyProduct format
+function transformShopifyProductData(rawProduct: any): ShopifyProduct {
+  console.log('🔍 RAW PRODUCT DATA:', {
+    title: rawProduct.title,
+    rawImages: rawProduct.images,
+    imagesEdges: rawProduct.images?.edges,
+  });
+
+  const transformedImages = rawProduct.images?.edges?.map((edge: any) => edge.node) || [];
+  
+  console.log('✅ TRANSFORMED IMAGES:', transformedImages);
+
+  return {
+    id: rawProduct.id,
+    title: rawProduct.title,
+    handle: rawProduct.handle,
+    description: rawProduct.description,
+    vendor: rawProduct.vendor,
+    productType: rawProduct.productType,
+    tags: rawProduct.tags,
+    images: transformedImages,
+    variants: rawProduct.variants?.edges?.map((edge: any) => edge.node) || [],
+    priceRange: rawProduct.priceRange,
+    compareAtPriceRange: rawProduct.compareAtPriceRange,
+  };
+}
+
 // Transform Shopify product to our extended format
 function transformToCiglissimeProduct(product: ShopifyProduct): CiglissimeProduct {
   return {
@@ -117,7 +149,7 @@ export async function getProducts(first = 20, query?: string): Promise<Ciglissim
   try {
     const data = await shopifyFetch<{
       products: {
-        edges: Array<{ node: ShopifyProduct }>;
+        edges: Array<{ node: any }>;
       };
     }>({
       query: GET_PRODUCTS_QUERY,
@@ -125,7 +157,19 @@ export async function getProducts(first = 20, query?: string): Promise<Ciglissim
       revalidate: 3600, // Cache for 1 hour
     });
 
-    return data.products.edges.map(({ node }) => transformToCiglissimeProduct(node));
+    console.log('📦 FETCHED PRODUCTS:', data.products.edges.length);
+
+    return data.products.edges.map(({ node }) => {
+      const product = transformShopifyProductData(node);
+      const ciglissimeProduct = transformToCiglissimeProduct(product);
+      
+      console.log('🎁 FINAL PRODUCT:', {
+        title: ciglissimeProduct.title,
+        images: ciglissimeProduct.images,
+      });
+      
+      return ciglissimeProduct;
+    });
   } catch (error) {
     console.error('Error fetching products:', error);
     // Return empty array instead of failing completely
@@ -136,7 +180,7 @@ export async function getProducts(first = 20, query?: string): Promise<Ciglissim
 export async function getProductByHandle(handle: string): Promise<CiglissimeProduct | null> {
   try {
     const data = await shopifyFetch<{
-      productByHandle: ShopifyProduct;
+      productByHandle: any;
     }>({
       query: GET_PRODUCT_BY_HANDLE_QUERY,
       variables: { handle },
@@ -146,7 +190,8 @@ export async function getProductByHandle(handle: string): Promise<CiglissimeProd
       return null;
     }
 
-    return transformToCiglissimeProduct(data.productByHandle);
+    const product = transformShopifyProductData(data.productByHandle);
+    return transformToCiglissimeProduct(product);
   } catch (error) {
     console.error('Error fetching product:', error);
     return null;
@@ -203,5 +248,112 @@ export async function getFeaturedProducts(first = 8): Promise<CiglissimeProduct[
   } catch (error) {
     console.error('Error fetching featured products:', error);
     return [];
+  }
+}
+
+// Cart API functions
+export async function createCart(variantId: string, quantity: number): Promise<ShopifyCart> {
+  const data = await shopifyFetch<{
+    cartCreate: {
+      cart: ShopifyCart;
+      userErrors: Array<{ field: string; message: string }>;
+    };
+  }>({
+    query: CREATE_CART_MUTATION,
+    variables: {
+      input: {
+        lines: [{ merchandiseId: variantId, quantity }],
+      },
+    },
+    cache: 'no-store',
+  });
+
+  if (data.cartCreate.userErrors.length > 0) {
+    throw new Error(data.cartCreate.userErrors[0].message);
+  }
+
+  return data.cartCreate.cart;
+}
+
+export async function addToCart(cartId: string, variantId: string, quantity: number): Promise<ShopifyCart> {
+  const data = await shopifyFetch<{
+    cartLinesAdd: {
+      cart: ShopifyCart;
+      userErrors: Array<{ field: string; message: string }>;
+    };
+  }>({
+    query: ADD_TO_CART_MUTATION,
+    variables: {
+      cartId,
+      lines: [{ merchandiseId: variantId, quantity }],
+    },
+    cache: 'no-store',
+  });
+
+  if (data.cartLinesAdd.userErrors.length > 0) {
+    throw new Error(data.cartLinesAdd.userErrors[0].message);
+  }
+
+  return data.cartLinesAdd.cart;
+}
+
+export async function updateCartLines(cartId: string, lineId: string, quantity: number): Promise<ShopifyCart> {
+  const data = await shopifyFetch<{
+    cartLinesUpdate: {
+      cart: ShopifyCart;
+      userErrors: Array<{ field: string; message: string }>;
+    };
+  }>({
+    query: UPDATE_CART_LINES_MUTATION,
+    variables: {
+      cartId,
+      lines: [{ id: lineId, quantity }],
+    },
+    cache: 'no-store',
+  });
+
+  if (data.cartLinesUpdate.userErrors.length > 0) {
+    throw new Error(data.cartLinesUpdate.userErrors[0].message);
+  }
+
+  return data.cartLinesUpdate.cart;
+}
+
+export async function removeFromCart(cartId: string, lineIds: string[]): Promise<ShopifyCart> {
+  const data = await shopifyFetch<{
+    cartLinesRemove: {
+      cart: ShopifyCart;
+      userErrors: Array<{ field: string; message: string }>;
+    };
+  }>({
+    query: REMOVE_FROM_CART_MUTATION,
+    variables: {
+      cartId,
+      lineIds,
+    },
+    cache: 'no-store',
+  });
+
+  if (data.cartLinesRemove.userErrors.length > 0) {
+    throw new Error(data.cartLinesRemove.userErrors[0].message);
+  }
+
+  return data.cartLinesRemove.cart;
+}
+
+export async function getCart(cartId: string): Promise<ShopifyCart | null> {
+  try {
+    const data = await shopifyFetch<{
+      cart: ShopifyCart;
+    }>({
+      query: GET_CART_QUERY,
+      variables: { cartId },
+      cache: 'no-store',
+    });
+
+    return data.cart;
+  } catch (error) {
+    console.error('Error fetching cart:', error);
+    return null;
   }
 }

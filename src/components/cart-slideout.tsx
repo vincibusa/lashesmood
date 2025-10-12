@@ -3,42 +3,43 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { X, Plus, Minus, ShoppingBag, Gift, Truck } from 'lucide-react';
+import { X, Plus, Minus, ShoppingBag, Gift, Truck, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { useCart, useCartActions } from '@/context/cart-context';
+import { useCart } from '@/context/cart-context';
 import { formatPrice } from '@/lib/utils';
 
 const CartSlideout = () => {
-  const { state } = useCart();
-  const { removeItem, updateQuantity, closeCart } = useCartActions();
+  const { cart, isLoading, isOpen, itemCount, updateCartLine, removeFromCart, closeCart } = useCart();
+
+  // Calculate total from cart
+  const total = cart ? parseFloat(cart.cost.totalAmount.amount) : 0;
+  const subtotal = cart ? parseFloat(cart.cost.subtotalAmount.amount) : 0;
 
   const giftThreshold = 42.00;
   const freeShippingThreshold = 49.99;
-  const remainingForGift = Math.max(0, giftThreshold - state.total);
-  const remainingForShipping = Math.max(0, freeShippingThreshold - state.total);
-  const giftEligible = state.total >= giftThreshold;
-  const freeShippingEligible = state.total >= freeShippingThreshold;
+  const remainingForGift = Math.max(0, giftThreshold - subtotal);
+  const remainingForShipping = Math.max(0, freeShippingThreshold - subtotal);
+  const giftEligible = subtotal >= giftThreshold;
+  const freeShippingEligible = subtotal >= freeShippingThreshold;
+
+  const cartLines = cart?.lines.edges || [];
+  const hasItems = cartLines.length > 0;
 
   return (
-    <Sheet open={state.isOpen} onOpenChange={closeCart}>
+    <Sheet open={isOpen} onOpenChange={closeCart}>
       <SheetContent side="right" className="w-full sm:max-w-lg p-0 flex flex-col">
         {/* Header */}
         <SheetHeader className="p-6 border-b">
-          <div className="flex items-center justify-between">
-            <SheetTitle className="flex items-center space-x-2">
-              <ShoppingBag className="h-5 w-5 text-brand-primary" />
-              <span>Carrello ({state.itemCount})</span>
-            </SheetTitle>
-            <Button variant="ghost" size="icon" onClick={closeCart}>
-              <X className="h-5 w-5" />
-            </Button>
-          </div>
+          <SheetTitle className="flex items-center space-x-2">
+            <ShoppingBag className="h-5 w-5 text-brand-primary" />
+            <span>Carrello ({itemCount})</span>
+          </SheetTitle>
         </SheetHeader>
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto">
-          {state.items.length === 0 ? (
+          {!hasItems ? (
             /* Empty Cart */
             <div className="flex flex-col items-center justify-center h-full p-6 text-center">
               <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
@@ -71,9 +72,9 @@ const CartSlideout = () => {
                       </span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
+                      <div
                         className="bg-brand-primary rounded-full h-2 transition-all duration-300"
-                        style={{ width: `${Math.min(100, (state.total / giftThreshold) * 100)}%` }}
+                        style={{ width: `${Math.min(100, (subtotal / giftThreshold) * 100)}%` }}
                       />
                     </div>
                   </div>
@@ -100,9 +101,9 @@ const CartSlideout = () => {
                       </span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
+                      <div
                         className="bg-blue-500 rounded-full h-2 transition-all duration-300"
-                        style={{ width: `${Math.min(100, (state.total / freeShippingThreshold) * 100)}%` }}
+                        style={{ width: `${Math.min(100, (subtotal / freeShippingThreshold) * 100)}%` }}
                       />
                     </div>
                   </div>
@@ -122,20 +123,20 @@ const CartSlideout = () => {
 
               {/* Cart Items */}
               <div className="space-y-4">
-                {state.items.map((item) => {
-                  const originalPrice = item.product.compareAtPriceRange?.minVariantPrice.amount;
-                  const salePrice = item.product.priceRange.minVariantPrice.amount;
-                  const hasDiscount = originalPrice && parseFloat(originalPrice) > parseFloat(salePrice);
+                {cartLines.map(({ node: line }) => {
+                  const price = parseFloat(line.merchandise.price.amount);
+                  const lineTotal = parseFloat(line.cost.totalAmount.amount);
+                  const productImage = line.merchandise.product.images.edges[0]?.node;
 
                   return (
-                    <div key={item.variantId} className="flex space-x-4 p-4 bg-gray-50 rounded-lg">
+                    <div key={line.id} className="flex space-x-4 p-4 bg-gray-50 rounded-lg">
                       {/* Product Image */}
                       <div className="flex-shrink-0">
                         <div className="w-20 h-20 bg-white rounded-lg overflow-hidden">
-                          {item.product.images[0] && (
+                          {productImage && (
                             <Image
-                              src={item.product.images[0].url}
-                              alt={item.product.title}
+                              src={productImage.url}
+                              alt={productImage.altText || line.merchandise.product.title}
                               width={80}
                               height={80}
                               className="w-full h-full object-cover"
@@ -146,20 +147,27 @@ const CartSlideout = () => {
 
                       {/* Product Info */}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-medium text-gray-900 line-clamp-2">
-                          {item.product.title}
-                        </h3>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {item.product.vendor}
-                        </p>
-                        
+                        <Link
+                          href={`/products/${line.merchandise.product.handle}`}
+                          onClick={closeCart}
+                        >
+                          <h3 className="font-medium text-gray-900 line-clamp-2 hover:text-brand-primary transition-colors">
+                            {line.merchandise.product.title}
+                          </h3>
+                        </Link>
+                        {line.merchandise.title !== 'Default Title' && (
+                          <p className="text-xs text-gray-500 mt-1">
+                            {line.merchandise.title}
+                          </p>
+                        )}
+
                         <div className="flex items-center space-x-2 mt-2">
                           <span className="font-bold text-gray-900">
-                            {formatPrice(parseFloat(salePrice), '€')}
+                            {formatPrice(price, line.cost.totalAmount.currencyCode)}
                           </span>
-                          {hasDiscount && (
-                            <span className="text-xs text-gray-500 line-through">
-                              {formatPrice(parseFloat(originalPrice!), '€')}
+                          {line.quantity > 1 && (
+                            <span className="text-xs text-gray-500">
+                              x{line.quantity} = {formatPrice(lineTotal, line.cost.totalAmount.currencyCode)}
                             </span>
                           )}
                         </div>
@@ -171,28 +179,39 @@ const CartSlideout = () => {
                               variant="outline"
                               size="icon"
                               className="h-8 w-8"
-                              onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
+                              onClick={() => updateCartLine(line.id, line.quantity - 1)}
+                              disabled={isLoading}
                             >
-                              <Minus className="h-3 w-3" />
+                              {isLoading ? (
+                                <Loader2 className="h-3 w-3 animate-spin" />
+                              ) : (
+                                <Minus className="h-3 w-3" />
+                              )}
                             </Button>
                             <span className="w-8 text-center text-sm font-medium">
-                              {item.quantity}
+                              {line.quantity}
                             </span>
                             <Button
                               variant="outline"
                               size="icon"
                               className="h-8 w-8"
-                              onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
+                              onClick={() => updateCartLine(line.id, line.quantity + 1)}
+                              disabled={isLoading}
                             >
-                              <Plus className="h-3 w-3" />
+                              {isLoading ? (
+                                <Loader2 className="h-3 w-3 animate-spin" />
+                              ) : (
+                                <Plus className="h-3 w-3" />
+                              )}
                             </Button>
                           </div>
-                          
+
                           <Button
                             variant="ghost"
                             size="sm"
                             className="text-red-500 hover:text-red-700 p-1"
-                            onClick={() => removeItem(item.variantId)}
+                            onClick={() => removeFromCart(line.id)}
+                            disabled={isLoading}
                           >
                             <X className="h-4 w-4" />
                           </Button>
@@ -207,23 +226,55 @@ const CartSlideout = () => {
         </div>
 
         {/* Footer */}
-        {state.items.length > 0 && (
+        {hasItems && cart && (
           <div className="border-t p-6 space-y-4">
-            {/* Subtotal */}
-            <div className="flex justify-between items-center text-lg font-bold">
-              <span>Totale</span>
-              <span>{formatPrice(state.total, '€')}</span>
+            {/* Subtotal & Tax */}
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Subtotale</span>
+                <span className="font-medium">
+                  {formatPrice(subtotal, cart.cost.subtotalAmount.currencyCode)}
+                </span>
+              </div>
+              {cart.cost.totalTaxAmount && parseFloat(cart.cost.totalTaxAmount.amount) > 0 && (
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-600">IVA</span>
+                  <span>
+                    {formatPrice(
+                      parseFloat(cart.cost.totalTaxAmount.amount),
+                      cart.cost.totalTaxAmount.currencyCode
+                    )}
+                  </span>
+                </div>
+              )}
+              <div className="flex justify-between items-center text-lg font-bold pt-2 border-t">
+                <span>Totale</span>
+                <span>{formatPrice(total, cart.cost.totalAmount.currencyCode)}</span>
+              </div>
             </div>
 
             {/* Checkout Button */}
-            <Button className="w-full btn-primary py-3 text-lg font-medium">
-              Procedi al Checkout
+            <Button
+              className="w-full btn-primary py-3 text-lg font-medium"
+              asChild
+              disabled={isLoading}
+            >
+              <a href={cart.checkoutUrl} target="_blank" rel="noopener noreferrer">
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Caricamento...
+                  </>
+                ) : (
+                  'Procedi al Checkout'
+                )}
+              </a>
             </Button>
 
             {/* Continue Shopping */}
-            <Button 
-              variant="outline" 
-              className="w-full" 
+            <Button
+              variant="outline"
+              className="w-full"
               onClick={closeCart}
               asChild
             >

@@ -20,19 +20,19 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
 		'press-go-kit-completo': {
 			title: 'Starter Kit Press&GO!',
 			description: 'Starter Kit Completo',
-			image: '/images/collection-hero.jpg',
-			products: products,
+			image: 'https://ciglissime.com/cdn/shop/files/IMG_1518_9X16-_2.jpg?v=1758388075&width=1920',
+			products,
 		},
 		regular: {
 			title: 'Kit Regular',
 			description: 'Kit completi con Bond&Seal per una durata maggiore',
-			image: '/images/regular-hero.jpg',
-			products: products,
+			image: 'https://ciglissime.com/cdn/shop/files/CLEAN_GIRLKit_Regular.jpg?v=1750413810&width=1920',
+			products,
 		},
 		accessori: {
 			title: 'Accessori',
 			description: 'Pinze, piegaciglia e accessori per le tue Ciglissime',
-			image: '/images/accessories-hero.jpg',
+			image: 'https://ciglissime.com/cdn/shop/files/Clean_Girl_4b943c04-4570-4118-af4a-80c653792089.jpg?v=1750413037&width=1920',
 			products: products.slice(0, 2),
 		},
 	}

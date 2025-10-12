@@ -150,8 +150,14 @@ const Footer = () => {
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
-              <img src="/payment-icons.png" alt="Metodi di pagamento" className="h-6" />
+            <div className="flex items-center gap-2 text-gray-400">
+              <span className="text-xs">Accettiamo:</span>
+              <div className="flex items-center gap-1 text-[10px] font-medium">
+                <span className="px-2 py-1 bg-gray-100 rounded">VISA</span>
+                <span className="px-2 py-1 bg-gray-100 rounded">Mastercard</span>
+                <span className="px-2 py-1 bg-gray-100 rounded">PayPal</span>
+                <span className="px-2 py-1 bg-gray-100 rounded">Klarna</span>
+              </div>
             </div>
           </div>
         </div>

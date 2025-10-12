@@ -17,28 +17,33 @@ const GiftThreshold: React.FC<GiftThresholdProps> = ({
   threshold = 42.00,
   giftTitle = "Specchietto CIGLISSIME",
   giftValue = 11.00,
-  giftImage = "/images/gift-specchietto.jpg"
+  giftImage = "https://ciglissime.com/cdn/shop/files/Clean_Girl_4b943c04-4570-4118-af4a-80c653792089.jpg?v=1750413037&width=200"
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const { state } = useCart();
+  const { cart, isLoading } = useCart();
 
-  // Use cart total instead of prop
-  const cartTotal = state.total;
+  // Calculate cart total from Shopify cart - safely handle null/undefined
+  const cartTotal = cart?.cost?.subtotalAmount?.amount 
+    ? parseFloat(cart.cost.subtotalAmount.amount) 
+    : 0;
   const remaining = Math.max(0, threshold - cartTotal);
   const progress = Math.min(100, (cartTotal / threshold) * 100);
   const isEligible = cartTotal >= threshold;
 
   useEffect(() => {
-    // Show the gift threshold after a short delay
+    // Show the gift threshold after cart is loaded and a short delay
+    if (isLoading) return;
+
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [isLoading]);
 
-  if (!isVisible) return null;
+  // Don't show while loading or if not visible
+  if (isLoading || !isVisible) return null;
 
   return (
     <div className={`fixed right-4 bottom-4 z-50 transition-all duration-300 ${

@@ -50,7 +50,7 @@ export interface ShopifyVariant {
     currencyCode: string;
   };
   availableForSale: boolean;
-  quantityAvailable: number;
+  quantityAvailable?: number;
   selectedOptions: {
     name: string;
     value: string;
@@ -72,13 +72,22 @@ export interface ShopifyCollection {
 
 export interface ShopifyCart {
   id: string;
-  lines: ShopifyCartLine[];
+  checkoutUrl: string;
+  lines: {
+    edges: {
+      node: ShopifyCartLine;
+    }[];
+  };
   cost: {
     totalAmount: {
       amount: string;
       currencyCode: string;
     };
     subtotalAmount: {
+      amount: string;
+      currencyCode: string;
+    };
+    totalTaxAmount?: {
       amount: string;
       currencyCode: string;
     };
@@ -91,7 +100,22 @@ export interface ShopifyCartLine {
   merchandise: {
     id: string;
     title: string;
-    product: ShopifyProduct;
+    price: {
+      amount: string;
+      currencyCode: string;
+    };
+    product: {
+      title: string;
+      handle: string;
+      images: {
+        edges: {
+          node: {
+            url: string;
+            altText?: string;
+          };
+        }[];
+      };
+    };
     selectedOptions: {
       name: string;
       value: string;

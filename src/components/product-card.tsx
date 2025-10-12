@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { CiglissimeProduct } from '@/types/shopify';
 import { formatPrice, formatDiscount } from '@/lib/utils';
-import { useCartActions } from '@/context/cart-context';
+import { useCart } from '@/context/cart-context';
 
 interface ProductCardProps {
   product: CiglissimeProduct;
@@ -17,14 +17,22 @@ interface ProductCardProps {
   className?: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ 
-  product, 
+const ProductCard: React.FC<ProductCardProps> = ({
+  product,
   showQuickAdd = true,
-  className = "" 
+  className = ""
 }) => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { addItem } = useCartActions();
+  const [isAdding, setIsAdding] = useState(false);
+  const { addToCart } = useCart();
+
+  console.log('🎴 PRODUCT CARD:', {
+    title: product.title,
+    images: product.images,
+    imagesLength: product.images?.length,
+    firstImage: product.images?.[0],
+  });
 
   const primaryImage = product.images[0];
   const secondaryImage = product.images[1];
@@ -41,14 +49,30 @@ const ProductCard: React.FC<ProductCardProps> = ({
     setIsWishlisted(!isWishlisted);
   };
 
-  const handleQuickAdd = (e: React.MouseEvent) => {
+  const handleQuickAdd = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addItem(product);
+
+    // Get the first available variant
+    const firstVariant = product.variants[0];
+    if (!firstVariant) {
+      console.error('No variants available for product:', product.title);
+      return;
+    }
+
+    try {
+      setIsAdding(true);
+      await addToCart(firstVariant.id, 1);
+    } catch (error) {
+      console.error('Error adding product to cart:', error);
+      // You could add a toast notification here
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   return (
-    <Card className={`card-product ${className}`}>
+    <Card className={`card-product !bg-none !shadow-none !border-none ${className}`}>
       <div className="relative">
         {/* Product Images */}
         <Link href={`/products/${product.handle}`}>
@@ -114,12 +138,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {/* Quick Add Button */}
             {showQuickAdd && (
               <div className="absolute bottom-3 left-3 right-3 opacity-0 hover:opacity-100 transition-all duration-300 transform translate-y-2 hover:translate-y-0">
-                <Button 
+                <Button
                   className="w-full bg-brand-primary hover:bg-brand-primary/90 text-white font-medium"
                   onClick={handleQuickAdd}
+                  disabled={isAdding}
                 >
                   <ShoppingBag className="h-4 w-4 mr-2" />
-                  Aggiungi al carrello
+                  {isAdding ? 'Aggiunta...' : 'Aggiungi al carrello'}
                 </Button>
               </div>
             )}

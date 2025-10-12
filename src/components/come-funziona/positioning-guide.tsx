@@ -9,7 +9,7 @@ const PositioningGuide = () => {
 				<div className="max-w-4xl mx-auto">
 					<div className="text-center mb-12">
 						<Image
-							src="/images/posizionamento-guide.jpg"
+							src="https://ciglissime.com/cdn/shop/files/clean_girl_press.jpg?v=1750417193&width=1500"
 							alt="Guida posizionamento ciuffetti"
 							width={800}
 							height={400}

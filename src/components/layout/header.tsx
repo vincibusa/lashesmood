@@ -6,13 +6,12 @@ import { Search, User, ShoppingBag, Menu, Heart, LayoutGrid, Zap, Package, BookO
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
-import { useCart, useCartActions } from '@/context/cart-context';
+import { useCart } from '@/context/cart-context';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showBanners, setShowBanners] = useState(true);
-  const { state } = useCart();
-  const { toggleCart } = useCartActions();
+  const { itemCount, toggleCart } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -134,12 +133,12 @@ const Header = () => {
             {/* Cart */}
             <Button variant="ghost" size="icon" className="relative" onClick={toggleCart}>
               <ShoppingBag className="h-5 w-5" />
-              {state.itemCount > 0 && (
-                <Badge 
-                  variant="destructive" 
+              {itemCount > 0 && (
+                <Badge
+                  variant="destructive"
                   className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs bg-brand-primary border-0"
                 >
-                  {state.itemCount}
+                  {itemCount}
                 </Badge>
               )}
             </Button>

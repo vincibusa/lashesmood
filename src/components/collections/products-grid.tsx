@@ -2,10 +2,10 @@ import React from 'react'
 import Link from 'next/link'
 import ProductCard from '@/components/product-card'
 import { Button } from '@/components/ui/button'
-import { ShopifyProduct } from '@/types/shopify'
+import { CiglissimeProduct } from '@/types/shopify'
 
 interface ProductsGridProps {
-	products: ShopifyProduct[]
+	products: CiglissimeProduct[]
 }
 
 const ProductsGrid = ({ products }: ProductsGridProps) => {

@@ -155,8 +155,10 @@ body {
     @apply border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white font-semibold px-8 py-3 rounded-xl transition-all duration-300;
   }
   
-  .card-product {
-    @apply bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-brand-primary/20;
+
+  
+  .aspect-product {
+    aspect-ratio: 9 / 16;
   }
   
   .text-gradient {
