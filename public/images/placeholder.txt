@@ -1,0 +1,32 @@
+# Placeholder for images directory
+
+Add the following images to complete the design:
+
+## Hero Section
+- hero-bg.jpg (main hero background)
+
+## Collection Gallery  
+- collection-1.jpg
+- collection-2.jpg
+- collection-3.jpg
+- collection-4.jpg
+
+## Before/After
+- before.jpg
+- after.jpg
+
+## Social Proof
+- social-1.jpg
+- social-2.jpg
+- social-3.jpg
+- social-4.jpg
+- social-5.jpg
+
+## Gift
+- gift-specchietto.jpg
+
+## Products
+- glamour-black-1.jpg
+- glamour-black-2.jpg
+
+For now, Next.js will show a broken image icon for missing images.
