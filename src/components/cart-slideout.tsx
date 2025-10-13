@@ -16,6 +16,13 @@ const CartSlideout = () => {
   const total = cart ? parseFloat(cart.cost.totalAmount.amount) : 0;
   const subtotal = cart ? parseFloat(cart.cost.subtotalAmount.amount) : 0;
 
+  // Log cart for debugging
+  console.log('🛒 [CART SLIDEOUT] Cart:', {
+    hasCart: !!cart,
+    checkoutUrl: cart?.checkoutUrl,
+    itemCount,
+  });
+
   const giftThreshold = 42.00;
   const freeShippingThreshold = 49.99;
   const remainingForGift = Math.max(0, giftThreshold - subtotal);

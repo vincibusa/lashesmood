@@ -40,7 +40,7 @@ const HeroSection = () => {
 								<Button
 									asChild
 									size="lg"
-									className="btn-primary text-lg px-8 py-4 hover:scale-105 transition-all duration-300"
+									className="btn-primary text-lg px-8 py-4 hover:scale-105 transition-all duration-300 w-full sm:w-auto"
 								>
 									<Link href="/collections/press-go-kit-completo">
 										Scopri le press&go
@@ -50,7 +50,7 @@ const HeroSection = () => {
 									asChild
 									variant="outline"
 									size="lg"
-									className="text-lg px-8 py-4 bg-white/90 hover:bg-white hover:scale-105 transition-all duration-300"
+									className="text-lg px-8 py-4 bg-white/90 hover:bg-white hover:scale-105 transition-all duration-300 w-full sm:w-auto"
 								>
 									<Link href="/come-funziona">PROVA ORA</Link>
 								</Button>

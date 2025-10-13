@@ -1,18 +1,23 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Star, Clock, Truck, Shield, HeadphonesIcon } from 'lucide-react'
+import { Star, Clock, Truck, Shield, HeadphonesIcon, ShoppingBag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
-import { ShopifyProduct } from '@/types/shopify'
+import { CiglissimeProduct } from '@/types/shopify'
 import { formatPrice, formatDiscount } from '@/lib/utils'
+import { useCart } from '@/context/cart-context'
 
 interface ProductDetailProps {
-	product: ShopifyProduct
+	product: CiglissimeProduct
 }
 
 const ProductDetail = ({ product }: ProductDetailProps) => {
+	const [isAdding, setIsAdding] = useState(false)
+	const { addToCart } = useCart()
 	const originalPrice = product.compareAtPriceRange?.minVariantPrice.amount
 	const salePrice = product.priceRange.minVariantPrice.amount
 	const hasDiscount =
@@ -26,6 +31,24 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 		text: "È già il secondo acquisto, le prime sono state le Clean Girl ed ogni applicazione è arrivata a durarmi anche due settimane, per cui soddisfatta ho deciso di provare un altro modello un po' più voluminoso, le Glamour Black. Le adoro",
 		rating: 5,
 		verified: true,
+	}
+
+	const handleAddToCart = async () => {
+		// Get the first available variant
+		const firstVariant = product.variants[0]
+		if (!firstVariant) {
+			console.error('No variants available for product:', product.title)
+			return
+		}
+
+		try {
+			setIsAdding(true)
+			await addToCart(firstVariant.id, 1)
+		} catch (error) {
+			console.error('Error adding product to cart:', error)
+		} finally {
+			setIsAdding(false)
+		}
 	}
 
 	return (
@@ -169,8 +192,14 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 						</div>
 
 						{/* Add to Cart */}
-						<Button size="lg" className="w-full btn-primary text-lg py-4">
-							Aggiungi al carrello
+						<Button 
+							size="lg" 
+							className="w-full btn-primary text-lg py-4"
+							onClick={handleAddToCart}
+							disabled={isAdding}
+						>
+							<ShoppingBag className="h-5 w-5 mr-2" />
+							{isAdding ? 'Aggiunta in corso...' : 'Aggiungi al carrello'}
 						</Button>
 
 						{/* Trust Badges */}

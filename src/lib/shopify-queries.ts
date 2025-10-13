@@ -150,6 +150,7 @@ export const CREATE_CART_MUTATION = `
     cartCreate(input: $input) {
       cart {
         id
+        checkoutUrl
         lines(first: 10) {
           edges {
             node {
@@ -215,6 +216,7 @@ export const ADD_TO_CART_MUTATION = `
     cartLinesAdd(cartId: $cartId, lines: $lines) {
       cart {
         id
+        checkoutUrl
         lines(first: 10) {
           edges {
             node {
@@ -280,6 +282,7 @@ export const UPDATE_CART_LINES_MUTATION = `
     cartLinesUpdate(cartId: $cartId, lines: $lines) {
       cart {
         id
+        checkoutUrl
         lines(first: 10) {
           edges {
             node {
@@ -345,6 +348,7 @@ export const REMOVE_FROM_CART_MUTATION = `
     cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
       cart {
         id
+        checkoutUrl
         lines(first: 10) {
           edges {
             node {

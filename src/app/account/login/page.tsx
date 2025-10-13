@@ -15,6 +15,7 @@ import {
 	CardFooter,
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { PasswordInput } from '@/components/ui/password-input'
 
 export default function AccountLoginPage() {
 	const router = useRouter()
@@ -66,9 +67,8 @@ export default function AccountLoginPage() {
 							<label htmlFor='password' className='text-sm font-medium text-gray-700'>
 								Password
 							</label>
-							<Input
+							<PasswordInput
 								id='password'
-								type='password'
 								required
 								value={password}
 								onChange={(event) => setPassword(event.target.value)}

@@ -15,6 +15,7 @@ import {
 	CardFooter,
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { PasswordInput } from '@/components/ui/password-input'
 
 export default function AccountRegisterPage() {
 	const router = useRouter()
@@ -72,9 +73,8 @@ export default function AccountRegisterPage() {
 								<label htmlFor='password' className='text-sm font-medium text-gray-700'>
 									Password
 								</label>
-								<Input
+								<PasswordInput
 									id='password'
-									type='password'
 									required
 									value={password}
 									onChange={(event) => setPassword(event.target.value)}
@@ -85,9 +85,8 @@ export default function AccountRegisterPage() {
 								<label htmlFor='confirmPassword' className='text-sm font-medium text-gray-700'>
 									Conferma password
 								</label>
-								<Input
+								<PasswordInput
 									id='confirmPassword'
-									type='password'
 									required
 									value={confirmPassword}
 									onChange={(event) => setConfirmPassword(event.target.value)}

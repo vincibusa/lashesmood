@@ -134,25 +134,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 className={`h-4 w-4 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
               />
             </Button>
-
-            {/* Quick Add Button */}
-            {showQuickAdd && (
-              <div className="absolute bottom-3 left-3 right-3 opacity-0 hover:opacity-100 transition-all duration-300 transform translate-y-2 hover:translate-y-0">
-                <Button
-                  className="w-full bg-brand-primary hover:bg-brand-primary/90 text-white font-medium"
-                  onClick={handleQuickAdd}
-                  disabled={isAdding}
-                >
-                  <ShoppingBag className="h-4 w-4 mr-2" />
-                  {isAdding ? 'Aggiunta...' : 'Aggiungi al carrello'}
-                </Button>
-              </div>
-            )}
           </div>
         </Link>
       </div>
 
-      <CardContent className="p-4">
+      <CardContent className="p-4 space-y-3">
         {/* Brand */}
         <Link href={`/collections/vendors?q=${product.vendor}`}>
           <p className="text-xs text-gray-500 hover:text-brand-primary transition-colors mb-1">
@@ -202,9 +188,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Quick Info */}
         {product.isKit && (
-          <p className="text-xs text-brand-primary mt-1 font-medium">
+          <p className="text-xs text-brand-primary font-medium">
             Kit completo • {product.duration}
           </p>
+        )}
+
+        {/* Add to Cart Button - Always Visible */}
+        {showQuickAdd && (
+          <Button
+            className="w-full bg-brand-primary hover:bg-brand-primary/90 text-white font-medium mt-2"
+            onClick={handleQuickAdd}
+            disabled={isAdding}
+            size="sm"
+          >
+            <ShoppingBag className="h-4 w-4 mr-2" />
+            {isAdding ? 'Aggiunta...' : 'Aggiungi al carrello'}
+          </Button>
         )}
       </CardContent>
     </Card>

@@ -47,32 +47,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-brand-light border-t border-gray-100">
-      {/* Newsletter Section */}
-      <div className="bg-gradient-to-r from-brand-primary to-brand-secondary">
-        <div className="container-custom py-12">
-          <div className="max-w-2xl mx-auto text-center text-white">
-            <h3 className="text-2xl font-bold mb-4">
-              Resta aggiornata sulle novità! 💕
-            </h3>
-            <p className="mb-6 opacity-90">
-              Iscriviti alla newsletter per ricevere sconti esclusivi, tutorial e tips di bellezza.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="La tua email..."
-                className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white/50"
-              />
-              <Button className="bg-white text-brand-primary hover:bg-gray-100 font-medium px-6 py-3">
-                Iscriviti
-              </Button>
-            </div>
-            <p className="text-xs mt-3 opacity-75">
-              Riceverai uno sconto del 10% sul tuo primo ordine! 🎁
-            </p>
-          </div>
-        </div>
-      </div>
+ 
 
       {/* Main Footer Content */}
       <div className="container-custom py-12">

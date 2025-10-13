@@ -11,6 +11,7 @@ import {
 export const dynamic = 'force-dynamic'
 
 interface CartRequestBody {
+	action: 'create' | 'add' | 'update' | 'remove' | 'get'
 	cartId?: string
 	variantId?: string
 	quantity?: number
@@ -19,84 +20,61 @@ interface CartRequestBody {
 
 export async function POST(request: NextRequest) {
 	const body = (await request.json().catch(() => ({}))) as CartRequestBody
-	const { variantId, quantity = 1 } = body
+	const { action, cartId, variantId, quantity = 1, lineId } = body
 
-	if (!variantId) {
-		return Response.json({ error: 'variantId richiesto' }, { status: 400 })
-	}
-
-	try {
-		const cart = await createCart(variantId, quantity)
-		return Response.json(cart)
-	} catch (error) {
-		console.error('Errore creazione carrello', error)
-		return Response.json({ error: 'Errore creazione carrello' }, { status: 500 })
-	}
-}
-
-export async function PUT(request: NextRequest) {
-	const body = (await request.json().catch(() => ({}))) as CartRequestBody
-	const { cartId, variantId, quantity = 1, lineId } = body
-
-	if (!cartId) {
-		return Response.json({ error: 'cartId richiesto' }, { status: 400 })
-	}
+	console.log('🛒 [CART API] Request:', { action, cartId, variantId, quantity, lineId })
 
 	try {
 		let cart
-		if (variantId && !lineId) {
-			cart = await addToCart(cartId, variantId, quantity)
-		} else if (lineId) {
-			cart = await updateCartLines(cartId, lineId, quantity)
-		} else {
-			return Response.json(
-				{ error: 'variantId o lineId richiesti per aggiornare' },
-				{ status: 400 },
-			)
+
+		switch (action) {
+			case 'create':
+				if (!variantId) {
+					return Response.json({ error: 'variantId richiesto' }, { status: 400 })
+				}
+				cart = await createCart(variantId, quantity)
+				console.log('✅ [CART API] Cart created:', cart?.id)
+				return Response.json({ cart })
+
+			case 'add':
+				if (!cartId || !variantId) {
+					return Response.json({ error: 'cartId e variantId richiesti' }, { status: 400 })
+				}
+				cart = await addToCart(cartId, variantId, quantity)
+				console.log('✅ [CART API] Item added to cart:', cart?.id)
+				return Response.json({ cart })
+
+			case 'update':
+				if (!cartId || !lineId) {
+					return Response.json({ error: 'cartId e lineId richiesti' }, { status: 400 })
+				}
+				cart = await updateCartLines(cartId, lineId, quantity)
+				console.log('✅ [CART API] Cart line updated:', cart?.id)
+				return Response.json({ cart })
+
+			case 'remove':
+				if (!cartId || !lineId) {
+					return Response.json({ error: 'cartId e lineId richiesti' }, { status: 400 })
+				}
+				cart = await removeFromCart(cartId, [lineId])
+				console.log('✅ [CART API] Item removed from cart:', cart?.id)
+				return Response.json({ cart })
+
+			case 'get':
+				if (!cartId) {
+					return Response.json({ error: 'cartId richiesto' }, { status: 400 })
+				}
+				cart = await getCart(cartId)
+				console.log('✅ [CART API] Cart retrieved:', cart?.id)
+				return Response.json({ cart })
+
+			default:
+				return Response.json({ error: 'Azione non valida' }, { status: 400 })
 		}
-
-		return Response.json(cart)
 	} catch (error) {
-		console.error('Errore aggiornamento carrello', error)
-		return Response.json({ error: 'Errore aggiornamento carrello' }, { status: 500 })
+		console.error('💥 [CART API] Error:', error)
+		return Response.json({ error: 'Errore operazione carrello' }, { status: 500 })
 	}
 }
 
-export async function DELETE(request: NextRequest) {
-	const body = (await request.json().catch(() => ({}))) as CartRequestBody & {
-		lineIds?: string[]
-	}
-	const { cartId, lineIds } = body
-
-	if (!cartId || !lineIds || lineIds.length === 0) {
-		return Response.json(
-			{ error: 'cartId e lineIds richiesti' },
-			{ status: 400 },
-		)
-	}
-
-	try {
-		const cart = await removeFromCart(cartId, lineIds)
-		return Response.json(cart)
-	} catch (error) {
-		console.error('Errore rimozione linee carrello', error)
-		return Response.json({ error: 'Errore rimozione elementi' }, { status: 500 })
-	}
-}
-
-export async function GET(request: NextRequest) {
-	const cartId = request.nextUrl.searchParams.get('cartId')
-
-	if (!cartId) {
-		return Response.json({ error: 'cartId richiesto' }, { status: 400 })
-	}
-
-	try {
-		const cart = await getCart(cartId)
-		return Response.json(cart)
-	} catch (error) {
-		console.error('Errore recupero carrello', error)
-		return Response.json({ error: 'Errore recupero carrello' }, { status: 500 })
-	}
-}
 

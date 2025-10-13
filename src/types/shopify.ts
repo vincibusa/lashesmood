@@ -65,7 +65,7 @@ export interface ShopifyCollection {
   image?: ShopifyImage;
   products: {
     edges: {
-      node: ShopifyProduct;
+      node: ShopifyProduct | CiglissimeProduct;
     }[];
   };
 }

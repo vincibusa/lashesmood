@@ -253,13 +253,28 @@ export async function getCollections(): Promise<ShopifyCollection[]> {
 export async function getCollectionByHandle(handle: string): Promise<ShopifyCollection | null> {
   try {
     const data = await shopifyFetch<{
-      collectionByHandle: ShopifyCollection;
+      collectionByHandle: any;
     }>({
       query: GET_COLLECTION_BY_HANDLE_QUERY,
       variables: { handle, first: 20 },
     });
 
-    return data.collectionByHandle || null;
+    if (!data.collectionByHandle) {
+      return null;
+    }
+
+    // Transform products to CiglissimeProduct format
+    const transformedProducts = data.collectionByHandle.products.edges.map(({ node }: any) => {
+      const product = transformShopifyProductData(node);
+      return transformToCiglissimeProduct(product);
+    });
+
+    return {
+      ...data.collectionByHandle,
+      products: {
+        edges: transformedProducts.map((product: CiglissimeProduct) => ({ node: product })),
+      },
+    };
   } catch (error) {
     console.error('Error fetching collection:', error);
     return null;
