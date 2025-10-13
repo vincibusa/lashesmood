@@ -467,3 +467,229 @@ export const GET_CART_QUERY = `
     }
   }
 `;
+
+export const CUSTOMER_CREATE_MUTATION = `
+  mutation customerCreate($input: CustomerCreateInput!) {
+    customerCreate(input: $input) {
+      customer {
+        id
+        email
+        firstName
+        lastName
+      }
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const CUSTOMER_ACCESS_TOKEN_CREATE_MUTATION = `
+  mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
+    customerAccessTokenCreate(input: $input) {
+      customerAccessToken {
+        accessToken
+        expiresAt
+      }
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const CUSTOMER_ACCESS_TOKEN_RENEW_MUTATION = `
+  mutation customerAccessTokenRenew($customerAccessToken: String!) {
+    customerAccessTokenRenew(customerAccessToken: $customerAccessToken) {
+      customerAccessToken {
+        accessToken
+        expiresAt
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const CUSTOMER_ACCESS_TOKEN_DELETE_MUTATION = `
+  mutation customerAccessTokenDelete($customerAccessToken: String!) {
+    customerAccessTokenDelete(customerAccessToken: $customerAccessToken) {
+      deletedAccessToken
+      deletedCustomerAccessTokenId
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const GET_CUSTOMER_ORDERS_QUERY = `
+  query customerOrders($customerAccessToken: String!, $first: Int = 10, $after: String) {
+    customer(customerAccessToken: $customerAccessToken) {
+      id
+      displayName
+      email
+      numberOfOrders
+      orders(first: $first, after: $after, sortKey: PROCESSED_AT, reverse: true) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          node {
+            id
+            name
+            processedAt
+            financialStatus
+            fulfillmentStatus
+            currentSubtotalPrice {
+              amount
+              currencyCode
+            }
+            currentTotalPrice {
+              amount
+              currencyCode
+            }
+            lineItems(first: 20) {
+              edges {
+                node {
+                  title
+                  quantity
+                  discountedTotalPrice {
+                    amount
+                    currencyCode
+                  }
+                  originalTotalPrice {
+                    amount
+                    currencyCode
+                  }
+                  variant {
+                    id
+                    title
+                    sku
+                    image {
+                      url
+                      altText
+                    }
+                  }
+                }
+              }
+            }
+            shippingAddress {
+              name
+              address1
+              address2
+              city
+              province
+              zip
+              country
+            }
+            statusUrl
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_CUSTOMER_ORDER_QUERY = `
+  query customerOrder($customerAccessToken: String!, $orderId: ID!) {
+    customer(customerAccessToken: $customerAccessToken) {
+      id
+      displayName
+      email
+    }
+    node(id: $orderId) {
+      ... on Order {
+        id
+        name
+        processedAt
+        financialStatus
+        fulfillmentStatus
+        statusUrl
+        totalPrice {
+          amount
+          currencyCode
+        }
+        subtotalPrice {
+          amount
+          currencyCode
+        }
+        totalShippingPrice {
+          amount
+          currencyCode
+        }
+        totalTax {
+          amount
+          currencyCode
+        }
+        lineItems(first: 50) {
+          edges {
+            node {
+              title
+              quantity
+              discountedTotalPrice {
+                amount
+                currencyCode
+              }
+              originalTotalPrice {
+                amount
+                currencyCode
+              }
+              variant {
+                id
+                sku
+                title
+                image {
+                  url
+                  altText
+                }
+              }
+            }
+          }
+        }
+        shippingAddress {
+          name
+          address1
+          address2
+          city
+          province
+          zip
+          country
+        }
+        billingAddress {
+          name
+          address1
+          address2
+          city
+          province
+          zip
+          country
+        }
+        successfulFulfillments(first: 10) {
+          trackingInfo {
+            number
+            url
+          }
+          fulfillmentLineItems(first: 10) {
+            edges {
+              node {
+                quantity
+                lineItem {
+                  title
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;

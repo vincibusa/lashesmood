@@ -1,4 +1,17 @@
-import { ShopifyProduct, ShopifyCollection, CiglissimeProduct, ShopifyCart } from '@/types/shopify';
+import {
+	ShopifyProduct,
+	ShopifyCollection,
+	CiglissimeProduct,
+	ShopifyCart,
+	CustomerCreateResponse,
+	CustomerAccessTokenCreateResponse,
+	CustomerAccessTokenRenewResponse,
+	CustomerAccessTokenDeleteResponse,
+	ShopifyCustomerOrdersResponse,
+	ShopifyCustomerOrdersQueryVariables,
+	ShopifyCustomerOrderQueryVariables,
+	ShopifyCustomerOrderQueryResponse,
+} from '@/types/shopify';
 import {
   GET_PRODUCTS_QUERY,
   GET_PRODUCT_BY_HANDLE_QUERY,
@@ -8,8 +21,18 @@ import {
   ADD_TO_CART_MUTATION,
   UPDATE_CART_LINES_MUTATION,
   REMOVE_FROM_CART_MUTATION,
-  GET_CART_QUERY,
+	GET_CART_QUERY,
+	CUSTOMER_CREATE_MUTATION,
+	CUSTOMER_ACCESS_TOKEN_CREATE_MUTATION,
+	CUSTOMER_ACCESS_TOKEN_RENEW_MUTATION,
+	CUSTOMER_ACCESS_TOKEN_DELETE_MUTATION,
+	GET_CUSTOMER_ORDERS_QUERY,
+	GET_CUSTOMER_ORDER_QUERY,
 } from './shopify-queries';
+
+export interface ShopifyError {
+	message: string;
+}
 
 const SHOPIFY_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN || '';
 const SHOPIFY_STOREFRONT_ACCESS_TOKEN = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN || '';
@@ -28,15 +51,17 @@ interface ShopifyResponse<T> {
 }
 
 async function shopifyFetch<T>({
-  query,
-  variables = {},
-  cache = 'force-cache',
-  revalidate = 3600,
+	query,
+	variables = {},
+	cache = 'force-cache',
+	revalidate = 3600,
+	includeContext = true,
 }: {
-  query: string;
-  variables?: Record<string, unknown>;
-  cache?: RequestCache;
-  revalidate?: number | false;
+	query: string;
+	variables?: Record<string, unknown>;
+	cache?: RequestCache;
+	revalidate?: number | false;
+	includeContext?: boolean;
 }): Promise<T> {
   // Validate configuration
   if (!SHOPIFY_DOMAIN) {
@@ -47,11 +72,13 @@ async function shopifyFetch<T>({
   }
 
   // Add country and language to variables if not present
-  const enhancedVariables = {
-    country: SHOPIFY_COUNTRY,
-    language: SHOPIFY_LANGUAGE,
-    ...variables,
-  };
+	const enhancedVariables = includeContext
+		? {
+			country: SHOPIFY_COUNTRY,
+			language: SHOPIFY_LANGUAGE,
+			...variables,
+		  }
+		: variables;
 
   try {
     const response = await fetch(SHOPIFY_GRAPHQL_URL, {
@@ -70,22 +97,29 @@ async function shopifyFetch<T>({
 
     if (!response.ok) {
       const errorText = await response.text();
+      console.error('❌ [Shopify] HTTP error:', {
+        status: response.status,
+        statusText: response.statusText,
+        errorText,
+      });
       throw new Error(`Shopify API error (${response.status}): ${errorText}`);
     }
 
     const result: ShopifyResponse<T> = await response.json();
 
     if (result.errors) {
+      console.error('❌ [Shopify] GraphQL errors:', result.errors);
       throw new Error(`Shopify GraphQL errors: ${result.errors.map(e => e.message).join(', ')}`);
     }
 
     if (!result.data) {
+      console.error('❌ [Shopify] No data in response:', result);
       throw new Error('No data returned from Shopify API');
     }
 
     return result.data;
   } catch (error) {
-    console.error('Shopify fetch error:', error);
+    console.error('💥 [Shopify] Fetch error:', error);
     throw error;
   }
 }
@@ -356,4 +390,114 @@ export async function getCart(cartId: string): Promise<ShopifyCart | null> {
     console.error('Error fetching cart:', error);
     return null;
   }
+}
+
+export async function createCustomer(
+  email: string,
+  password: string,
+  firstName?: string,
+  lastName?: string,
+): Promise<CustomerCreateResponse['customerCreate']> {
+  console.log('🔄 [Shopify] createCustomer called with:', {
+    email,
+    hasPassword: !!password,
+    firstName,
+    lastName,
+  });
+
+  const data = await shopifyFetch<CustomerCreateResponse>({
+    query: CUSTOMER_CREATE_MUTATION,
+    variables: {
+      input: {
+        email,
+        password,
+        firstName,
+        lastName,
+      },
+    },
+    cache: 'no-store',
+    includeContext: false,
+  });
+
+  console.log('📦 [Shopify] createCustomer response:', JSON.stringify(data, null, 2));
+
+  return data.customerCreate;
+}
+
+export async function createCustomerAccessToken(
+  email: string,
+  password: string,
+): Promise<CustomerAccessTokenCreateResponse['customerAccessTokenCreate']> {
+  console.log('🔄 [Shopify] createCustomerAccessToken called with:', {
+    email,
+    hasPassword: !!password,
+  });
+
+  const data = await shopifyFetch<CustomerAccessTokenCreateResponse>({
+    query: CUSTOMER_ACCESS_TOKEN_CREATE_MUTATION,
+    variables: {
+      input: {
+        email,
+        password,
+      },
+    },
+    cache: 'no-store',
+    includeContext: false,
+  });
+
+  console.log('📦 [Shopify] createCustomerAccessToken response:', JSON.stringify(data, null, 2));
+
+  return data.customerAccessTokenCreate;
+}
+
+export async function renewCustomerAccessToken(
+  customerAccessToken: string,
+): Promise<CustomerAccessTokenRenewResponse['customerAccessTokenRenew']> {
+  const data = await shopifyFetch<CustomerAccessTokenRenewResponse>({
+    query: CUSTOMER_ACCESS_TOKEN_RENEW_MUTATION,
+    variables: { customerAccessToken },
+    cache: 'no-store',
+    includeContext: false,
+  });
+
+  return data.customerAccessTokenRenew;
+}
+
+export async function deleteCustomerAccessToken(
+  customerAccessToken: string,
+): Promise<CustomerAccessTokenDeleteResponse['customerAccessTokenDelete']> {
+  const data = await shopifyFetch<CustomerAccessTokenDeleteResponse>({
+    query: CUSTOMER_ACCESS_TOKEN_DELETE_MUTATION,
+    variables: { customerAccessToken },
+    cache: 'no-store',
+    includeContext: false,
+  });
+
+  return data.customerAccessTokenDelete;
+}
+
+export async function getCustomerOrders(
+	variables: ShopifyCustomerOrdersQueryVariables,
+): Promise<ShopifyCustomerOrdersResponse['customer']> {
+	const data = await shopifyFetch<ShopifyCustomerOrdersResponse>({
+		query: GET_CUSTOMER_ORDERS_QUERY,
+		variables,
+		cache: 'no-store',
+		includeContext: false,
+	});
+
+	return data.customer;
+}
+
+export async function getCustomerOrderById(
+	variables: ShopifyCustomerOrderQueryVariables,
+): Promise<ShopifyCustomerOrderQueryResponse> {
+	const data = await shopifyFetch<ShopifyCustomerOrderQueryResponse>({
+		query: GET_CUSTOMER_ORDER_QUERY,
+		variables,
+		cache: 'no-store',
+		includeContext: false,
+	});
+
+	return data;
 }
