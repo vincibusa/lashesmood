@@ -31,7 +31,13 @@ async function request<T>(url: string, options?: RequestInit): Promise<T> {
 		throw new Error(body.error ?? 'Request failed')
 	}
 
-	return response.json() as Promise<T>
+	// Check if response has content
+	const text = await response.text()
+	if (!text) {
+		return {} as T
+	}
+
+	return JSON.parse(text) as T
 }
 
 async function fetchCustomerSummary(): Promise<{
@@ -62,10 +68,17 @@ export function CustomerProvider({ children }: { children: React.ReactNode }) {
 		try {
 			setIsLoading(true)
 			const { name, orderCount } = await fetchCustomerSummary()
-			setIsAuthenticated(true)
-			setCustomerName(name)
-			setOrderCount(orderCount)
-		} catch (error) {
+			// Only set as authenticated if we actually have customer data
+			if (name) {
+				setIsAuthenticated(true)
+				setCustomerName(name)
+				setOrderCount(orderCount)
+			} else {
+				setIsAuthenticated(false)
+				setCustomerName(undefined)
+				setOrderCount(undefined)
+			}
+		} catch {
 			setIsAuthenticated(false)
 			setCustomerName(undefined)
 			setOrderCount(undefined)
@@ -90,7 +103,7 @@ export function CustomerProvider({ children }: { children: React.ReactNode }) {
 				})
 				await refreshCustomer()
 				return true
-			} catch (error) {
+			} catch {
 				return false
 			} finally {
 				setIsLoggingIn(false)
@@ -109,7 +122,7 @@ export function CustomerProvider({ children }: { children: React.ReactNode }) {
 				})
 				await refreshCustomer()
 				return true
-			} catch (error) {
+			} catch {
 				return false
 			} finally {
 				setIsLoggingIn(false)

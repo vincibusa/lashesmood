@@ -1,19 +1,11 @@
-import { deleteCustomerAccessToken } from '@/lib/shopify'
-import {
-	clearCustomerAccessToken,
-	getCustomerAccessToken,
-} from '@/lib/customer-session'
+import { clearCustomerAccessToken } from '@/lib/customer-session'
 
 export const dynamic = 'force-dynamic'
 
 export async function POST() {
 	try {
-		const token = await getCustomerAccessToken()
-
-		if (token) {
-			await deleteCustomerAccessToken(token)
-		}
-
+		// Simply clear the cookie - no need to invalidate on Shopify
+		// The token will expire naturally based on Shopify's settings
 		await clearCustomerAccessToken()
 
 		return Response.json({ success: true })

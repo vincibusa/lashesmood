@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 
 interface BeforeAfterSliderProps {
@@ -20,7 +20,7 @@ export default function BeforeAfterSlider({
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleMove = (clientX: number) => {
+  const handleMove = useCallback((clientX: number) => {
     if (!containerRef.current) return;
 
     const rect = containerRef.current.getBoundingClientRect();
@@ -29,21 +29,21 @@ export default function BeforeAfterSlider({
 
     // Limita tra 0 e 100
     setSliderPosition(Math.min(Math.max(percentage, 0), 100));
-  };
+  }, []);
 
-  const handleMouseDown = () => setIsDragging(true);
+  const handleMouseDown = useCallback(() => setIsDragging(true), []);
 
-  const handleMouseUp = () => setIsDragging(false);
+  const handleMouseUp = useCallback(() => setIsDragging(false), []);
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging) return;
     handleMove(e.clientX);
-  };
+  }, [isDragging, handleMove]);
 
-  const handleTouchMove = (e: TouchEvent) => {
+  const handleTouchMove = useCallback((e: TouchEvent) => {
     if (!isDragging) return;
     handleMove(e.touches[0].clientX);
-  };
+  }, [isDragging, handleMove]);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     handleMove(e.clientX);
@@ -63,7 +63,7 @@ export default function BeforeAfterSlider({
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleMouseUp);
     };
-  }, [isDragging]);
+  }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove]);
 
   return (
     <div

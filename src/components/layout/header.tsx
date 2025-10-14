@@ -2,10 +2,19 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, User, ShoppingBag, Menu, Heart, LayoutGrid, Zap, Package, BookOpen, Mail } from 'lucide-react';
+import { Search, User, ShoppingBag, Menu, Heart, LayoutGrid, Zap, Package, BookOpen, Mail, LogOut, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useCart } from '@/context/cart-context';
 import { useCustomer } from '@/context/customer-context';
 
@@ -133,14 +142,50 @@ const Header = () => {
 								<User className="h-5 w-5" />
 							</Button>
 						) : isAuthenticated ? (
-							<div className="flex items-center space-x-2">
-								<Link href="/account" className="hidden sm:flex text-sm font-medium">
-									Ciao, {customerName ?? 'Cliente'}
-								</Link>
-								<Button variant="ghost" size="icon" onClick={handleLogout}>
-									<User className="h-5 w-5" />
-								</Button>
-							</div>
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<Button variant="ghost" size="icon" className="relative">
+										<Avatar className="h-8 w-8">
+											<AvatarFallback className="bg-brand-primary text-white text-sm">
+												{customerName?.charAt(0).toUpperCase() ?? 'U'}
+											</AvatarFallback>
+										</Avatar>
+									</Button>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent align="end" className="w-56">
+									<DropdownMenuLabel>
+										<div className="flex flex-col space-y-1">
+											<p className="text-sm font-medium">
+												Ciao, {customerName ?? 'Cliente'}!
+											</p>
+											<p className="text-xs text-gray-500">
+												Il tuo account
+											</p>
+										</div>
+									</DropdownMenuLabel>
+									<DropdownMenuSeparator />
+									<DropdownMenuItem asChild>
+										<Link href="/account" className="flex items-center cursor-pointer">
+											<User className="mr-2 h-4 w-4" />
+											<span>Profilo</span>
+										</Link>
+									</DropdownMenuItem>
+									<DropdownMenuItem asChild>
+										<Link href="/account/orders" className="flex items-center cursor-pointer">
+											<ShoppingCart className="mr-2 h-4 w-4" />
+											<span>I miei ordini</span>
+										</Link>
+									</DropdownMenuItem>
+									<DropdownMenuSeparator />
+									<DropdownMenuItem 
+										onClick={handleLogout}
+										className="text-red-600 focus:text-red-600 cursor-pointer"
+									>
+										<LogOut className="mr-2 h-4 w-4" />
+										<span>Esci</span>
+									</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
 						) : (
 							<Link href="/account/login">
 								<Button variant="ghost" size="icon">

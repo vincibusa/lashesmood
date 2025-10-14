@@ -1,11 +1,25 @@
 import React from 'react'
-import { ShopifyProduct } from '@/types/shopify'
+import { CiglissimeProduct } from '@/types/shopify'
 
 interface ProductDescriptionProps {
-	product: ShopifyProduct
+	product: CiglissimeProduct
 }
 
 const ProductDescription = ({ product }: ProductDescriptionProps) => {
+	// Default benefits and kit contents if not provided
+	const benefits = product.benefits || [
+		'Applicazione facile e veloce',
+		'Lunga durata',
+		'Aspetto naturale',
+		'Riutilizzabili',
+	]
+
+	const kitContents = product.kitContents || [
+		'Ciglia Press&GO',
+		'Applicatore',
+		'Istruzioni dettagliate',
+	]
+
 	return (
 		<section className="section-padding bg-white">
 			<div className="container-custom max-w-4xl">
@@ -17,7 +31,7 @@ const ProductDescription = ({ product }: ProductDescriptionProps) => {
 						<div>
 							<h3 className="text-xl font-bold mb-4">Vantaggi</h3>
 							<ul className="space-y-2">
-								{product.benefits.map((benefit, index) => (
+								{benefits.map((benefit, index) => (
 									<li key={index} className="flex items-start space-x-2">
 										<span className="text-brand-primary">•</span>
 										<span>{benefit}</span>
@@ -27,17 +41,19 @@ const ProductDescription = ({ product }: ProductDescriptionProps) => {
 						</div>
 
 						{/* Cosa trovi nel Kit */}
-						<div>
-							<h3 className="text-xl font-bold mb-4">Cosa trovi nel Kit</h3>
-							<ul className="space-y-2">
-								{product.kitContents.map((item, index) => (
-									<li key={index} className="flex items-start space-x-2">
-										<span className="text-brand-primary">•</span>
-										<span>{item}</span>
-									</li>
-								))}
-							</ul>
-						</div>
+						{product.isKit && (
+							<div>
+								<h3 className="text-xl font-bold mb-4">Cosa trovi nel Kit</h3>
+								<ul className="space-y-2">
+									{kitContents.map((item, index) => (
+										<li key={index} className="flex items-start space-x-2">
+											<span className="text-brand-primary">•</span>
+											<span>{item}</span>
+										</li>
+									))}
+								</ul>
+							</div>
+						)}
 					</div>
 
 					{/* Ingredienti */}

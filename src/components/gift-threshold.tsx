@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Gift, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -83,11 +84,14 @@ const GiftThreshold: React.FC<GiftThresholdProps> = ({
                 Hai diritto al regalo gratuito
               </p>
               <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg">
-                <img 
-                  src={giftImage} 
-                  alt={giftTitle}
-                  className="w-12 h-12 rounded-lg object-cover"
-                />
+                <div className="relative w-12 h-12 rounded-lg overflow-hidden">
+                  <Image 
+                    src={giftImage} 
+                    alt={giftTitle}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
                 <div className="flex-1 text-left">
                   <p className="font-medium text-sm">{giftTitle}</p>
                   <p className="text-xs text-green-600 line-through">
@@ -124,11 +128,14 @@ const GiftThreshold: React.FC<GiftThresholdProps> = ({
 
               {/* Gift Preview */}
               <div className="flex items-center space-x-3 p-3 bg-brand-light rounded-lg">
-                <img 
-                  src={giftImage} 
-                  alt={giftTitle}
-                  className="w-12 h-12 rounded-lg object-cover"
-                />
+                <div className="relative w-12 h-12 rounded-lg overflow-hidden">
+                  <Image 
+                    src={giftImage} 
+                    alt={giftTitle}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
                 <div className="flex-1 text-left">
                   <p className="font-medium text-sm">{giftTitle}</p>
                   <p className="text-xs text-gray-500 line-through">

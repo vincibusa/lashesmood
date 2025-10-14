@@ -11,6 +11,7 @@ import {
 	ShopifyCustomerOrdersQueryVariables,
 	ShopifyCustomerOrderQueryVariables,
 	ShopifyCustomerOrderQueryResponse,
+	ShopifyImage,
 } from '@/types/shopify';
 import {
   GET_PRODUCTS_QUERY,
@@ -48,6 +49,70 @@ type LanguageCode = 'IT' | 'EN' | 'FR' | 'DE' | 'ES';
 interface ShopifyResponse<T> {
   data: T;
   errors?: Array<{ message: string }>;
+}
+
+// Interfaces for raw Shopify API data
+interface RawShopifyImage {
+  id: string;
+  url: string;
+  altText?: string;
+  width: number;
+  height: number;
+}
+
+interface RawShopifyVariant {
+  id: string;
+  title: string;
+  price: {
+    amount: string;
+    currencyCode: string;
+  };
+  compareAtPrice?: {
+    amount: string;
+    currencyCode: string;
+  };
+  availableForSale: boolean;
+  quantityAvailable?: number;
+  selectedOptions: {
+    name: string;
+    value: string;
+  }[];
+}
+
+interface RawShopifyProduct {
+  id: string;
+  title: string;
+  handle: string;
+  description: string;
+  vendor: string;
+  productType: string;
+  tags: string[];
+  images?: {
+    edges: Array<{ node: RawShopifyImage }>;
+  };
+  variants?: {
+    edges: Array<{ node: RawShopifyVariant }>;
+  };
+  priceRange: {
+    minVariantPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+    maxVariantPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+  };
+  compareAtPriceRange?: {
+    minVariantPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+    maxVariantPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+  };
 }
 
 async function shopifyFetch<T>({
@@ -125,14 +190,14 @@ async function shopifyFetch<T>({
 }
 
 // Transform raw Shopify API response to our ShopifyProduct format
-function transformShopifyProductData(rawProduct: any): ShopifyProduct {
+function transformShopifyProductData(rawProduct: RawShopifyProduct): ShopifyProduct {
   console.log('🔍 RAW PRODUCT DATA:', {
     title: rawProduct.title,
     rawImages: rawProduct.images,
     imagesEdges: rawProduct.images?.edges,
   });
 
-  const transformedImages = rawProduct.images?.edges?.map((edge: any) => edge.node) || [];
+  const transformedImages: ShopifyImage[] = rawProduct.images?.edges?.map((edge) => edge.node) || [];
   
   console.log('✅ TRANSFORMED IMAGES:', transformedImages);
 
@@ -145,7 +210,7 @@ function transformShopifyProductData(rawProduct: any): ShopifyProduct {
     productType: rawProduct.productType,
     tags: rawProduct.tags,
     images: transformedImages,
-    variants: rawProduct.variants?.edges?.map((edge: any) => edge.node) || [],
+    variants: rawProduct.variants?.edges?.map((edge) => edge.node) || [],
     priceRange: rawProduct.priceRange,
     compareAtPriceRange: rawProduct.compareAtPriceRange,
   };
@@ -183,7 +248,7 @@ export async function getProducts(first = 20, query?: string): Promise<Ciglissim
   try {
     const data = await shopifyFetch<{
       products: {
-        edges: Array<{ node: any }>;
+        edges: Array<{ node: RawShopifyProduct }>;
       };
     }>({
       query: GET_PRODUCTS_QUERY,
@@ -214,7 +279,7 @@ export async function getProducts(first = 20, query?: string): Promise<Ciglissim
 export async function getProductByHandle(handle: string): Promise<CiglissimeProduct | null> {
   try {
     const data = await shopifyFetch<{
-      productByHandle: any;
+      productByHandle: RawShopifyProduct | null;
     }>({
       query: GET_PRODUCT_BY_HANDLE_QUERY,
       variables: { handle },
@@ -253,7 +318,16 @@ export async function getCollections(): Promise<ShopifyCollection[]> {
 export async function getCollectionByHandle(handle: string): Promise<ShopifyCollection | null> {
   try {
     const data = await shopifyFetch<{
-      collectionByHandle: any;
+      collectionByHandle: {
+        id: string;
+        title: string;
+        handle: string;
+        description: string;
+        image?: ShopifyImage;
+        products: {
+          edges: Array<{ node: RawShopifyProduct }>;
+        };
+      } | null;
     }>({
       query: GET_COLLECTION_BY_HANDLE_QUERY,
       variables: { handle, first: 20 },
@@ -264,7 +338,7 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
     }
 
     // Transform products to CiglissimeProduct format
-    const transformedProducts = data.collectionByHandle.products.edges.map(({ node }: any) => {
+    const transformedProducts = data.collectionByHandle.products.edges.map(({ node }) => {
       const product = transformShopifyProductData(node);
       return transformToCiglissimeProduct(product);
     });
@@ -272,7 +346,7 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
     return {
       ...data.collectionByHandle,
       products: {
-        edges: transformedProducts.map((product: CiglissimeProduct) => ({ node: product })),
+        edges: transformedProducts.map((product) => ({ node: product })),
       },
     };
   } catch (error) {

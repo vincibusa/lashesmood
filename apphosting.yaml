@@ -2,22 +2,58 @@
 # See https://firebase.google.com/docs/app-hosting/configure#cloud-run
 runConfig:
   minInstances: 0
-  # maxInstances: 100
-  # concurrency: 80
-  # cpu: 1
-  # memoryMiB: 512
+  maxInstances: 10
+  concurrency: 80
+  cpu: 1
+  memoryMiB: 512
 
 # Environment variables and secrets.
-# env:
-  # Configure environment variables.
-  # See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
-  # - variable: MESSAGE
-  #   value: Hello world!
-  #   availability:
-  #     - BUILD
-  #     - RUNTIME
+env:
+  # Shopify Store Configuration
+  - variable: NEXT_PUBLIC_SHOPIFY_DOMAIN
+    value: uqhtvc-mq.myshopify.com
+    availability:
+      - BUILD
+      - RUNTIME
 
-  # Grant access to secrets in Cloud Secret Manager.
-  # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
-  # - variable: MY_SECRET
-  #   secret: mySecretRef
+  - variable: NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN
+    value: 9faf0f72abf7d5719d343f453ddd4461
+    availability:
+      - BUILD
+      - RUNTIME
+
+  # Site Configuration
+  - variable: NEXT_PUBLIC_SITE_URL
+    value: https://my-web-app--lasheesmood.europe-west4.hosted.app/
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_SITE_NAME
+    value: Lashesmood
+    availability:
+      - BUILD
+      - RUNTIME
+
+  # Internationalization
+  - variable: NEXT_PUBLIC_SHOPIFY_COUNTRY
+    value: IT
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_SHOPIFY_LANGUAGE
+    value: IT
+    availability:
+      - BUILD
+      - RUNTIME
+
+  # Admin Access Token
+  # TODO: For production, move this to Google Cloud Secret Manager
+  # See: https://firebase.google.com/docs/app-hosting/configure#secret-parameters
+  - variable: SHOPIFY_ADMIN_ACCESS_TOKEN
+    value: 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
+    availability:
+      - BUILD
+      - RUNTIME
+

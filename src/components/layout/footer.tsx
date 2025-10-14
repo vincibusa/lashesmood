@@ -3,7 +3,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { Instagram, Facebook, Video, Mail, Phone } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 const Footer = () => {
   const footerSections = [
