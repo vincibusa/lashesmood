@@ -11,10 +11,10 @@ const HowItWorks = () => {
 				<div className="prose prose-lg max-w-none">
 					<div className="bg-gradient-to-r from-brand-primary/5 to-brand-secondary/5 rounded-xl p-8 mb-8">
 						<h3 className="text-2xl font-bold mb-4 text-center">
-							Cos&apos;è CIGLISSIME?
+							Cos&apos;è LASHESMOOD?
 						</h3>
 						<p className="text-lg leading-relaxed text-center">
-							Ciglissime è un sistema di Lash Extension semi-permanente che puoi
+							Lashesmood è un sistema di Lash Extension semi-permanente che puoi
 							applicare a casa da solə in
 							<strong className="text-brand-primary"> meno di 2 minuti</strong>.
 							Ogni set che crei dura

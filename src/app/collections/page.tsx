@@ -139,7 +139,7 @@ export default async function CollectionsPage() {
 						Non sai quale scegliere?
 					</h2>
 					<p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-						Guarda i nostri tutorial per scoprire come applicare le Ciglissime e
+						Guarda i nostri tutorial per scoprire come applicare le Lashesmood e
 						quale collezione si adatta meglio al tuo stile
 					</p>
 					<Button

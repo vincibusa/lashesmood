@@ -16,12 +16,12 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "CIGLISSIME - Extension Ciglia Semipermanenti Fai-da-Te",
+  title: "LASHESMOOD - Extension Ciglia Semipermanenti Fai-da-Te",
   description: "Extension ciglia semipermanenti fai-da-te. Risultati da salone, direttamente a casa tua in pochi minuti. Press&GO! e Regular Kit disponibili.",
-  keywords: "extension ciglia, ciglia finte, press and go, ciglissime, bellezza, makeup",
-  authors: [{ name: "Ciglissime" }],
+  keywords: "extension ciglia, ciglia finte, press and go, lashesmood, bellezza, makeup",
+  authors: [{ name: "Lashesmood" }],
   openGraph: {
-    title: "CIGLISSIME - Extension Ciglia Semipermanenti",
+    title: "LASHESMOOD - Extension Ciglia Semipermanenti",
     description: "Extension ciglia semipermanenti fai-da-te. Risultati da salone, direttamente a casa tua.",
     type: "website",
     locale: "it_IT",

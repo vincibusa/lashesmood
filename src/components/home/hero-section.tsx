@@ -13,7 +13,7 @@ const HeroSection = () => {
 				<div className="absolute inset-0 bg-gradient-to-r from-brand-primary/10 to-brand-secondary/10">
 					<Image
 						src="https://ciglissime.com/cdn/shop/files/IMG_1518_9X16-_2.jpg?v=1758388075&width=3840"
-						alt="Ciglissime Hero"
+						alt="Lashesmood Hero"
 						fill
 						className="object-cover"
 						priority
@@ -30,7 +30,7 @@ const HeroSection = () => {
 							</Badge>
 							<h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
 								<span className="bg-gradient-to-r from-brand-primary via-pink-400 to-brand-secondary bg-clip-text text-transparent">
-									le tue ciglissime
+									le tue lashesmood
 								</span>
 							</h1>
 							<h2 className="text-2xl md:text-4xl text-white mb-8 font-light">

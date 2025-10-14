@@ -29,7 +29,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   
-  /* Ciglissime Brand Colors */
+  /* Lashesmood Brand Colors */
   --color-brand-primary: var(--brand-primary);
   --color-brand-secondary: var(--brand-secondary);
   --color-brand-accent: var(--brand-accent);
@@ -42,16 +42,16 @@
 :root {
   --radius: 0.75rem;
   
-  /* Ciglissime Brand Colors - Dal sito originale */
+  /* Lashesmood Brand Colors - Dal sito originale */
   --background: oklch(1 0 0); /* White background */
   --foreground: oklch(0.145 0 0); /* Dark text */
   --card: oklch(1 0 0); /* Pure white per le card */
   --card-foreground: oklch(0.145 0 0); /* Dark text su card bianche */
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.75 0.15 330); /* Ciglissime pink #ff69b4 */
+  --primary: oklch(0.75 0.15 330); /* Lashesmood pink #ff69b4 */
   --primary-foreground: oklch(1 0 0); /* White text su pink */
-  --secondary: oklch(0.65 0.12 60); /* Ciglissime gold #d4af37 */
+  --secondary: oklch(0.65 0.12 60); /* Lashesmood gold #d4af37 */
   --secondary-foreground: oklch(1 0 0); /* White text su gold */
   --muted: oklch(0.96 0.005 0); /* Light gray */
   --muted-foreground: oklch(0.45 0.01 0); /* Medium gray per muted text */
@@ -62,7 +62,7 @@
   --input: oklch(0.96 0.005 0); /* Light input background */
   --ring: oklch(0.75 0.15 330); /* Pink ring/focus */
   
-  /* Custom Ciglissime variables - Colori dal sito */
+  /* Custom Lashesmood variables - Colori dal sito */
   --brand-primary: oklch(0.75 0.15 330); /* Pink principale #ff69b4 */
   --brand-secondary: oklch(0.65 0.12 60); /* Gold #d4af37 */
   --brand-accent: oklch(0.145 0 0); /* Black accents */
@@ -83,7 +83,7 @@
 }
 
 @layer utilities {
-  /* Ciglissime Custom Color Utilities */
+  /* Lashesmood Custom Color Utilities */
   .text-brand-primary { color: var(--brand-primary); }
   .text-brand-secondary { color: var(--brand-secondary); }
   .text-brand-accent { color: var(--brand-accent); }
@@ -101,8 +101,8 @@
   /* Font Utilities */
   .font-playfair { font-family: var(--font-playfair), serif; }
   
-  /* Gradient Utilities per Ciglissime Theme */
-  .bg-ciglissime-gradient { 
+  /* Gradient Utilities per Lashesmood Theme */
+  .bg-lashesmood-gradient { 
     background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
   }
   
@@ -141,7 +141,7 @@ body {
   font-family: var(--font-inter), system-ui, sans-serif;
 }
 
-/* Ciglissime Custom Components */
+/* Lashesmood Custom Components */
 @layer components {
   .btn-primary {
     @apply bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold px-8 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform;
@@ -185,27 +185,27 @@ body {
     @apply max-w-7xl mx-auto px-4 md:px-6 lg:px-8;
   }
   
-  .bg-ciglissime-gradient {
+  .bg-lashesmood-gradient {
     @apply bg-gradient-to-br from-brand-primary via-pink-400 to-brand-secondary;
   }
   
-  .bg-ciglissime-light {
+  .bg-lashesmood-light {
     @apply bg-gradient-to-br from-brand-light to-brand-cream;
   }
   
-  .border-ciglissime {
+  .border-lashesmood {
     @apply border-brand-primary/20 hover:border-brand-primary/40 transition-colors duration-300;
   }
   
-  .shadow-ciglissime {
+  .shadow-lashesmood {
     @apply shadow-lg shadow-brand-primary/10 hover:shadow-xl hover:shadow-brand-primary/20 transition-all duration-300;
   }
   
-  .text-ciglissime-primary {
+  .text-lashesmood-primary {
     @apply text-brand-primary font-semibold;
   }
   
-  .text-ciglissime-secondary {
+  .text-lashesmood-secondary {
     @apply text-brand-secondary font-semibold;
   }
 

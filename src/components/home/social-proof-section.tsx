@@ -17,7 +17,7 @@ const SocialProofSection = () => {
 					Esprimiti come vuoi, <em className="italic text-brand-primary">sempre</em>
 				</h2>
 				<p className="text-center text-brand-primary font-bold mb-12 text-xl">
-					#ciglissime
+					#lashesmood
 				</p>
 				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 					{socialImages.map((src, index) => (

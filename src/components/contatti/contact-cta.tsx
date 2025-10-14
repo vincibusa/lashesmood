@@ -21,7 +21,7 @@ const ContactCTA = () => {
 							size="lg"
 							className="bg-white text-brand-primary hover:bg-gray-100 font-medium px-8 py-4"
 						>
-							<Link href="mailto:shop@ciglissime.com">
+							<Link href="mailto:shop@lashesmood.com">
 								<Mail className="h-5 w-5 mr-2" />
 								Invia Email
 							</Link>
@@ -33,7 +33,7 @@ const ContactCTA = () => {
 							className="border-white text-white hover:bg-white hover:text-brand-primary px-8 py-4"
 						>
 							<Link
-								href="https://ig.me/m/ciglissime"
+								href="https://ig.me/m/lashesmood"
 								target="_blank"
 								rel="noopener noreferrer"
 							>

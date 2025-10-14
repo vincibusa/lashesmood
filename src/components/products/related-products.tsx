@@ -1,9 +1,9 @@
 import React from 'react'
 import ProductCard from '@/components/product-card'
-import { CiglissimeProduct } from '@/types/shopify'
+import { LashesmoodProduct } from '@/types/shopify'
 
 interface RelatedProductsProps {
-	products: CiglissimeProduct[]
+	products: LashesmoodProduct[]
 }
 
 const RelatedProducts = ({ products }: RelatedProductsProps) => {

@@ -55,7 +55,7 @@ const Footer = () => {
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block mb-4">
               <h2 className="text-2xl font-bold text-brand-primary">
-                CIGLISSIME
+                LASHESMOOD
               </h2>
             </Link>
             <p className="text-gray-600 mb-6 text-sm leading-relaxed">
@@ -66,19 +66,19 @@ const Footer = () => {
             {/* Social Links */}
             <div className="flex space-x-3">
               <Link 
-                href="https://instagram.com/ciglissime" 
+                href="https://instagram.com/lashesmood" 
                 className="p-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Instagram className="h-5 w-5 text-brand-primary hover:scale-110 transition-transform" />
               </Link>
               <Link 
-                href="https://tiktok.com/@ciglissime" 
+                href="https://tiktok.com/@lashesmood" 
                 className="p-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Video className="h-5 w-5 text-brand-primary hover:scale-110 transition-transform" />
               </Link>
               <Link 
-                href="https://facebook.com/ciglissime" 
+                href="https://facebook.com/lashesmood" 
                 className="p-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Facebook className="h-5 w-5 text-brand-primary hover:scale-110 transition-transform" />
@@ -116,7 +116,7 @@ const Footer = () => {
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
               <div className="flex items-center space-x-2 text-sm text-gray-600">
                 <Mail className="h-4 w-4" />
-                <span>shop@ciglissime.com</span>
+                <span>shop@lashesmood.com</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-gray-600">
                 <Phone className="h-4 w-4" />
@@ -142,7 +142,7 @@ const Footer = () => {
         <div className="container-custom py-4">
           <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
             <p>
-              © {new Date().getFullYear()} Ciglissime. Tutti i diritti riservati.
+              © {new Date().getFullYear()} Lashesmood. Tutti i diritti riservati.
             </p>
             <p className="mt-2 md:mt-0">
               Made with 💕 in Italy

@@ -25,12 +25,12 @@ const ContactSections = () => {
 			title: 'INFO & SPEDIZIONI',
 			description:
 				'Per assistenza su ordini, spedizioni o pagamenti invia una mail a',
-			email: 'shop@ciglissime.com',
+			email: 'shop@lashesmood.com',
 			extraInfo:
 				"Se hai qualche difficoltà nell'applicazione, scrivici su IG:",
 			cta: {
 				text: 'Chatta con noi 💖',
-				href: 'https://ig.me/m/ciglissime',
+				href: 'https://ig.me/m/lashesmood',
 				external: true,
 			},
 			hours:
@@ -40,11 +40,11 @@ const ContactSections = () => {
 			icon: Users,
 			title: 'COLLABORAZIONI',
 			description:
-				"Sei un'influencer o UGC Creator e ti piacerebbe collaborare con Ciglissime?",
-			email: 'marketing@ciglissime.com',
+				"Sei un'influencer o UGC Creator e ti piacerebbe collaborare con Lashesmood?",
+			email: 'marketing@lashesmood.com',
 			cta: {
 				text: 'Contattaci subito! 📩',
-				href: 'mailto:marketing@ciglissime.com',
+				href: 'mailto:marketing@lashesmood.com',
 				external: false,
 			},
 		},
@@ -52,11 +52,11 @@ const ContactSections = () => {
 			icon: Store,
 			title: 'RIVENDITORI',
 			description:
-				"Sei un'estetista o una Lash Maker interessata a introdurre Ciglissime nel tuo salone? Oppure rappresenti un punto vendita e desideri vendere i nostri prodotti?",
-			email: 'shop@ciglissime.com',
+				"Sei un'estetista o una Lash Maker interessata a introdurre Lashesmood nel tuo salone? Oppure rappresenti un punto vendita e desideri vendere i nostri prodotti?",
+			email: 'shop@lashesmood.com',
 			cta: {
 				text: 'Contattaci subito! 📩',
-				href: 'mailto:shop@ciglissime.com',
+				href: 'mailto:shop@lashesmood.com',
 				external: false,
 			},
 			extraInfo:

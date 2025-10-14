@@ -7,12 +7,12 @@ import { Heart, Star, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { CiglissimeProduct } from '@/types/shopify';
+import { LashesmoodProduct } from '@/types/shopify';
 import { formatPrice, formatDiscount } from '@/lib/utils';
 import { useCart } from '@/context/cart-context';
 
 interface ProductCardProps {
-  product: CiglissimeProduct;
+  product: LashesmoodProduct;
   showQuickAdd?: boolean;
   className?: string;
 }

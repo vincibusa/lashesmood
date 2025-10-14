@@ -14,9 +14,9 @@ interface FAQ {
 const FAQSection = () => {
 	const faqs: FAQ[] = [
 		{
-			question: "Cos'è CIGLISSIME?",
+			question: "Cos'è LASHESMOOD?",
 			answer:
-				'Ciglissime è un sistema di Lash Extension semi-permanente che puoi applicare a casa da solə in meno di 2 minuti. Ogni set che crei dura dai 5-10 giorni, la scelta è tua! Il nostro sistema è rivoluzionario, non rovina le tue ciglia naturali e si adatta a tutte le forme degli occhi.',
+				'Lashesmood è un sistema di Lash Extension semi-permanente che puoi applicare a casa da solə in meno di 2 minuti. Ogni set che crei dura dai 5-10 giorni, la scelta è tua! Il nostro sistema è rivoluzionario, non rovina le tue ciglia naturali e si adatta a tutte le forme degli occhi.',
 		},
 		{
 			question: "Che differenza c'è tra tecnologia Regular e Press&GO?",
@@ -24,9 +24,9 @@ const FAQSection = () => {
 				"La tecnologia Regular comprende l'uso di colla (Bond&Seal) e hanno una durata maggiore circa di 10 giorni. La tecnologia Press&GO! NON comprende la colla, quindi l'applicazione risulta essere di solo un passaggio e sarà più veloce con una tenuta dai 3-7 giorni. Tutti i modelli sono riutilizzabili con Bond&Seal",
 		},
 		{
-			question: 'Ciglissime sono facili da applicare?',
+			question: 'Lashesmood sono facili da applicare?',
 			answer:
-				'Ciglissime sono facili e veloci da applicare, ma sappiamo che ognuno ha la propria manualità e che le prime volte potrebbe volerci un pizzico di pratica. Come per qualsiasi cosa nel makeup, più le usi, più diventa naturale! 💕',
+				'Lashesmood sono facili e veloci da applicare, ma sappiamo che ognuno ha la propria manualità e che le prime volte potrebbe volerci un pizzico di pratica. Come per qualsiasi cosa nel makeup, più le usi, più diventa naturale! 💕',
 		},
 		{
 			question: 'Quanto durano?',
@@ -40,16 +40,16 @@ const FAQSection = () => {
 		{
 			question: 'Possono rovinare le ciglia naturali?',
 			answer:
-				'Assolutamente no. La tecnica di applicazione per CIGLISSIME permette di non intaccare minimamente la salute delle tue ciglia. Nessuna sensazione di pesantezza, ti sembrerà di non averle addosso. Prova per credere.',
+				'Assolutamente no. La tecnica di applicazione per LASHESMOOD permette di non intaccare minimamente la salute delle tue ciglia. Nessuna sensazione di pesantezza, ti sembrerà di non averle addosso. Prova per credere.',
 		},
 		{
-			question: 'CIGLISSIME sono Waterproof?',
+			question: 'LASHESMOOD sono Waterproof?',
 			answer:
-				"Ciglissime sono resistenti all'acqua e al mare. Puoi fare la doccia, nuotare, fare sport acquatici e fare sport mentre indossi Ciglissime. L'unica raccomandazione è attendere 24 ore prima di bagnarle dopo l'applicazione e di stare attenta al vapore.",
+				"Lashesmood sono resistenti all'acqua e al mare. Puoi fare la doccia, nuotare, fare sport acquatici e fare sport mentre indossi Lashesmood. L'unica raccomandazione è attendere 24 ore prima di bagnarle dopo l'applicazione e di stare attenta al vapore.",
 		},
 		{
-			question: 'CIGLISSIME sono riutilizzabili?',
-			answer: 'Ciglissime sono riutilizzabili sia con Bond&Seal o con Glue Pads',
+			question: 'LASHESMOOD sono riutilizzabili?',
+			answer: 'Lashesmood sono riutilizzabili sia con Bond&Seal o con Glue Pads',
 		},
 		{
 			question: 'Come faccio ad iniziare?',

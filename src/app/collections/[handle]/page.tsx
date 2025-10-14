@@ -4,7 +4,7 @@ import CollectionHero from '@/components/collections/collection-hero'
 import ProductsGrid from '@/components/collections/products-grid'
 import PressGoDescription from '@/components/collections/press-go-description'
 import { getCollectionByHandle } from '@/lib/shopify'
-import { CiglissimeProduct } from '@/types/shopify'
+import { LashesmoodProduct } from '@/types/shopify'
 
 interface CollectionPageProps {
 	params: Promise<{ handle: string }>
@@ -20,8 +20,8 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
 		notFound()
 	}
 
-	// Get products from collection (already transformed to CiglissimeProduct in getCollectionByHandle)
-	const products = collection.products.edges.map(({ node }) => node) as CiglissimeProduct[]
+	// Get products from collection (already transformed to LashesmoodProduct in getCollectionByHandle)
+	const products = collection.products.edges.map(({ node }) => node) as LashesmoodProduct[]
 
 	// Use collection image or fallback to first product image
 	const heroImage = collection.image?.url || products[0]?.images?.[0]?.url || '/images/placeholder.jpg'

@@ -65,7 +65,7 @@ export interface ShopifyCollection {
   image?: ShopifyImage;
   products: {
     edges: {
-      node: ShopifyProduct | CiglissimeProduct;
+      node: ShopifyProduct | LashesmoodProduct;
     }[];
   };
 }
@@ -129,7 +129,7 @@ export interface ShopifyCartLine {
   };
 }
 
-export interface CiglissimeProduct extends ShopifyProduct {
+export interface LashesmoodProduct extends ShopifyProduct {
   category: 'press-go' | 'regular' | 'accessories';
   featured: boolean;
   reviewCount: number;

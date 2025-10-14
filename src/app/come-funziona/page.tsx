@@ -18,7 +18,7 @@ export default function ComeFunzionaPage() {
 		},
 		{
 			id: 'tutorial-riutilizzo',
-			title: 'Come Riutilizzare Ciglissime',
+			title: 'Come Riutilizzare Lashesmood',
 			thumbnail: 'https://ciglissime.com/cdn/shop/files/clean_girl_press.jpg?v=1750417193&width=800',
 			duration: '3:15',
 			description: 'Impara a riutilizzare le tue ciglia con Bond&Seal',

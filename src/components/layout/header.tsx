@@ -74,11 +74,11 @@ const Header = () => {
 							</Button>
 						</SheetTrigger>
 						<SheetContent side="left" className="w-[300px]">
-							<SheetTitle className="text-2xl font-bold text-brand-primary mb-8">
-								<Link href="/" onClick={() => setIsMenuOpen(false)}>
-									CIGLISSIME
-								</Link>
-							</SheetTitle>
+						<SheetTitle className="text-2xl font-bold text-brand-primary mb-8">
+							<Link href="/" onClick={() => setIsMenuOpen(false)}>
+								LASHESMOOD
+							</Link>
+						</SheetTitle>
 							<SheetDescription className="sr-only">
 								Menu di navigazione principale
 							</SheetDescription>
@@ -105,7 +105,7 @@ const Header = () => {
 					<Link href="/" className="flex-1 lg:flex-none">
 						<div className="text-center lg:text-left">
 							<h1 className="text-2xl lg:text-3xl font-bold text-brand-primary tracking-tight">
-								CIGLISSIME
+								LASHESMOOD
 							</h1>
 						</div>
 					</Link>

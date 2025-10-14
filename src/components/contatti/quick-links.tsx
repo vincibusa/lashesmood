@@ -20,7 +20,7 @@ const QuickLinks = () => {
 								<div className="text-left">
 									<h3 className="font-bold mb-1">Tutorial e Guide</h3>
 									<p className="text-gray-600 text-sm mb-3">
-										Scopri come applicare le tue Ciglissime
+										Scopri come applicare le tue Lashesmood
 									</p>
 									<Button asChild variant="outline" size="sm">
 										<Link href="/come-funziona">Vai ai Tutorial</Link>
@@ -41,11 +41,11 @@ const QuickLinks = () => {
 									</p>
 									<Button asChild variant="outline" size="sm">
 										<Link
-											href="https://instagram.com/ciglissime"
+											href="https://instagram.com/lashesmood"
 											target="_blank"
 											rel="noopener noreferrer"
 										>
-											@ciglissime
+											@lashesmood
 										</Link>
 									</Button>
 								</div>

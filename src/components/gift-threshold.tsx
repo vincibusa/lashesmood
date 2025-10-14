@@ -16,7 +16,7 @@ interface GiftThresholdProps {
 
 const GiftThreshold: React.FC<GiftThresholdProps> = ({
   threshold = 42.00,
-  giftTitle = "Specchietto CIGLISSIME",
+  giftTitle = "Specchietto LASHESMOOD",
   giftValue = 11.00,
   giftImage = "https://ciglissime.com/cdn/shop/files/Clean_Girl_4b943c04-4570-4118-af4a-80c653792089.jpg?v=1750413037&width=200"
 }) => {

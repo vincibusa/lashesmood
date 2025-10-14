@@ -28,7 +28,7 @@ export default async function AccountPage() {
 					Ciao, {customer.displayName || 'Cliente'}
 				</h1>
 				<p className="text-gray-600">
-					Benvenuta/o nella tua area personale Ciglissime. Qui puoi controllare lo stato dei tuoi ordini,
+					Benvenuta/o nella tua area personale Lashesmood. Qui puoi controllare lo stato dei tuoi ordini,
 					gestire le informazioni del profilo e scoprire le ultime novità.
 				</p>
 			</div>

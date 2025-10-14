@@ -1,8 +1,8 @@
 import React from 'react'
-import { CiglissimeProduct } from '@/types/shopify'
+import { LashesmoodProduct } from '@/types/shopify'
 
 interface ProductDescriptionProps {
-	product: CiglissimeProduct
+	product: LashesmoodProduct
 }
 
 const ProductDescription = ({ product }: ProductDescriptionProps) => {

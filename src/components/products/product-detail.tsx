@@ -7,12 +7,12 @@ import { Star, Clock, Truck, Shield, HeadphonesIcon, ShoppingBag } from 'lucide-
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
-import { CiglissimeProduct } from '@/types/shopify'
+import { LashesmoodProduct } from '@/types/shopify'
 import { formatPrice, formatDiscount } from '@/lib/utils'
 import { useCart } from '@/context/cart-context'
 
 interface ProductDetailProps {
-	product: CiglissimeProduct
+	product: LashesmoodProduct
 }
 
 const ProductDetail = ({ product }: ProductDetailProps) => {

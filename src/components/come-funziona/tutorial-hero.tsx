@@ -9,7 +9,7 @@ const TutorialHero = () => {
 					<em className="italic text-brand-primary">Video Tutorial</em>
 				</h1>
 				<p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-					Impara ad applicare le tue Ciglissime come una vera professionista con
+					Impara ad applicare le tue Lashesmood come una vera professionista con
 					i nostri tutorial step-by-step
 				</p>
 			</div>

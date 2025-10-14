@@ -7,7 +7,7 @@ const CTASection = () => {
 		<section className="section-padding bg-gradient-to-r from-brand-primary to-brand-secondary">
 			<div className="container-custom text-center">
 				<h2 className="text-3xl font-bold text-white mb-6">
-					Pronta a provare le tue Ciglissime?
+					Pronta a provare le tue Lashesmood?
 				</h2>
 				<p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
 					Scegli il tuo kit preferito e inizia subito la tua routine di bellezza

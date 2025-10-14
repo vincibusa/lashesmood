@@ -56,7 +56,7 @@ const CartSlideout = () => {
                 Il tuo carrello è vuoto
               </h3>
               <p className="text-gray-600 mb-6">
-                Aggiungi i tuoi prodotti Ciglissime preferiti
+                Aggiungi i tuoi prodotti Lashesmood preferiti
               </p>
               <Button asChild className="btn-primary" onClick={closeCart}>
                 <Link href="/collections/press-go-kit-completo">

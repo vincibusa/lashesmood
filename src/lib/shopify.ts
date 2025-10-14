@@ -1,7 +1,7 @@
 import {
 	ShopifyProduct,
 	ShopifyCollection,
-	CiglissimeProduct,
+	LashesmoodProduct,
 	ShopifyCart,
 	CustomerCreateResponse,
 	CustomerAccessTokenCreateResponse,
@@ -217,7 +217,7 @@ function transformShopifyProductData(rawProduct: RawShopifyProduct): ShopifyProd
 }
 
 // Transform Shopify product to our extended format
-function transformToCiglissimeProduct(product: ShopifyProduct): CiglissimeProduct {
+function transformToLashesmoodProduct(product: ShopifyProduct): LashesmoodProduct {
   return {
     ...product,
     category: product.tags.includes('press-go') ? 'press-go' : 
@@ -244,7 +244,7 @@ function transformToCiglissimeProduct(product: ShopifyProduct): CiglissimeProduc
   };
 }
 
-export async function getProducts(first = 20, query?: string): Promise<CiglissimeProduct[]> {
+export async function getProducts(first = 20, query?: string): Promise<LashesmoodProduct[]> {
   try {
     const data = await shopifyFetch<{
       products: {
@@ -260,14 +260,14 @@ export async function getProducts(first = 20, query?: string): Promise<Ciglissim
 
     return data.products.edges.map(({ node }) => {
       const product = transformShopifyProductData(node);
-      const ciglissimeProduct = transformToCiglissimeProduct(product);
+      const lashesmoodProduct = transformToLashesmoodProduct(product);
       
       console.log('🎁 FINAL PRODUCT:', {
-        title: ciglissimeProduct.title,
-        images: ciglissimeProduct.images,
+        title: lashesmoodProduct.title,
+        images: lashesmoodProduct.images,
       });
       
-      return ciglissimeProduct;
+      return lashesmoodProduct;
     });
   } catch (error) {
     console.error('Error fetching products:', error);
@@ -276,7 +276,7 @@ export async function getProducts(first = 20, query?: string): Promise<Ciglissim
   }
 }
 
-export async function getProductByHandle(handle: string): Promise<CiglissimeProduct | null> {
+export async function getProductByHandle(handle: string): Promise<LashesmoodProduct | null> {
   try {
     const data = await shopifyFetch<{
       productByHandle: RawShopifyProduct | null;
@@ -290,7 +290,7 @@ export async function getProductByHandle(handle: string): Promise<CiglissimeProd
     }
 
     const product = transformShopifyProductData(data.productByHandle);
-    return transformToCiglissimeProduct(product);
+    return transformToLashesmoodProduct(product);
   } catch (error) {
     console.error('Error fetching product:', error);
     return null;
@@ -337,10 +337,10 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
       return null;
     }
 
-    // Transform products to CiglissimeProduct format
+    // Transform products to LashesmoodProduct format
     const transformedProducts = data.collectionByHandle.products.edges.map(({ node }) => {
       const product = transformShopifyProductData(node);
-      return transformToCiglissimeProduct(product);
+      return transformToLashesmoodProduct(product);
     });
 
     return {
@@ -356,7 +356,7 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
 }
 
 // Get featured products (products with 'featured' tag)
-export async function getFeaturedProducts(first = 8): Promise<CiglissimeProduct[]> {
+export async function getFeaturedProducts(first = 8): Promise<LashesmoodProduct[]> {
   try {
     // Try to get products with 'featured' tag first
     let products = await getProducts(first, 'tag:featured');
