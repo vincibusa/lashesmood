@@ -42,34 +42,34 @@
 :root {
   --radius: 0.75rem;
   
-  /* Lashesmood Brand Colors - Dal sito originale */
-  --background: oklch(1 0 0); /* White background */
+  /* Lashesmood Brand Colors - Nuova palette */
+  --background: oklch(0.988 0.006 35); /* #FDF8F5 - Beige/Crema molto chiaro */
   --foreground: oklch(0.145 0 0); /* Dark text */
   --card: oklch(1 0 0); /* Pure white per le card */
   --card-foreground: oklch(0.145 0 0); /* Dark text su card bianche */
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.75 0.15 330); /* Lashesmood pink #ff69b4 */
+  --primary: oklch(0.68 0.15 330); /* #D26CB4 - Rosa/Magenta principale */
   --primary-foreground: oklch(1 0 0); /* White text su pink */
-  --secondary: oklch(0.65 0.12 60); /* Lashesmood gold #d4af37 */
-  --secondary-foreground: oklch(1 0 0); /* White text su gold */
-  --muted: oklch(0.96 0.005 0); /* Light gray */
+  --secondary: oklch(0.88 0.08 340); /* #FFC8DD - Rosa chiaro */
+  --secondary-foreground: oklch(0.145 0 0); /* Dark text su rosa chiaro */
+  --muted: oklch(0.96 0.005 35); /* Light muted */
   --muted-foreground: oklch(0.45 0.01 0); /* Medium gray per muted text */
-  --accent: oklch(0.97 0.01 25); /* Light cream accent */
+  --accent: oklch(0.88 0.08 340); /* #FFC8DD - Rosa chiaro accent */
   --accent-foreground: oklch(0.145 0 0); /* Dark text su accent */
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.88 0.005 0); /* Light border */
-  --input: oklch(0.96 0.005 0); /* Light input background */
-  --ring: oklch(0.75 0.15 330); /* Pink ring/focus */
+  --border: oklch(0.88 0.005 35); /* Light border */
+  --input: oklch(0.96 0.005 35); /* Light input background */
+  --ring: oklch(0.68 0.15 330); /* Pink ring/focus */
   
-  /* Custom Lashesmood variables - Colori dal sito */
-  --brand-primary: oklch(0.75 0.15 330); /* Pink principale #ff69b4 */
-  --brand-secondary: oklch(0.65 0.12 60); /* Gold #d4af37 */
+  /* Custom Lashesmood variables - Nuova palette */
+  --brand-primary: oklch(0.68 0.15 330); /* #D26CB4 - Rosa/Magenta principale */
+  --brand-secondary: oklch(0.88 0.08 340); /* #FFC8DD - Rosa chiaro */
   --brand-accent: oklch(0.145 0 0); /* Black accents */
-  --brand-light: oklch(0.98 0.005 25); /* Light cream background */
-  --brand-muted: oklch(0.96 0.005 0); /* Muted gray */
-  --brand-rose: oklch(0.85 0.1 330); /* Light pink */
-  --brand-cream: oklch(0.97 0.01 25); /* Warm cream */
+  --brand-light: oklch(0.988 0.006 35); /* #FDF8F5 - Beige/Crema chiaro background */
+  --brand-muted: oklch(0.96 0.005 35); /* Muted beige */
+  --brand-rose: oklch(0.88 0.08 340); /* #FFC8DD - Rosa chiaro */
+  --brand-cream: oklch(0.988 0.006 35); /* #FDF8F5 - Warm cream */
 }
 
 @layer base {
@@ -118,7 +118,7 @@
   }
   
   .btn-primary:hover {
-    background-color: oklch(0.70 0.15 330);
+    background-color: oklch(0.63 0.15 330); /* Hover più scuro del primary #D26CB4 */
     color: white;
   }
   
@@ -129,7 +129,7 @@
   }
   
   .btn-secondary:hover {
-    background-color: oklch(0.60 0.12 60);
+    background-color: oklch(0.83 0.08 340); /* Hover più scuro del secondary #FFC8DD */
     color: white;
   }
 }
