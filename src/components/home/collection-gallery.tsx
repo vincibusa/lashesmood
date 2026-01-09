@@ -334,7 +334,7 @@ const CollectionGallery = ({ collections: shopifyCollections }: CollectionGaller
 							transition={{ delay: 0.2 }}
 							className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto"
 						>
-							Dal naturale al drammatico, trova il set perfetto per te
+							Dal più naturale al più appariscente, trova il set perfetto per te
 						</motion.p>
 					</div>
 				</ScrollReveal>
