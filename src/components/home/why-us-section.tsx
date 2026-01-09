@@ -160,7 +160,7 @@ const WhyUsSection = () => {
 		},
 		{
 			icon: Sparkles,
-			title: 'Come se fossi andata dalla LashesMaker',
+			title: 'Come se fossi andata dalla Lash Maker',
 			description: 'Uno sguardo sempre curato anche nei tuoi giorni più "make-up free"',
 		},
 		{
@@ -261,32 +261,6 @@ const WhyUsSection = () => {
 								index={index}
 							/>
 						))}
-					</motion.div>
-				</ScrollReveal>
-
-			{/* Bottom CTA */}
-				<ScrollReveal>
-					<motion.div
-						initial={{ opacity: 0, scale: 0.9 }}
-						whileInView={{ opacity: 1, scale: 1 }}
-						viewport={{ once: true }}
-						transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-						className="mt-12 md:mt-16 text-center"
-					>
-						<motion.div
-							animate={{ y: [0, -8, 0] }}
-							transition={{
-								duration: 1.5,
-								repeat: Infinity,
-								repeatDelay: 3,
-								ease: 'easeInOut'
-							}}
-							className="inline-block"
-						>
-							<p className="text-lg font-medium text-foreground mb-4">
-								Pronta a trasformare il tuo sguardo?
-							</p>
-						</motion.div>
 					</motion.div>
 				</ScrollReveal>
 			</div>

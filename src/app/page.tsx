@@ -20,8 +20,9 @@ export default async function Home() {
 			<section id="collections">
 				<CollectionGallery collections={collections} />
 			</section>
-			<WhyUsSection />
 			<BeforeAfterSection />
+			<WhyUsSection />
+		
 			<section id="tutorials">
 				<VideoTutorialsSection />
 			</section>
