@@ -203,7 +203,7 @@ const ContactSections = () => {
 			title: 'INFO & SPEDIZIONI',
 			description:
 				'Per assistenza su ordini, spedizioni o pagamenti invia una mail a',
-			email: 'shop@lashesmood.com',
+			email: 'lashesmoodstore@gmail.com',
 			extraInfo:
 				"Se hai qualche difficoltà nell'applicazione, scrivici su IG:",
 			cta: {
@@ -219,10 +219,10 @@ const ContactSections = () => {
 			title: 'COLLABORAZIONI',
 			description:
 				"Sei un'influencer o UGC Creator e ti piacerebbe collaborare con Lashesmood?",
-			email: 'marketing@lashesmood.com',
+			email: 'lashesmoodstore@gmail.com',
 			cta: {
 				text: 'Contattaci subito! 📩',
-				href: 'mailto:marketing@lashesmood.com',
+				href: 'mailto:lashesmoodstore@gmail.com',
 				external: false,
 			},
 		},
@@ -231,10 +231,10 @@ const ContactSections = () => {
 			title: 'RIVENDITORI',
 			description:
 				"Sei un'estetista o una Lash Maker interessata a introdurre Lashesmood nel tuo salone? Oppure rappresenti un punto vendita e desideri vendere i nostri prodotti?",
-			email: 'shop@lashesmood.com',
+			email: 'lashesmoodstore@gmail.com',
 			cta: {
 				text: 'Contattaci subito! 📩',
-				href: 'mailto:shop@lashesmood.com',
+				href: 'mailto:lashesmoodstore@gmail.com',
 				external: false,
 			},
 			extraInfo:

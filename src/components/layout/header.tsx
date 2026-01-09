@@ -49,22 +49,24 @@ const Header = () => {
 		{ label: 'Contatti', href: '/contatti', icon: Mail },
 	];
 
-	// Determine header background and shadow based on homepage and scroll state
-	const headerClasses = isHomepage && !isScrolled
+	// Determine header background and shadow based on homepage, scroll state, and search state
+	const shouldBeTransparent = isHomepage && !isScrolled && !isSearchOpen;
+	
+	const headerClasses = shouldBeTransparent
 		? 'fixed top-0 left-0 right-0 z-50 shadow-none'
 		: 'sticky top-0 z-50 bg-white shadow-sm transition-all duration-300';
 
-	const headerStyle = isHomepage && !isScrolled
+	const headerStyle = shouldBeTransparent
 		? { backgroundColor: 'transparent', background: 'transparent' }
 		: {};
 
-	const iconColorClass = isHomepage && !isScrolled ? 'text-white hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100';
+	const iconColorClass = shouldBeTransparent ? 'text-white hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100';
 
 	return (
 		<header className={headerClasses} style={headerStyle}>
 			{/* Banner - Free Shipping (only one banner now) */}
 			<div className={`banner-shipping transition-all duration-300 ${showBanners ? 'h-auto opacity-100' : 'h-0 opacity-0 overflow-hidden'}`}>
-				<div className={`container-custom ${isHomepage && !isScrolled ? '!bg-transparent' : ''}`}>
+				<div className={`container-custom ${shouldBeTransparent ? '!bg-transparent' : ''}`}>
 					<p className="text-center py-2 px-4 font-medium text-sm">
 						<strong>SPEDIZIONE GRATUITA</strong> 24-72h per ordini superiori a 49,99EUR
 					</p>
@@ -73,12 +75,12 @@ const Header = () => {
 
 			{/* Main Header */}
 			<div
-				className={`container-custom ${isHomepage && !isScrolled ? '!bg-transparent' : ''}`}
-				style={isHomepage && !isScrolled ? { backgroundColor: 'transparent', background: 'transparent' } : {}}
+				className={`container-custom ${shouldBeTransparent ? '!bg-transparent' : ''}`}
+				style={shouldBeTransparent ? { backgroundColor: 'transparent', background: 'transparent' } : {}}
 			>
 				<div
-					className={`flex items-center justify-between py-4 ${isHomepage && !isScrolled ? 'bg-transparent' : ''}`}
-					style={isHomepage && !isScrolled ? { backgroundColor: 'transparent', background: 'transparent' } : {}}
+					className={`flex items-center justify-between py-4 ${shouldBeTransparent ? 'bg-transparent' : ''}`}
+					style={shouldBeTransparent ? { backgroundColor: 'transparent', background: 'transparent' } : {}}
 				>
 					{/* Mobile Menu Trigger */}
 					<Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
@@ -144,7 +146,7 @@ const Header = () => {
 					<Link href="/" className="flex-1 lg:flex-none">
 						<div className="text-center lg:text-left">
 							<h1 className={`text-2xl lg:text-3xl font-bold tracking-tight transition-colors duration-300 ${
-								isHomepage && !isScrolled ? 'text-white' : 'text-brand-primary'
+								shouldBeTransparent ? 'text-white' : 'text-brand-primary'
 							}`}>
 								LASHESMOOD
 							</h1>
@@ -178,12 +180,12 @@ const Header = () => {
 									href={item.href}
 									onClick={handleClick}
 									className={`text-sm font-medium transition-colors duration-200 relative ${
-										isHomepage && !isScrolled ? 'text-white hover:text-white/80' : 'text-gray-700 hover:text-brand-primary'
+										shouldBeTransparent ? 'text-white hover:text-white/80' : 'text-gray-700 hover:text-brand-primary'
 									}`}
 								>
 									{item.label}
 									<span className={`absolute inset-x-0 -bottom-1 h-0.5 ${
-										isHomepage && !isScrolled ? 'bg-white' : 'bg-brand-primary'
+										shouldBeTransparent ? 'bg-white' : 'bg-brand-primary'
 									} scale-x-0 hover:scale-x-100 transition-transform duration-200`} />
 								</Link>
 							)

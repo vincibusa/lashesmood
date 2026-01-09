@@ -155,18 +155,18 @@ const WhyUsSection = () => {
 		},
 		{
 			icon: Clock,
-			title: 'Applicazione in pochi secondi',
+			title: 'Applicazione in pochi minuti',
 			description: 'Zero stress, zero attese: ciglia perfette in un attimo, anche se vai sempre di corsa',
 		},
 		{
 			icon: Sparkles,
-			title: 'Come truccata, anche appena sveglia',
+			title: 'Come se fossi andata dalla LashesMaker',
 			description: 'Uno sguardo sempre curato anche nei tuoi giorni più "make-up free"',
 		},
 		{
 			icon: Heart,
-			title: 'Setole in PLA',
-			description: 'Materiali biodegradabili, cruelty-free e ipoallergenici per la massima sicurezza',
+			title: 'Fibre sintetiche',
+			description: 'Realizzate in fibra sintetica biodegradabile, cruelty-free e ipoallergeniche. Non usiamo colla: sono magnetiche per un\'applicazione semplice e sicura',
 		},
 		{
 			icon: Award,

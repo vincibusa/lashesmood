@@ -105,7 +105,7 @@ const Footer = () => {
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4 text-brand-primary" />
-                <span>shop@lashesmood.com</span>
+                <span>lashesmoodstore@gmail.com</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4 text-brand-primary" />

@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { ScrollReveal } from '@/components/ui/scroll-reveal'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
 
-const ContactCTA = () => {
+const FAQCTA = () => {
 	const shouldReduceMotion = useReducedMotion()
 	const [emailHovered, setEmailHovered] = React.useState(false)
 
@@ -45,7 +45,7 @@ const ContactCTA = () => {
 							transition={{ type: 'spring', damping: 20 }}
 							className="font-playfair text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
 						>
-							Non hai trovato quello che <span className="text-brand-secondary">cercavi</span>?
+							Hai ancora <span className="text-brand-secondary">domande</span>?
 						</motion.h2>
 
 						<motion.p
@@ -55,8 +55,7 @@ const ContactCTA = () => {
 							transition={{ delay: 0.2 }}
 							className="text-lg md:text-xl mb-8 text-white/95"
 						>
-							Scrivici direttamente! Il nostro team è sempre pronto ad aiutarti
-							con qualsiasi domanda o richiesta speciale.
+							Il nostro team è sempre disponibile per aiutarti. Scrivici e ti risponderemo il prima possibile!
 						</motion.p>
 
 						<motion.div
@@ -77,9 +76,9 @@ const ContactCTA = () => {
 									size="lg"
 									className="bg-white text-brand-primary hover:bg-brand-secondary hover:text-white font-semibold px-8 py-4 shadow-xl hover:shadow-2xl transition-all duration-300"
 								>
-									<Link href="mailto:lashesmoodstore@gmail.com" className="flex items-center gap-2">
+									<Link href="/contatti" className="flex items-center gap-2">
 										<Mail className="h-5 w-5" />
-										Invia Email
+										Contattaci
 										<motion.div
 											animate={shouldReduceMotion ? {} : {
 												x: emailHovered ? 5 : 0
@@ -99,5 +98,5 @@ const ContactCTA = () => {
 	)
 }
 
-export default ContactCTA
+export default FAQCTA
 
