@@ -40,8 +40,21 @@ export async function POST(request: NextRequest) {
 				if (!cartId || !variantId) {
 					return Response.json({ error: 'cartId e variantId richiesti' }, { status: 400 })
 				}
-				cart = await addToCart(cartId, variantId, quantity)
-				console.log('✅ [CART API] Item added to cart:', cart?.id)
+				// Try to add to existing cart, if it fails due to cart not found, create a new one
+				try {
+					cart = await addToCart(cartId, variantId, quantity)
+					console.log('✅ [CART API] Item added to cart:', cart?.id)
+				} catch (addError: any) {
+					if (addError.message.includes('Il carrello specificato non esiste') || 
+						addError.message.includes('Cart not found') ||
+						addError.message.includes('UNAUTHORIZED')) {
+						console.warn('⚠️ [CART API] Cart not found, creating a new one.')
+						cart = await createCart(variantId, quantity)
+						console.log('✅ [CART API] New cart created after add failure:', cart?.id)
+					} else {
+						throw addError // Re-throw other errors
+					}
+				}
 				return Response.json({ cart })
 
 			case 'update':

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, User, ShoppingBag, Menu, Heart, LayoutGrid, Zap, Package, BookOpen, Mail, LogOut, ShoppingCart } from 'lucide-react';
+import { Search, User, ShoppingBag, Menu, LayoutGrid, Zap, Package, BookOpen, Mail, LogOut, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
@@ -17,18 +17,27 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useCart } from '@/context/cart-context';
 import { useCustomer } from '@/context/customer-context';
+import { usePathname } from 'next/navigation';
 
 const Header = () => {
+	const pathname = usePathname();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [showBanners, setShowBanners] = useState(true);
+	const [isSearchOpen, setIsSearchOpen] = useState(false);
+	const [isScrolled, setIsScrolled] = useState(false);
 	const { itemCount, toggleCart } = useCart();
 	const { isAuthenticated, isLoading, customerName, handleLogout } = useCustomer();
 
+	const isHomepage = pathname === '/';
+
 	useEffect(() => {
 		const handleScroll = () => {
-			setShowBanners(window.scrollY < 50);
+			const scrollY = window.scrollY;
+			setShowBanners(scrollY < 50);
+			setIsScrolled(scrollY > 20);
 		};
 
+		handleScroll();
 		window.addEventListener('scroll', handleScroll);
 		return () => window.removeEventListener('scroll', handleScroll);
 	}, []);
@@ -41,22 +50,23 @@ const Header = () => {
 		{ label: 'Contatti', href: '/contatti', icon: Mail },
 	];
 
-	return (
-		<header className="sticky top-0 z-50 bg-white shadow-sm">
-			{/* Top Banner - Flash Promo */}
-			<div className={`banner-promo animate-pulse transition-all duration-300 ${showBanners ? 'h-auto opacity-100' : 'h-0 opacity-0 overflow-hidden'}`}>
-				<div className="container-custom">
-					<p className="text-center py-2 px-4 font-medium text-sm">
-						<span className="hidden sm:inline">FLASH PROMO 💕 Sconti esclusivi </span>
-						<strong>SOLO PER OGGI</strong>
-						<span className="hidden sm:inline"> 💕</span>
-					</p>
-				</div>
-			</div>
+	// Determine header background and shadow based on homepage and scroll state
+	const headerClasses = isHomepage && !isScrolled
+		? 'fixed top-0 left-0 right-0 z-50 shadow-none'
+		: 'sticky top-0 z-50 bg-white shadow-sm transition-all duration-300';
 
-			{/* Second Banner - Free Shipping */}
+	const headerStyle = isHomepage && !isScrolled
+		? { backgroundColor: 'transparent', background: 'transparent' }
+		: {};
+
+	const textColorClass = isHomepage && !isScrolled ? 'text-white' : 'text-gray-700';
+	const iconColorClass = isHomepage && !isScrolled ? 'text-white hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100';
+
+	return (
+		<header className={headerClasses} style={headerStyle}>
+			{/* Banner - Free Shipping (only one banner now) */}
 			<div className={`banner-shipping transition-all duration-300 ${showBanners ? 'h-auto opacity-100' : 'h-0 opacity-0 overflow-hidden'}`}>
-				<div className="container-custom">
+				<div className={`container-custom ${isHomepage && !isScrolled ? '!bg-transparent' : ''}`}>
 					<p className="text-center py-2 px-4 font-medium text-sm">
 						<strong>SPEDIZIONE GRATUITA</strong> 24-72h per ordini superiori a 49,99EUR
 					</p>
@@ -64,12 +74,22 @@ const Header = () => {
 			</div>
 
 			{/* Main Header */}
-			<div className="container-custom">
-				<div className="flex items-center justify-between py-4">
+			<div
+				className={`container-custom ${isHomepage && !isScrolled ? '!bg-transparent' : ''}`}
+				style={isHomepage && !isScrolled ? { backgroundColor: 'transparent', background: 'transparent' } : {}}
+			>
+				<div
+					className={`flex items-center justify-between py-4 ${isHomepage && !isScrolled ? 'bg-transparent' : ''}`}
+					style={isHomepage && !isScrolled ? { backgroundColor: 'transparent', background: 'transparent' } : {}}
+				>
 					{/* Mobile Menu Trigger */}
 					<Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
 						<SheetTrigger asChild className="lg:hidden">
-							<Button variant="ghost" size="icon">
+							<Button
+								variant="ghost"
+								size="icon"
+								className={`transition-colors duration-300 ${iconColorClass}`}
+							>
 								<Menu className="h-6 w-6" />
 							</Button>
 						</SheetTrigger>
@@ -104,7 +124,9 @@ const Header = () => {
 					{/* Logo */}
 					<Link href="/" className="flex-1 lg:flex-none">
 						<div className="text-center lg:text-left">
-							<h1 className="text-2xl lg:text-3xl font-bold text-brand-primary tracking-tight">
+							<h1 className={`text-2xl lg:text-3xl font-bold tracking-tight transition-colors duration-300 ${
+								isHomepage && !isScrolled ? 'text-white' : 'text-brand-primary'
+							}`}>
 								LASHESMOOD
 							</h1>
 						</div>
@@ -116,10 +138,14 @@ const Header = () => {
 							<Link
 								key={item.href}
 								href={item.href}
-								className="text-sm font-medium hover:text-brand-primary transition-colors duration-200 relative"
+								className={`text-sm font-medium transition-colors duration-200 relative ${
+									isHomepage && !isScrolled ? 'text-white hover:text-white/80' : 'text-gray-700 hover:text-brand-primary'
+								}`}
 							>
 								{item.label}
-								<span className="absolute inset-x-0 -bottom-1 h-0.5 bg-brand-primary scale-x-0 hover:scale-x-100 transition-transform duration-200" />
+								<span className={`absolute inset-x-0 -bottom-1 h-0.5 ${
+									isHomepage && !isScrolled ? 'bg-white' : 'bg-brand-primary'
+								} scale-x-0 hover:scale-x-100 transition-transform duration-200`} />
 							</Link>
 						))}
 					</nav>
@@ -127,18 +153,28 @@ const Header = () => {
 					{/* Right Actions */}
 					<div className="flex items-center space-x-2">
 						{/* Search */}
-						<Button variant="ghost" size="icon" className="hidden sm:flex">
+						<Button
+							variant="ghost"
+							size="icon"
+							className={`hidden sm:flex ${iconColorClass}`}
+							onClick={() => setIsSearchOpen(!isSearchOpen)}
+						>
 							<Search className="h-5 w-5" />
 						</Button>
 
-						{/* Wishlist */}
-						<Button variant="ghost" size="icon" className="hidden sm:flex">
-							<Heart className="h-5 w-5" />
+						{/* Mobile Search Button */}
+						<Button
+							variant="ghost"
+							size="icon"
+							className={`sm:hidden ${iconColorClass}`}
+							onClick={() => setIsSearchOpen(!isSearchOpen)}
+						>
+							<Search className="h-5 w-5" />
 						</Button>
 
 						{/* Account */}
 						{isLoading ? (
-							<Button variant="ghost" size="icon" className="animate-pulse">
+							<Button variant="ghost" size="icon" className={`animate-pulse ${iconColorClass}`}>
 								<User className="h-5 w-5" />
 							</Button>
 						) : isAuthenticated ? (
@@ -188,14 +224,14 @@ const Header = () => {
 							</DropdownMenu>
 						) : (
 							<Link href="/account/login">
-								<Button variant="ghost" size="icon">
+								<Button variant="ghost" size="icon" className={iconColorClass}>
 									<User className="h-5 w-5" />
 								</Button>
 							</Link>
 						)}
 
 						{/* Cart */}
-						<Button variant="ghost" size="icon" className="relative" onClick={toggleCart}>
+						<Button variant="ghost" size="icon" className={`relative ${iconColorClass}`} onClick={toggleCart}>
 							<ShoppingBag className="h-5 w-5" />
 							{itemCount > 0 && (
 								<Badge
@@ -210,19 +246,39 @@ const Header = () => {
 				</div>
 			</div>
 
-			{/* Mobile Search Bar */}
-			<div className="lg:hidden border-t border-gray-100">
-				<div className="container-custom py-3">
-					<div className="relative">
-						<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-						<input
-							type="text"
-							placeholder="Cerca prodotti..."
-							className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-						/>
+			{/* Desktop Search Bar */}
+			{isSearchOpen && (
+				<div className="hidden lg:block border-t border-gray-100">
+					<div className="container-custom py-3">
+						<div className="relative max-w-2xl mx-auto">
+							<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+							<input
+								type="text"
+								placeholder="Cerca prodotti..."
+								className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-base"
+								autoFocus
+							/>
+						</div>
 					</div>
 				</div>
-			</div>
+			)}
+
+			{/* Mobile Search Bar */}
+			{isSearchOpen && (
+				<div className="lg:hidden border-t border-gray-100">
+					<div className="container-custom py-3">
+						<div className="relative">
+							<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+							<input
+								type="text"
+								placeholder="Cerca prodotti..."
+								className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+								autoFocus
+							/>
+						</div>
+					</div>
+				</div>
+			)}
 		</header>
 	);
 };

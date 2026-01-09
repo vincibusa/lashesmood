@@ -37,10 +37,11 @@ export interface ShopifyError {
 
 const SHOPIFY_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN || '';
 const SHOPIFY_STOREFRONT_ACCESS_TOKEN = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN || '';
+const SHOPIFY_API_VERSION = process.env.NEXT_PUBLIC_SHOPIFY_API_VERSION || '2024-10';
 const SHOPIFY_COUNTRY = (process.env.NEXT_PUBLIC_SHOPIFY_COUNTRY as CountryCode) || 'IT';
 const SHOPIFY_LANGUAGE = (process.env.NEXT_PUBLIC_SHOPIFY_LANGUAGE as LanguageCode) || 'IT';
 
-const SHOPIFY_GRAPHQL_URL = `https://${SHOPIFY_DOMAIN}/api/2025-01/graphql.json`;
+const SHOPIFY_GRAPHQL_URL = `https://${SHOPIFY_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
 
 // Types for internationalization
 type CountryCode = 'IT' | 'US' | 'GB' | 'FR' | 'DE' | 'ES';
@@ -146,12 +147,20 @@ async function shopifyFetch<T>({
 		: variables;
 
   try {
+    // Determine if it's a private token and use the correct header
+    const isPrivateToken = SHOPIFY_STOREFRONT_ACCESS_TOKEN.startsWith('shpat_');
+    const tokenHeaderName = isPrivateToken 
+      ? 'Shopify-Storefront-Private-Token' 
+      : 'X-Shopify-Storefront-Access-Token';
+
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+      [tokenHeaderName]: SHOPIFY_STOREFRONT_ACCESS_TOKEN,
+    };
+
     const response = await fetch(SHOPIFY_GRAPHQL_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_ACCESS_TOKEN,
-      },
+      headers,
       body: JSON.stringify({
         query,
         variables: enhancedVariables

@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import CartSlideout from '@/components/cart-slideout'
+import { PageTransition } from '@/components/layout/page-transition'
 
 const AUTH_HIDDEN_ROUTES = ['/account/login', '/account/register']
 
@@ -20,7 +21,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 	return (
 		<>
 			<Header />
-			<main className='flex-1'>{children}</main>
+			<main className='flex-1'>
+				<PageTransition>{children}</PageTransition>
+			</main>
 			<Footer />
 			<CartSlideout />
 		</>
