@@ -45,7 +45,7 @@ const Header = () => {
 	const navigationItems = [
 		{ label: 'Collections', href: '/#collections', icon: LayoutGrid },
 		{ label: 'Prodotti', href: '/prodotti', icon: Package },
-		{ label: 'Tutorial', href: '/#tutorials', icon: BookOpen },
+		{ label: 'Come funziona', href: '/#tutorials', icon: BookOpen },
 		{ label: 'Contatti', href: '/contatti', icon: Mail },
 	];
 

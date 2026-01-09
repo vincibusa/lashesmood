@@ -7,12 +7,12 @@ import ContactCTA from '@/components/contatti/contact-cta'
 
 export default function ContattiPage() {
 	return (
-		<div className="min-h-screen">
+		<>
 			<ContactHero />
 			<ContactSections />
 			<QuickLinks />
 			<FAQQuickAccess />
 			<ContactCTA />
-		</div>
+		</>
 	)
 }

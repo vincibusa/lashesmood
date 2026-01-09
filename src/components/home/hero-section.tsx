@@ -5,9 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import {
-	slideInLeft,
 	springUp,
 	fadeInUp,
 	staggerContainer,
@@ -41,13 +39,6 @@ const HeroSection = () => {
 							variants={staggerContainer}
 							className="max-w-3xl mx-auto md:mx-0 md:max-w-xl lg:max-w-2xl"
 						>
-							{/* Badge animato */}
-							<motion.div variants={slideInLeft}>
-								<Badge className="mb-4 bg-brand-primary text-white font-medium tracking-wide">
-									#backtowork
-								</Badge>
-							</motion.div>
-
 							{/* Titolo principale - Playfair Display */}
 							<motion.h1
 								variants={springUp}

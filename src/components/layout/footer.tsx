@@ -11,7 +11,7 @@ const Footer = () => {
       links: [
         { label: 'Collections', href: '/#collections' },
         { label: 'Prodotti', href: '/prodotti' },
-        { label: 'Tutorial', href: '/#tutorials' },
+        { label: 'Come funziona', href: '/#tutorials' },
         { label: 'Contatti', href: '/contatti' },
       ],
     },

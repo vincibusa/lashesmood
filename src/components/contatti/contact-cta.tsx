@@ -1,48 +1,99 @@
+'use client'
+
 import React from 'react'
 import Link from 'next/link'
-import { Mail, Instagram } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Mail, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { ScrollReveal } from '@/components/ui/scroll-reveal'
+import { useReducedMotion } from '@/hooks/use-reduced-motion'
 
 const ContactCTA = () => {
+	const shouldReduceMotion = useReducedMotion()
+	const [emailHovered, setEmailHovered] = React.useState(false)
+
 	return (
-		<section className="section-padding bg-gradient-to-r from-brand-primary to-brand-secondary">
-			<div className="container-custom text-center">
-				<div className="max-w-2xl mx-auto text-white">
-					<h2 className="text-3xl font-bold mb-6">
-						Non hai trovato quello che cercavi?
-					</h2>
-					<p className="text-xl mb-8 opacity-90">
-						Scrivici direttamente! Il nostro team è sempre pronto ad aiutarti
-						con qualsiasi domanda o richiesta speciale.
-					</p>
-					<div className="flex flex-col sm:flex-row gap-4 justify-center">
-						<Button
-							asChild
-							size="lg"
-							className="bg-white text-brand-primary hover:bg-gray-100 font-medium px-8 py-4"
+		<section className="section-padding relative overflow-hidden">
+			{/* Gradient Background */}
+			<div className="absolute inset-0 bg-lashesmood-gradient" />
+
+			{/* Animated Background Pattern */}
+			<motion.div
+				animate={shouldReduceMotion ? {} : {
+					opacity: [0.1, 0.2, 0.1],
+					rotate: [0, 5, 0]
+				}}
+				transition={{
+					duration: 8,
+					repeat: Infinity,
+					ease: 'easeInOut'
+				}}
+				className="absolute inset-0 opacity-10"
+				style={{
+					backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+					backgroundSize: '40px 40px'
+				}}
+			/>
+
+			<div className="container-custom text-center relative z-10">
+				<ScrollReveal>
+					<div className="max-w-2xl mx-auto text-white">
+						<motion.h2
+							initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ type: 'spring', damping: 20 }}
+							className="font-playfair text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
 						>
-							<Link href="mailto:shop@lashesmood.com">
-								<Mail className="h-5 w-5 mr-2" />
-								Invia Email
-							</Link>
-						</Button>
-						<Button
-							asChild
-							variant="outline"
-							size="lg"
-							className="border-white text-white hover:bg-white hover:text-brand-primary px-8 py-4"
+							Non hai trovato quello che <span className="text-brand-secondary">cercavi</span>?
+						</motion.h2>
+
+						<motion.p
+							initial={shouldReduceMotion ? false : { opacity: 0 }}
+							whileInView={{ opacity: 1 }}
+							viewport={{ once: true }}
+							transition={{ delay: 0.2 }}
+							className="text-lg md:text-xl mb-8 text-white/95"
 						>
-							<Link
-								href="https://ig.me/m/lashesmood"
-								target="_blank"
-								rel="noopener noreferrer"
+							Scrivici direttamente! Il nostro team è sempre pronto ad aiutarti
+							con qualsiasi domanda o richiesta speciale.
+						</motion.p>
+
+						<motion.div
+							initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ delay: 0.3 }}
+							className="flex justify-center"
+						>
+							<motion.div
+								onMouseEnter={() => setEmailHovered(true)}
+								onMouseLeave={() => setEmailHovered(false)}
+								whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+								transition={{ type: 'spring', stiffness: 400, damping: 10 }}
 							>
-								<Instagram className="h-5 w-5 mr-2" />
-								Chat Instagram
-							</Link>
-						</Button>
+								<Button
+									asChild
+									size="lg"
+									className="bg-white text-brand-primary hover:bg-brand-secondary hover:text-white font-semibold px-8 py-4 shadow-xl hover:shadow-2xl transition-all duration-300"
+								>
+									<Link href="mailto:shop@lashesmood.com" className="flex items-center gap-2">
+										<Mail className="h-5 w-5" />
+										Invia Email
+										<motion.div
+											animate={shouldReduceMotion ? {} : {
+												x: emailHovered ? 5 : 0
+											}}
+											transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+										>
+											<ArrowRight className="h-5 w-5" />
+										</motion.div>
+									</Link>
+								</Button>
+							</motion.div>
+						</motion.div>
 					</div>
-				</div>
+				</ScrollReveal>
 			</div>
 		</section>
 	)
