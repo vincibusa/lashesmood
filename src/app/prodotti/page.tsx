@@ -2,7 +2,6 @@ import React from 'react'
 import { getProducts } from '@/lib/shopify'
 import ProductsGrid from '@/components/collections/products-grid'
 import { ScrollReveal } from '@/components/ui/scroll-reveal'
-import { motion } from 'framer-motion'
 
 export default async function ProdottiPage() {
 	const products = await getProducts(250) // Get all products (max 250)
@@ -10,27 +9,15 @@ export default async function ProdottiPage() {
 	return (
 		<div className="min-h-screen">
 			{/* Hero Section */}
-			<section className="section-padding bg-gradient-to-br from-brand-light to-white">
+			<section className="section-padding bg-gradient-to-br from-brand-light via-white to-brand-cream/30">
 				<div className="container-custom text-center">
 					<ScrollReveal>
-						<motion.h1
-							initial={{ opacity: 0, y: 20 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							transition={{ type: 'spring', damping: 20 }}
-							className="font-playfair text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4"
-						>
+						<h1 className="font-playfair text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
 							Tutti i <span className="text-brand-primary">Prodotti</span>
-						</motion.h1>
-						<motion.p
-							initial={{ opacity: 0 }}
-							whileInView={{ opacity: 1 }}
-							viewport={{ once: true }}
-							transition={{ delay: 0.2 }}
-							className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto"
-						>
+						</h1>
+						<p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
 							Scopri la nostra collezione completa di extension ciglia magnetiche
-						</motion.p>
+						</p>
 					</ScrollReveal>
 				</div>
 			</section>

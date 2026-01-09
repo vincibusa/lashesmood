@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Heart, Star, ShoppingBag, Zap } from 'lucide-react';
+import { Star, ShoppingBag, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -25,7 +25,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   showQuickAdd = true,
   className = ""
 }) => {
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isAdding, setIsAdding] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -73,12 +72,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
     if (hasMultipleImages && !shouldReduceMotion) {
       setCurrentImageIndex(1);
     }
-  };
-
-  const handleWishlistToggle = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsWishlisted(!isWishlisted);
   };
 
   const handleQuickAdd = async (e: React.MouseEvent) => {
@@ -244,28 +237,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
                   )}
                 </div>
 
-                {/* Wishlist Button - Pulse Animation */}
-                <motion.div
-                  className="absolute top-3 right-3 z-10"
-                  whileTap={shouldReduceMotion ? {} : { scale: 0.9 }}
-                >
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-9 w-9 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all"
-                    onClick={handleWishlistToggle}
-                  >
-                    <motion.div
-                      animate={isWishlisted && !shouldReduceMotion ? { scale: [1, 1.2, 1] } : {}}
-                      transition={{ duration: 0.4, repeat: isWishlisted ? Infinity : 0, repeatDelay: 2 }}
-                    >
-                      <Heart
-                        className={`h-5 w-5 transition-all ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-600 hover:text-red-500'}`}
-                      />
-                    </motion.div>
-                  </Button>
-                </motion.div>
-
                 {/* Hover Indicator (Desktop only) */}
                 {hasMultipleImages && !shouldReduceMotion && (
                   <motion.div
@@ -358,7 +329,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               transition={{ duration: 0.2 }}
             >
               <Button
-                className="w-full bg-brand-secondary hover:bg-brand-secondary/90 text-brand-accent font-semibold py-5 shadow-md hover:shadow-lg transition-all"
+                className="w-full bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold py-5 shadow-lg hover:shadow-xl transition-all rounded-xl"
                 onClick={handleQuickAdd}
                 disabled={isAdding}
                 size="lg"

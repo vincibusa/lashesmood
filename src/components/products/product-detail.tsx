@@ -54,11 +54,11 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 	return (
 		<section className="section-padding">
 			<div className="container-custom">
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
 					{/* Product Images */}
 					<div className="space-y-4">
 						{/* Main Image */}
-						<div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
+						<div className="aspect-square overflow-hidden rounded-2xl bg-gray-100 shadow-lg">
 							{product.images[0] && (
 								<Image
 									src={product.images[0].url}
@@ -72,11 +72,11 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 						</div>
 
 						{/* Thumbnail Images */}
-						<div className="grid grid-cols-4 gap-2">
+						<div className="grid grid-cols-4 gap-3">
 							{product.images.slice(0, 4).map((image, index) => (
 								<div
 									key={image.id}
-									className="aspect-square overflow-hidden rounded-lg bg-gray-100 cursor-pointer hover:opacity-80 transition-opacity"
+									className="aspect-square overflow-hidden rounded-xl bg-gray-100 cursor-pointer hover:opacity-80 transition-all hover:scale-105 border-2 border-transparent hover:border-brand-primary/30"
 								>
 									<Image
 										src={image.url}
@@ -136,21 +136,21 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 						</div>
 
 						{/* Product Title */}
-						<h1 className="text-3xl font-bold text-gray-900">
+						<h1 className="font-playfair text-4xl md:text-5xl font-bold text-foreground leading-tight">
 							{product.title}
 						</h1>
 
 						{/* Price */}
-						<div className="flex items-baseline space-x-4">
-							<span className="text-3xl font-bold text-gray-900">
+						<div className="flex items-baseline gap-4 pt-2">
+							<span className="font-playfair text-4xl font-bold text-brand-primary">
 								{formatPrice(parseFloat(salePrice), '€')}
 							</span>
 							{hasDiscount && (
 								<>
-									<span className="text-xl text-gray-500 line-through">
+									<span className="text-xl text-muted-foreground line-through">
 										{formatPrice(parseFloat(originalPrice!), '€')}
 									</span>
-									<Badge variant="destructive" className="bg-red-500">
+									<Badge className="bg-red-500 text-white font-bold px-3 py-1">
 										-{discountPercentage}%
 									</Badge>
 								</>
@@ -159,22 +159,22 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 
 						{/* Customer Review Highlight */}
 						{customerReview && (
-							<Card className="bg-brand-light border-brand-primary/20">
-								<CardContent className="p-4">
-									<div className="flex items-center space-x-2 mb-2">
+							<Card className="bg-gradient-to-br from-brand-light to-white border border-brand-primary/20 rounded-2xl shadow-sm">
+								<CardContent className="p-6">
+									<div className="flex items-center gap-3 mb-3">
 										<div className="flex">
 											{[...Array(5)].map((_, i) => (
 												<Star
 													key={i}
-													className="h-3 w-3 fill-yellow-400 text-yellow-400"
+													className="h-4 w-4 fill-yellow-400 text-yellow-400"
 												/>
 											))}
 										</div>
-										<span className="text-sm font-medium">
+										<span className="font-playfair font-semibold text-foreground">
 											{customerReview.name}
 										</span>
 									</div>
-									<p className="text-sm text-gray-700 italic">
+									<p className="text-sm text-muted-foreground italic leading-relaxed">
 										&quot;{customerReview.text}&quot;
 									</p>
 								</CardContent>
@@ -182,8 +182,8 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 						)}
 
 						{/* Countdown Timer */}
-						<div className="bg-red-50 border border-red-200 rounded-lg p-4">
-							<div className="flex items-center space-x-2 text-red-600">
+						<div className="bg-red-50 border border-red-200 rounded-xl p-4">
+							<div className="flex items-center gap-2 text-red-600">
 								<Clock className="h-5 w-5" />
 								<span className="font-medium">
 									L&apos;offerta termina in 09:56:43
@@ -194,7 +194,7 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 						{/* Add to Cart */}
 						<Button 
 							size="lg" 
-							className="w-full btn-primary text-lg py-4"
+							className="w-full bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold text-lg py-6 rounded-xl shadow-lg hover:shadow-xl transition-all"
 							onClick={handleAddToCart}
 							disabled={isAdding}
 						>
@@ -203,37 +203,37 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 						</Button>
 
 						{/* Trust Badges */}
-						<div className="grid grid-cols-2 gap-4 text-sm">
-							<div className="flex items-center space-x-2">
-								<Truck className="h-5 w-5 text-brand-primary" />
+						<div className="grid grid-cols-2 gap-4 pt-2">
+							<div className="flex items-start gap-3 p-4 bg-white border border-border/50 rounded-xl hover:shadow-md transition-shadow">
+								<Truck className="h-5 w-5 text-brand-primary mt-0.5 flex-shrink-0" />
 								<div>
-									<p className="font-medium">
+									<p className="font-semibold text-sm text-foreground">
 										il Kit lo acquisti una volta sola!
 									</p>
 								</div>
 							</div>
-							<div className="flex items-center space-x-2">
-								<Shield className="h-5 w-5 text-brand-primary" />
+							<div className="flex items-start gap-3 p-4 bg-white border border-border/50 rounded-xl hover:shadow-md transition-shadow">
+								<Shield className="h-5 w-5 text-brand-primary mt-0.5 flex-shrink-0" />
 								<div>
-									<p className="font-medium">Paga anche alla consegna</p>
+									<p className="font-semibold text-sm text-foreground">Paga anche alla consegna</p>
 								</div>
 							</div>
-							<div className="flex items-center space-x-2">
-								<Shield className="h-5 w-5 text-brand-primary" />
+							<div className="flex items-start gap-3 p-4 bg-white border border-border/50 rounded-xl hover:shadow-md transition-shadow">
+								<Shield className="h-5 w-5 text-brand-primary mt-0.5 flex-shrink-0" />
 								<div>
-									<p className="font-medium">Garanzia di rimborso 15gg</p>
+									<p className="font-semibold text-sm text-foreground">Garanzia di rimborso 15gg</p>
 								</div>
 							</div>
-							<div className="flex items-center space-x-2">
-								<HeadphonesIcon className="h-5 w-5 text-brand-primary" />
+							<div className="flex items-start gap-3 p-4 bg-white border border-border/50 rounded-xl hover:shadow-md transition-shadow">
+								<HeadphonesIcon className="h-5 w-5 text-brand-primary mt-0.5 flex-shrink-0" />
 								<div>
-									<p className="font-medium">Assistenza 24/7</p>
+									<p className="font-semibold text-sm text-foreground">Assistenza 24/7</p>
 								</div>
 							</div>
 						</div>
 
 						{/* Shipping Info */}
-						<div className="bg-green-50 border border-green-200 rounded-lg p-4">
+						<div className="bg-green-50 border border-green-200 rounded-xl p-4">
 							<p className="text-green-700 font-medium">
 								Pronto da spedire - Arrivo previsto gio 2 ottobre
 							</p>

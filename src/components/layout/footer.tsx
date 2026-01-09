@@ -7,6 +7,15 @@ import { Instagram, Facebook, Video, Mail, Phone } from 'lucide-react';
 const Footer = () => {
   const footerSections = [
     {
+      title: 'Navigazione',
+      links: [
+        { label: 'Collections', href: '/#collections' },
+        { label: 'Prodotti', href: '/prodotti' },
+        { label: 'Tutorial', href: '/#tutorials' },
+        { label: 'Contatti', href: '/contatti' },
+      ],
+    },
+    {
       title: 'Prodotti',
       links: [
         { label: 'Press&GO! Kit', href: '/collections/press-go-kit-completo' },
@@ -19,27 +28,17 @@ const Footer = () => {
       title: 'Supporto',
       links: [
         { label: 'Come Funziona', href: '/come-funziona' },
-        { label: 'Tutorial Video', href: '/come-funziona#tutorial' },
         { label: 'FAQ', href: '/faq' },
-        { label: 'Contatti', href: '/contatti' },
-      ],
-    },
-    {
-      title: 'Azienda',
-      links: [
-        { label: 'Chi Siamo', href: '/chi-siamo' },
-        { label: 'Collaborazioni', href: '/collaborazioni' },
-        { label: 'Rivenditori', href: '/rivenditori' },
-        { label: 'Affiliate Program', href: '/affiliate' },
+        { label: 'Spedizioni e Resi', href: '/spedizioni' },
       ],
     },
     {
       title: 'Informazioni',
       links: [
-        { label: 'Spedizioni e Resi', href: '/spedizioni' },
         { label: 'Privacy Policy', href: '/privacy' },
         { label: 'Termini e Condizioni', href: '/termini' },
         { label: 'Cookie Policy', href: '/cookie' },
+        { label: 'Chi Siamo', href: '/chi-siamo' },
       ],
     },
   ];
@@ -54,11 +53,11 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block mb-4">
-              <h2 className="text-2xl font-bold text-brand-primary">
+              <h2 className="font-playfair text-3xl font-bold text-brand-primary">
                 LASHESMOOD
               </h2>
             </Link>
-            <p className="text-gray-600 mb-6 text-sm leading-relaxed">
+            <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
               Extension ciglia semipermanenti fai-da-te. Risultati da salone, 
               direttamente a casa tua in pochi minuti.
             </p>
@@ -89,7 +88,7 @@ const Footer = () => {
           {/* Footer Links */}
           {footerSections.map((section, index) => (
             <div key={index}>
-              <h3 className="font-semibold text-gray-900 mb-4">
+              <h3 className="font-playfair font-semibold text-foreground mb-4">
                 {section.title}
               </h3>
               <ul className="space-y-3">
@@ -97,7 +96,7 @@ const Footer = () => {
                   <li key={linkIndex}>
                     <Link
                       href={link.href}
-                      className="text-sm text-gray-600 hover:text-brand-primary transition-colors duration-200"
+                      className="text-sm text-muted-foreground hover:text-brand-primary transition-colors duration-200"
                     >
                       {link.label}
                     </Link>
@@ -114,12 +113,12 @@ const Footer = () => {
         <div className="container-custom py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <Mail className="h-4 w-4" />
+              <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                <Mail className="h-4 w-4 text-brand-primary" />
                 <span>shop@lashesmood.com</span>
               </div>
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <Phone className="h-4 w-4" />
+              <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                <Phone className="h-4 w-4 text-brand-primary" />
                 <span>Lun-Ven 9:30-18:30</span>
               </div>
             </div>

@@ -1,5 +1,8 @@
 import React from 'react'
 import { LashesmoodProduct } from '@/types/shopify'
+import { Card, CardContent } from '@/components/ui/card'
+import { ScrollReveal } from '@/components/ui/scroll-reveal'
+import { Check } from 'lucide-react'
 
 interface ProductDescriptionProps {
 	product: LashesmoodProduct
@@ -21,49 +24,71 @@ const ProductDescription = ({ product }: ProductDescriptionProps) => {
 	]
 
 	return (
-		<section className="section-padding bg-white">
-			<div className="container-custom max-w-4xl">
-				<div className="prose prose-lg max-w-none">
-					<p className="text-lg leading-relaxed mb-6">{product.description}</p>
+		<section className="section-padding bg-gradient-to-br from-brand-light to-white">
+			<div className="container-custom max-w-5xl">
+				{/* Description */}
+				<ScrollReveal>
+					<div className="mb-12">
+						<h2 className="font-playfair text-3xl md:text-4xl font-bold text-foreground mb-6">
+							Descrizione
+						</h2>
+						<p className="text-lg leading-relaxed text-muted-foreground">{product.description}</p>
+					</div>
+				</ScrollReveal>
 
-					<div className="grid md:grid-cols-2 gap-8 mt-8">
-						{/* Vantaggi */}
-						<div>
-							<h3 className="text-xl font-bold mb-4">Vantaggi</h3>
-							<ul className="space-y-2">
-								{benefits.map((benefit, index) => (
-									<li key={index} className="flex items-start space-x-2">
-										<span className="text-brand-primary">•</span>
-										<span>{benefit}</span>
-									</li>
-								))}
-							</ul>
-						</div>
-
-						{/* Cosa trovi nel Kit */}
-						{product.isKit && (
-							<div>
-								<h3 className="text-xl font-bold mb-4">Cosa trovi nel Kit</h3>
-								<ul className="space-y-2">
-									{kitContents.map((item, index) => (
-										<li key={index} className="flex items-start space-x-2">
-											<span className="text-brand-primary">•</span>
-											<span>{item}</span>
+				<div className="grid md:grid-cols-2 gap-6 md:gap-8">
+					{/* Vantaggi */}
+					<ScrollReveal>
+						<Card className="bg-white border border-border/50 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+							<CardContent className="p-6">
+								<h3 className="font-playfair text-2xl font-bold text-foreground mb-6">Vantaggi</h3>
+								<ul className="space-y-4">
+									{benefits.map((benefit, index) => (
+										<li key={index} className="flex items-start gap-3">
+											<div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-brand-primary/10 flex items-center justify-center">
+												<Check className="h-3 w-3 text-brand-primary" />
+											</div>
+											<span className="text-muted-foreground leading-relaxed">{benefit}</span>
 										</li>
 									))}
 								</ul>
-							</div>
-						)}
-					</div>
+							</CardContent>
+						</Card>
+					</ScrollReveal>
 
-					{/* Ingredienti */}
-					{product.ingredients && (
-						<div className="mt-8">
-							<h3 className="text-xl font-bold mb-4">Ingredienti</h3>
-							<p className="text-gray-700">{product.ingredients}</p>
-						</div>
+					{/* Cosa trovi nel Kit */}
+					{product.isKit && (
+						<ScrollReveal>
+							<Card className="bg-white border border-border/50 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+								<CardContent className="p-6">
+									<h3 className="font-playfair text-2xl font-bold text-foreground mb-6">Cosa trovi nel Kit</h3>
+									<ul className="space-y-4">
+										{kitContents.map((item, index) => (
+											<li key={index} className="flex items-start gap-3">
+												<div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-brand-primary/10 flex items-center justify-center">
+													<Check className="h-3 w-3 text-brand-primary" />
+												</div>
+												<span className="text-muted-foreground leading-relaxed">{item}</span>
+											</li>
+										))}
+									</ul>
+								</CardContent>
+							</Card>
+						</ScrollReveal>
 					)}
 				</div>
+
+				{/* Ingredienti */}
+				{product.ingredients && (
+					<ScrollReveal>
+						<Card className="bg-white border border-border/50 rounded-2xl shadow-sm mt-8">
+							<CardContent className="p-6">
+								<h3 className="font-playfair text-2xl font-bold text-foreground mb-4">Ingredienti</h3>
+								<p className="text-muted-foreground leading-relaxed">{product.ingredients}</p>
+							</CardContent>
+						</Card>
+					</ScrollReveal>
+				)}
 			</div>
 		</section>
 	)

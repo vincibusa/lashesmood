@@ -10,18 +10,18 @@ interface ProductsGridProps {
 
 const ProductsGrid = ({ products }: ProductsGridProps) => {
 	return (
-		<section className="section-padding">
+		<section className="section-padding bg-white">
 			<div className="container-custom">
 				{/* Filters & Sort */}
-				<div className="flex items-center justify-between mb-8">
-					<p className="text-gray-600">
+				<div className="flex items-center justify-between mb-12">
+					<p className="text-muted-foreground font-medium">
 						{products.length} prodott{products.length === 1 ? 'o' : 'i'}
 					</p>
-					<div className="flex items-center space-x-4">
-						<Button variant="outline" size="sm">
+					<div className="flex items-center space-x-3">
+						<Button variant="outline" size="sm" className="rounded-xl">
 							Filtri
 						</Button>
-						<Button variant="outline" size="sm">
+						<Button variant="outline" size="sm" className="rounded-xl">
 							Ordina per
 						</Button>
 					</div>
@@ -29,7 +29,7 @@ const ProductsGrid = ({ products }: ProductsGridProps) => {
 
 				{/* Products Grid */}
 				{products.length > 0 ? (
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
 						{products.map((product) => (
 							<ProductCard key={product.id} product={product} />
 						))}
