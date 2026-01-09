@@ -697,3 +697,31 @@ export const GET_CUSTOMER_ORDER_QUERY = `
     }
   }
 `;
+
+export const GET_PAGES_QUERY = `
+  query getPages($first: Int!, $query: String, $country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+    pages(first: $first, query: $query) {
+      edges {
+        node {
+          id
+          title
+          body
+          handle
+        }
+      }
+    }
+  }
+`;
+
+export const GET_PAGE_BY_HANDLE_QUERY = `
+  query getPageByHandle($handle: String!, $country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+    pageByHandle(handle: $handle) {
+      id
+      title
+      body
+      handle
+    }
+  }
+`;

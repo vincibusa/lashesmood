@@ -308,3 +308,30 @@ export interface CustomerAccessTokenDeleteResponse {
     userErrors: Array<{ field?: string[] | null; message: string }>;
   };
 }
+
+export interface ShopPolicy {
+  id: string;
+  title: string;
+  body: string;
+  handle: string;
+  url?: string;
+}
+
+export interface ShopPolicyPage {
+  id: string;
+  title: string;
+  body: string;
+  handle: string;
+}
+
+export interface PagesResponse {
+  pages: {
+    edges: Array<{
+      node: ShopPolicyPage;
+    }>;
+  };
+}
+
+export interface PageResponse {
+  pageByHandle: ShopPolicyPage | null;
+}

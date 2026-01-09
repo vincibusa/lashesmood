@@ -9,7 +9,7 @@ const Footer = () => {
     {
       title: 'Navigazione',
       links: [
-        { label: 'Collections', href: '/#collections' },
+        { label: 'Collezioni', href: '/#collections' },
         { label: 'Prodotti', href: '/prodotti' },
         { label: 'Come funziona', href: '/#tutorials' },
         { label: 'Contatti', href: '/contatti' },
@@ -18,18 +18,17 @@ const Footer = () => {
     {
       title: 'Supporto',
       links: [
-        { label: 'Come Funziona', href: '/come-funziona' },
         { label: 'FAQ', href: '/faq' },
-        { label: 'Spedizioni e Resi', href: '/spedizioni' },
+        { label: 'Spedizioni e Resi', href: '/politiche/shipping-policy' },
       ],
     },
     {
       title: 'Informazioni',
       links: [
-        { label: 'Privacy Policy', href: '/privacy' },
-        { label: 'Termini e Condizioni', href: '/termini' },
-        { label: 'Cookie Policy', href: '/cookie' },
-        { label: 'Chi Siamo', href: '/chi-siamo' },
+        { label: 'Privacy Policy', href: '/politiche/privacy-policy' },
+        { label: 'Politica di Reso', href: '/politiche/refund-policy' },
+        { label: 'Politica di Spedizione', href: '/politiche/shipping-policy' },
+        { label: 'Termini e Condizioni', href: '/politiche/terms-of-service' },
       ],
     },
   ];
@@ -133,9 +132,6 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
             <p>
               © {new Date().getFullYear()} Lashesmood. Tutti i diritti riservati.
-            </p>
-            <p className="mt-2 md:mt-0">
-              Made with 💕 in Italy
             </p>
           </div>
         </div>
