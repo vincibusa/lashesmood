@@ -16,15 +16,6 @@ const Footer = () => {
       ],
     },
     {
-      title: 'Prodotti',
-      links: [
-        { label: 'Press&GO! Kit', href: '/collections/press-go-kit-completo' },
-        { label: 'Kit Regular', href: '/collections/regular' },
-        { label: 'Accessori', href: '/collections/accessori' },
-        { label: 'Carte Regalo', href: '/products/carta-regalo' },
-      ],
-    },
-    {
       title: 'Supporto',
       links: [
         { label: 'Come Funziona', href: '/come-funziona' },
