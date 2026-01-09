@@ -15,11 +15,28 @@ interface FeatureCardProps {
 
 const FeatureCard: React.FC<FeatureCardProps> = ({ icon: Icon, title, description, index }) => {
 	const shouldReduceMotion = useReducedMotion()
+	const [isMobile, setIsMobile] = React.useState(false)
+
+	React.useEffect(() => {
+		const checkMobile = () => {
+			setIsMobile(window.innerWidth < 768)
+		}
+		checkMobile()
+		window.addEventListener('resize', checkMobile)
+		return () => window.removeEventListener('resize', checkMobile)
+	}, [])
+
+	// Alterna animazione: pari da destra, dispari da sinistra
+	const isEven = index % 2 === 0
+	const mobileInitialX = isEven ? 100 : -100
 
 	return (
 		<motion.div
-			initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.8, rotate: -5 }}
-			whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+			initial={shouldReduceMotion ? false : isMobile 
+				? { opacity: 0, x: mobileInitialX }
+				: { opacity: 0, scale: 0.8, rotate: -5 }
+			}
+			whileInView={{ opacity: 1, x: 0, scale: 1, rotate: 0 }}
 			viewport={{ once: true, margin: '-50px' }}
 			transition={{
 				type: 'spring',

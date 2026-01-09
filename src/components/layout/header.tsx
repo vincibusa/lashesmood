@@ -43,10 +43,9 @@ const Header = () => {
 	}, []);
 
 	const navigationItems = [
-		{ label: 'Collections', href: '/collections', icon: LayoutGrid },
-		{ label: 'Press&GO!', href: '/collections/press-go-kit-completo', icon: Zap },
-		{ label: 'Regular', href: '/collections/regular', icon: Package },
-		{ label: 'Tutorial', href: '/come-funziona', icon: BookOpen },
+		{ label: 'Collections', href: '/#collections', icon: LayoutGrid },
+		{ label: 'Prodotti', href: '/prodotti', icon: Package },
+		{ label: 'Tutorial', href: '/#tutorials', icon: BookOpen },
 		{ label: 'Contatti', href: '/contatti', icon: Mail },
 	];
 
@@ -105,12 +104,33 @@ const Header = () => {
 							<div className="flex flex-col space-y-4 mt-8">
 								{navigationItems.map((item) => {
 									const Icon = item.icon
+									const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+										if (item.href.startsWith('/#')) {
+											const hash = item.href.substring(1)
+											setIsMenuOpen(false)
+											if (pathname === '/') {
+												e.preventDefault()
+												const element = document.querySelector(hash)
+												if (element) {
+													const headerHeight = 80
+													const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+													const offsetPosition = elementPosition - headerHeight
+													window.scrollTo({
+														top: offsetPosition,
+														behavior: 'smooth'
+													})
+												}
+											}
+										} else {
+											setIsMenuOpen(false)
+										}
+									}
 									return (
 										<Link
 											key={item.href}
 											href={item.href}
 											className="flex items-center space-x-3 text-lg font-medium hover:text-brand-primary transition-colors"
-											onClick={() => setIsMenuOpen(false)}
+											onClick={handleClick}
 										>
 											<Icon className="h-5 w-5" />
 											<span>{item.label}</span>
@@ -134,20 +154,41 @@ const Header = () => {
 
 					{/* Desktop Navigation */}
 					<nav className="hidden lg:flex items-center space-x-8 flex-1 justify-center">
-						{navigationItems.map((item) => (
-							<Link
-								key={item.href}
-								href={item.href}
-								className={`text-sm font-medium transition-colors duration-200 relative ${
-									isHomepage && !isScrolled ? 'text-white hover:text-white/80' : 'text-gray-700 hover:text-brand-primary'
-								}`}
-							>
-								{item.label}
-								<span className={`absolute inset-x-0 -bottom-1 h-0.5 ${
-									isHomepage && !isScrolled ? 'bg-white' : 'bg-brand-primary'
-								} scale-x-0 hover:scale-x-100 transition-transform duration-200`} />
-							</Link>
-						))}
+						{navigationItems.map((item) => {
+							const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+								if (item.href.startsWith('/#')) {
+									const hash = item.href.substring(1)
+									if (pathname === '/') {
+										e.preventDefault()
+										const element = document.querySelector(hash)
+										if (element) {
+											const headerHeight = 80
+											const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+											const offsetPosition = elementPosition - headerHeight
+											window.scrollTo({
+												top: offsetPosition,
+												behavior: 'smooth'
+											})
+										}
+									}
+								}
+							}
+							return (
+								<Link
+									key={item.href}
+									href={item.href}
+									onClick={handleClick}
+									className={`text-sm font-medium transition-colors duration-200 relative ${
+										isHomepage && !isScrolled ? 'text-white hover:text-white/80' : 'text-gray-700 hover:text-brand-primary'
+									}`}
+								>
+									{item.label}
+									<span className={`absolute inset-x-0 -bottom-1 h-0.5 ${
+										isHomepage && !isScrolled ? 'bg-white' : 'bg-brand-primary'
+									} scale-x-0 hover:scale-x-100 transition-transform duration-200`} />
+								</Link>
+							)
+						})}
 					</nav>
 
 					{/* Right Actions */}

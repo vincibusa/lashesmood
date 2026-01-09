@@ -31,119 +31,122 @@ const VideoCard = ({ video, index, onPlay }: { video: Video; index: number; onPl
 				damping: 20,
 				delay: shouldReduceMotion ? 0 : index * 0.1
 			}}
-			whileHover={shouldReduceMotion ? {} : { scale: 1.02, y: -5 }}
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}
-			className="group relative overflow-hidden rounded-2xl bg-white border border-border/50 shadow-sm cursor-pointer"
+			className="group relative overflow-hidden rounded-2xl aspect-video cursor-pointer"
 			onClick={() => onPlay(video)}
 		>
-			{/* Thumbnail Container */}
-			<div className="relative aspect-video overflow-hidden">
-				{/* Placeholder Thumbnail with Gradient */}
-				<motion.div
-					animate={shouldReduceMotion ? {} : {
-						backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-					}}
-					transition={{
+			{/* Full Image Background */}
+			<motion.div
+				animate={shouldReduceMotion ? {} : {
+					backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+					scale: isHovered ? 1.05 : 1,
+				}}
+				transition={{
+					backgroundPosition: {
 						duration: 10,
 						repeat: Infinity,
 						ease: 'linear'
-					}}
-					className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 via-brand-secondary/20 to-brand-primary/20 bg-[length:200%_200%]"
-					style={{
-						backgroundImage: `url(${video.thumbnail})`,
-						backgroundSize: 'cover',
-						backgroundPosition: 'center'
+					},
+					scale: {
+						duration: 0.3,
+						ease: 'easeOut'
 					}
-					}
-				/>
+				}}
+				className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 via-brand-secondary/20 to-brand-primary/20 bg-[length:200%_200%]"
+				style={{
+					backgroundImage: `url(${video.thumbnail})`,
+					backgroundSize: 'cover',
+					backgroundPosition: 'center'
+				}}
+			/>
 
-				{/* Dark Overlay */}
-				<motion.div
-					animate={{ opacity: isHovered ? 0.6 : 0.4 }}
-					className="absolute inset-0 bg-black/40"
-				/>
+			{/* Gradient Overlay for Text Readability - Stronger on mobile */}
+			<motion.div
+				animate={{ opacity: isHovered ? 0.7 : 0.5 }}
+				className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/40 md:from-black/80 md:via-black/50 md:to-black/30"
+			/>
 
-				{/* Play Button */}
-				<motion.div
-					animate={shouldReduceMotion ? {} : {
-						scale: isHovered ? 1.1 : 1,
-						opacity: isHovered ? 1 : 0.9
-					}}
-					transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-					className="absolute inset-0 flex items-center justify-center"
-				>
+			{/* Content Overlay */}
+			<div className="absolute inset-0 flex flex-col justify-between p-4 md:p-6 z-10">
+				{/* Top Section - Duration Badge */}
+				<div className="flex justify-end">
+					<motion.div
+						initial={false}
+						animate={{ opacity: isHovered ? 0 : 1 }}
+						className="bg-black/80 backdrop-blur-sm text-white text-xs md:text-xs font-semibold px-2.5 py-1 rounded-lg"
+					>
+						{video.duration}
+					</motion.div>
+				</div>
+
+				{/* Bottom Section - Text Content */}
+				<div>
+					<motion.h3
+						animate={shouldReduceMotion ? {} : {
+							y: isHovered ? -5 : 0,
+						}}
+						className="font-playfair font-bold text-lg md:text-xl lg:text-2xl mb-2 leading-tight text-white drop-shadow-lg"
+					>
+						{video.title}
+					</motion.h3>
+					<motion.p
+						animate={shouldReduceMotion ? {} : {
+							opacity: isHovered ? 1 : 0.95,
+						}}
+						className="text-sm md:text-sm text-white drop-shadow-md mb-3 md:mb-4 line-clamp-2"
+					>
+						{video.description}
+					</motion.p>
+
+					{/* Play Indicator */}
 					<motion.div
 						animate={shouldReduceMotion ? {} : {
-							scale: [1, 1.1, 1],
+							x: isHovered ? 5 : 0,
+							opacity: isHovered ? 1 : 0.9
 						}}
-						transition={{
-							duration: 1.5,
-							repeat: isHovered ? Infinity : 0,
-							repeatDelay: 1
-						}}
-						whileHover={{ scale: 1.2 }}
-						className="w-16 h-16 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg"
+						className="flex items-center gap-2 text-sm md:text-sm font-semibold text-white drop-shadow-md"
 					>
-						<Play className="h-8 w-8 text-brand-primary ml-1" />
+						<span>Guarda ora</span>
+						<motion.span
+							animate={shouldReduceMotion ? {} : {
+								x: isHovered ? [0, 5, 0] : 0
+							}}
+							transition={{
+								duration: 0.8,
+								repeat: isHovered ? Infinity : 0,
+								repeatDelay: 0.5
+							}}
+						>
+							→
+						</motion.span>
 					</motion.div>
-				</motion.div>
-
-				{/* Duration Badge */}
-				<motion.div
-					initial={false}
-					animate={{ opacity: isHovered ? 0 : 1 }}
-					className="absolute top-3 right-3 bg-black/70 backdrop-blur-sm text-white text-xs font-semibold px-2.5 py-1 rounded-lg"
-				>
-					{video.duration}
-				</motion.div>
-
-				{/* Hover Gradient Effect */}
-				<motion.div
-					animate={shouldReduceMotion ? {} : {
-						opacity: isHovered ? 1 : 0,
-					}}
-					className="absolute inset-0 bg-gradient-to-t from-brand-primary/30 to-transparent opacity-0 pointer-events-none"
-				/>
+				</div>
 			</div>
 
-			{/* Content */}
-			<div className="p-4">
-				<motion.h3
-					animate={shouldReduceMotion ? {} : {
-						color: isHovered ? 'var(--brand-primary)' : 'var(--foreground)'
-					}}
-					className="font-playfair font-bold text-lg mb-2 leading-tight"
-				>
-					{video.title}
-				</motion.h3>
-				<p className="text-sm text-muted-foreground line-clamp-2">
-					{video.description}
-				</p>
-
-				{/* Play Indicator */}
+			{/* Play Button - Center */}
+			<motion.div
+				animate={shouldReduceMotion ? {} : {
+					scale: isHovered ? 1.1 : 0.9,
+					opacity: isHovered ? 1 : 0
+				}}
+				transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+				className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
+			>
 				<motion.div
 					animate={shouldReduceMotion ? {} : {
-						x: isHovered ? 5 : 0,
-						opacity: isHovered ? 1 : 0.5
+						scale: [1, 1.1, 1],
 					}}
-					className="mt-3 flex items-center gap-2 text-sm font-medium text-brand-primary"
+					transition={{
+						duration: 1.5,
+						repeat: isHovered ? Infinity : 0,
+						repeatDelay: 1
+					}}
+					className="w-16 h-16 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg"
 				>
-					<span>Guarda ora</span>
-					<motion.span
-						animate={shouldReduceMotion ? {} : {
-							x: isHovered ? [0, 5, 0] : 0
-						}}
-						transition={{
-							duration: 0.8,
-							repeat: isHovered ? Infinity : 0,
-							repeatDelay: 0.5
-						}}
-					>
-						→
-					</motion.span>
+					<Play className="h-8 w-8 text-brand-primary ml-1" />
 				</motion.div>
-			</div>
+			</motion.div>
 
 			{/* Border Animation on Hover */}
 			<motion.div
@@ -173,9 +176,9 @@ const VideoPlayerModal = ({ video, onClose }: { video: Video | null; onClose: ()
 				onClick={onClose}
 			>
 				<motion.div
-					initial={shouldReduceMotion ? false : { scale: 0.9, opacity: 0, y: 20 }}
-					animate={shouldReduceMotion ? {} : { scale: 1, opacity: 1, y: 0 }}
-					exit={shouldReduceMotion ? false : { scale: 0.9, opacity: 0, y: 20 }}
+					initial={shouldReduceMotion ? { scale: 1, opacity: 1, y: 0 } : { scale: 0.9, opacity: 0, y: 20 }}
+					animate={shouldReduceMotion ? { scale: 1, opacity: 1, y: 0 } : { scale: 1, opacity: 1, y: 0 }}
+					exit={shouldReduceMotion ? { scale: 1, opacity: 1, y: 0 } : { scale: 0.9, opacity: 0, y: 20 }}
 					transition={{ type: 'spring', damping: 25, stiffness: 200 }}
 					className="relative w-full max-w-4xl bg-white rounded-2xl overflow-hidden shadow-2xl"
 					onClick={(e) => e.stopPropagation()}
@@ -337,60 +340,16 @@ const VideoTutorialsSection = () => {
 			<div className="container-custom">
 				{/* Header */}
 				<ScrollReveal>
-					<div className="flex items-end justify-between mb-8 md:mb-12">
-						<div>
-							<motion.h2
-								initial={{ opacity: 0, y: 20 }}
-								whileInView={{ opacity: 1, y: 0 }}
-								viewport={{ once: true }}
-								transition={{ type: 'spring', damping: 20 }}
-								className="font-playfair text-3xl md:text-5xl lg:text-6xl font-bold text-foreground mb-2"
-							>
-								Video Tutorial
-							</motion.h2>
-							<motion.p
-								initial={{ opacity: 0 }}
-								whileInView={{ opacity: 1 }}
-								viewport={{ once: true }}
-								transition={{ delay: 0.2 }}
-								className="text-muted-foreground text-lg"
-							>
-								Guarda come applicare le tue nuove ciglia
-							</motion.p>
-						</div>
-
-						{/* Navigation Buttons (Desktop) */}
-						<motion.div
-							initial={{ opacity: 0, x: 20 }}
-							whileInView={{ opacity: 1, x: 0 }}
-							viewport={{ once: true }}
-							className="hidden md:flex gap-2"
-						>
-							<Button
-								variant="outline"
-								size="icon"
-								onClick={() => scrollCarousel('left')}
-								disabled={currentIndex === 0}
-								className="hover:bg-brand-primary hover:text-white transition-all disabled:opacity-30"
-							>
-								<ChevronLeft className="h-5 w-5" />
-							</Button>
-							<Button
-								variant="outline"
-								size="icon"
-								onClick={() => scrollCarousel('right')}
-								disabled={currentIndex === videos.length - 1}
-								className="hover:bg-brand-primary hover:text-white transition-all disabled:opacity-30"
-							>
-								<ChevronRight className="h-5 w-5" />
-							</Button>
-						</motion.div>
+					<div className="text-center mb-12">
+						<h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+							Video Tutorial
+						</h2>
 					</div>
 				</ScrollReveal>
 
 				{/* Video Carousel */}
 				<ScrollReveal>
-					<div className="relative">
+					<div className="relative -mx-4 md:-mx-6">
 						{/* Mobile Scroll Indicator */}
 						<motion.div
 							animate={shouldReduceMotion ? {} : {
@@ -409,13 +368,13 @@ const VideoTutorialsSection = () => {
 
 						<div
 							ref={scrollRef}
-							className="flex gap-4 md:gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide"
+							className="flex gap-4 md:gap-6 overflow-x-auto overflow-y-visible pt-4 pb-4 px-8 md:px-12 snap-x snap-mandatory hide-scrollbar"
 							style={{ scrollbarWidth: 'none' } as React.CSSProperties}
 						>
 							{videos.map((video, index) => (
 								<div
 									key={video.id}
-									className="flex-shrink-0 w-[85%] md:w-[45%] lg:w-[32%] snap-start"
+									className="flex-shrink-0 w-[90%] md:w-[50%] lg:w-[38%] snap-start"
 								>
 									<VideoCard
 										video={video}
@@ -425,35 +384,6 @@ const VideoTutorialsSection = () => {
 								</div>
 							))}
 						</div>
-
-						{/* Mobile Navigation Overlay */}
-						<motion.div
-							initial={{ opacity: 0 }}
-							whileInView={{ opacity: 1 }}
-							viewport={{ once: true }}
-							className="md:hidden flex justify-center gap-3 mt-4"
-						>
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={() => scrollCarousel('left')}
-								disabled={currentIndex === 0}
-								className="px-4 hover:bg-brand-primary hover:text-white transition-all disabled:opacity-30"
-							>
-								<ChevronLeft className="h-4 w-4 mr-1" />
-								Precedente
-							</Button>
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={() => scrollCarousel('right')}
-								disabled={currentIndex === videos.length - 1}
-								className="px-4 hover:bg-brand-primary hover:text-white transition-all disabled:opacity-30"
-							>
-								Successivo
-								<ChevronRight className="h-4 w-4 ml-1" />
-							</Button>
-						</motion.div>
 					</div>
 				</ScrollReveal>
 

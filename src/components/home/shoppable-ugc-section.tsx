@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ShoppingBag, Heart, ChevronLeft, ChevronRight } from 'lucide-react'
+import { X, ShoppingBag, Heart, ChevronLeft, ChevronRight, Play } from 'lucide-react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { ScrollReveal } from '@/components/ui/scroll-reveal'
@@ -39,8 +39,8 @@ const StoryBubble = ({ story, onOpen }: { story: StoryItem; onOpen: (story: Stor
 			whileInView={{ opacity: 1, scale: 1 }}
 			viewport={{ once: true }}
 			transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-			whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -5 }}
-			className="flex-shrink-0 flex flex-col items-center gap-2 cursor-pointer"
+			whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+			className="flex-shrink-0 flex flex-col items-center gap-2 cursor-pointer pt-2"
 			onClick={() => onOpen(story)}
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}
@@ -97,119 +97,100 @@ const UGCCard = ({ item, index, onOpen }: { item: UGCItem; index: number; onOpen
 				damping: 20,
 				delay: shouldReduceMotion ? 0 : index * 0.1
 			}}
-			whileHover={shouldReduceMotion ? {} : { scale: 1.02, y: -3 }}
-			className="group relative overflow-hidden rounded-2xl bg-white border border-border/50 shadow-sm cursor-pointer"
+			className="group relative overflow-hidden rounded-2xl aspect-[3/4] cursor-pointer"
 			onClick={() => onOpen(item)}
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}
 		>
-			{/* Image Container */}
-			<div className="relative aspect-[3/4] overflow-hidden">
-				<motion.div
-					animate={shouldReduceMotion ? {} : {
-						scale: isHovered ? 1.05 : 1,
-					}}
-					transition={{ duration: 0.4 }}
-					className="absolute inset-0"
-				>
-					<Image
-						src={item.imageSrc}
-						alt={item.alt}
-						fill
-						sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-						className="object-cover"
-					/>
-				</motion.div>
-
-				{/* Dark Overlay */}
-				<motion.div
-					animate={{ opacity: isHovered ? 0.6 : 0.2 }}
-					className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"
+			{/* Full Image Background */}
+			<motion.div
+				animate={shouldReduceMotion ? {} : {
+					scale: isHovered ? 1.05 : 1,
+				}}
+				transition={{ duration: 0.4 }}
+				className="absolute inset-0 rounded-2xl overflow-hidden"
+				style={{ borderRadius: '1rem' }}
+			>
+				<Image
+					src={item.imageSrc}
+					alt={item.alt}
+					fill
+					sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+					className="object-cover"
 				/>
+			</motion.div>
 
-				{/* User Info */}
-				<motion.div
-					animate={shouldReduceMotion ? {} : {
-						y: isHovered ? 0 : 10,
-						opacity: isHovered ? 1 : 0.8
-					}}
-					className="absolute top-3 left-3 flex items-center gap-2"
-				>
-					<div className="w-6 h-6 rounded-full overflow-hidden border border-white/30">
-						<Image
-							src={item.userAvatar}
-							alt={item.username}
-							fill
-							sizes="24px"
-							className="object-cover"
-						/>
-					</div>
-					<span className="text-white text-xs font-semibold drop-shadow-md">
-						@{item.username}
-					</span>
-				</motion.div>
+			{/* Gradient Overlay for Text Readability - Stronger on mobile */}
+			<motion.div
+				animate={{ opacity: isHovered ? 0.7 : 0.5 }}
+				className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/40 md:from-black/80 md:via-black/50 md:to-black/30"
+			/>
 
-				{/* Shop Button - Desktop Only */}
-				<motion.div
-					animate={shouldReduceMotion ? {} : {
-						opacity: isHovered ? 1 : 0,
-						y: isHovered ? 0 : 10
-					}}
-					className="absolute bottom-3 right-3 hidden md:block"
-				>
-					<Button
-						size="sm"
-						className="bg-white/90 backdrop-blur-sm text-brand-primary hover:bg-white font-semibold shadow-lg"
+			{/* Content Overlay */}
+			<div className="absolute inset-0 flex flex-col justify-end p-4 md:p-6 z-10">
+				{/* Text Content */}
+				<div>
+					<motion.h3
+						animate={shouldReduceMotion ? {} : {
+							y: isHovered ? -5 : 0,
+						}}
+						className="font-playfair font-bold text-lg md:text-xl lg:text-2xl mb-2 leading-tight text-white drop-shadow-lg"
 					>
-						<ShoppingBag className="h-4 w-4 mr-1" />
-						Shop
-					</Button>
-				</motion.div>
+						{item.alt}
+					</motion.h3>
+					{item.products.length > 0 && (
+						<motion.p
+							animate={shouldReduceMotion ? {} : {
+								opacity: isHovered ? 1 : 0.95,
+							}}
+							className="text-sm md:text-sm text-white drop-shadow-md mb-3 md:mb-4 line-clamp-2"
+						>
+							{item.products.map(p => p.name).join(', ')}
+						</motion.p>
+					)}
 
-				{/* Mobile Shop Indicator */}
+					{/* Shop Button */}
+					<motion.div
+						animate={shouldReduceMotion ? {} : {
+							x: isHovered ? 5 : 0,
+							opacity: isHovered ? 1 : 0.9
+						}}
+						className="flex items-center gap-2"
+					>
+						<Button
+							size="sm"
+							className="bg-white/90 backdrop-blur-sm text-brand-primary hover:bg-white font-semibold shadow-lg"
+						>
+							<ShoppingBag className="h-4 w-4 mr-1" />
+							Acquista
+						</Button>
+					</motion.div>
+				</div>
+			</div>
+
+			{/* Hover Indicator - Center */}
+			<motion.div
+				animate={shouldReduceMotion ? {} : {
+					scale: isHovered ? 1.1 : 0.9,
+					opacity: isHovered ? 1 : 0
+				}}
+				transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+				className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
+			>
 				<motion.div
 					animate={shouldReduceMotion ? {} : {
 						scale: [1, 1.1, 1],
-						opacity: [0.8, 1, 0.8]
 					}}
 					transition={{
 						duration: 1.5,
-						repeat: Infinity,
-						repeatDelay: 2
+						repeat: isHovered ? Infinity : 0,
+						repeatDelay: 1
 					}}
-					className="md:hidden absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm p-2 rounded-full"
+					className="w-16 h-16 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg"
 				>
-					<ShoppingBag className="h-4 w-4 text-brand-primary" />
+					<Play className="h-8 w-8 text-brand-primary ml-1" />
 				</motion.div>
-
-				{/* Product Count Badge */}
-				<motion.div
-					animate={shouldReduceMotion ? {} : {
-						opacity: isHovered ? 0 : 1,
-					}}
-					className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs font-semibold px-2 py-1 rounded-lg"
-				>
-					{item.products.length} prodotti
-				</motion.div>
-
-				{/* Hover Gradient Effect */}
-				<motion.div
-					animate={shouldReduceMotion ? {} : {
-						opacity: isHovered ? 1 : 0,
-					}}
-					className="absolute inset-0 bg-gradient-to-t from-brand-primary/30 to-transparent opacity-0 pointer-events-none"
-				/>
-			</div>
-
-			{/* Content - Desktop Only */}
-			<div className="hidden md:block p-4">
-				<h3 className="font-semibold text-foreground mb-1 line-clamp-1">
-					{item.alt}
-				</h3>
-				<p className="text-sm text-muted-foreground line-clamp-2">
-					{item.products.map(p => p.name).join(', ')}
-				</p>
-			</div>
+			</motion.div>
 		</motion.div>
 	)
 }
@@ -248,9 +229,9 @@ const LightboxModal = ({ item, onClose }: { item: UGCItem | null; onClose: () =>
 				onClick={onClose}
 			>
 				<motion.div
-					initial={shouldReduceMotion ? false : { scale: 0.9, opacity: 0, y: 20 }}
-					animate={shouldReduceMotion ? {} : { scale: 1, opacity: 1, y: 0 }}
-					exit={shouldReduceMotion ? false : { scale: 0.9, opacity: 0, y: 20 }}
+					initial={shouldReduceMotion ? { scale: 1, opacity: 1, y: 0 } : { scale: 0.9, opacity: 0, y: 20 }}
+					animate={shouldReduceMotion ? { scale: 1, opacity: 1, y: 0 } : { scale: 1, opacity: 1, y: 0 }}
+					exit={shouldReduceMotion ? { scale: 1, opacity: 1, y: 0 } : { scale: 0.9, opacity: 0, y: 20 }}
 					transition={{ type: 'spring', damping: 25, stiffness: 200 }}
 					className="relative w-full max-w-6xl bg-white rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]"
 					onClick={(e) => e.stopPropagation()}
@@ -286,9 +267,9 @@ const LightboxModal = ({ item, onClose }: { item: UGCItem | null; onClose: () =>
 						{/* Image */}
 						<motion.div
 							key={currentImageIndex}
-							initial={shouldReduceMotion ? false : { x: direction * 100, opacity: 0 }}
+							initial={shouldReduceMotion ? { x: 0, opacity: 1 } : { x: direction * 100, opacity: 0 }}
 							animate={{ x: 0, opacity: 1 }}
-							exit={shouldReduceMotion ? false : { x: direction * -100, opacity: 0 }}
+							exit={shouldReduceMotion ? { x: 0, opacity: 1 } : { x: direction * -100, opacity: 0 }}
 							transition={{ type: 'spring', damping: 30, stiffness: 200 }}
 							className="relative w-full h-[50vh] md:h-full"
 						>
@@ -315,7 +296,7 @@ const LightboxModal = ({ item, onClose }: { item: UGCItem | null; onClose: () =>
 									onClick={() => setCurrentImageIndex(idx)}
 								/>
 							))}
-						</motion.div>
+						</div>
 					</div>
 
 					{/* Product Info Section */}
@@ -599,7 +580,7 @@ const ShoppableUGCSection = () => {
 
 						<div
 							ref={scrollRef}
-							className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide"
+							className="flex gap-4 overflow-x-auto overflow-y-visible pt-2 pb-4 hide-scrollbar"
 							style={{ scrollbarWidth: 'none' } as React.CSSProperties}
 						>
 							{stories.map((story) => (

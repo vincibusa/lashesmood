@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useRef } from 'react'
+import React from 'react'
 import Image from 'next/image'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ArrowRight, ShoppingBag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ScrollReveal } from '@/components/ui/scroll-reveal'
@@ -26,60 +26,48 @@ interface CollectionGalleryProps {
 
 const ParallaxImage = ({ item, index }: { item: CollectionItem; index: number }) => {
 	const shouldReduceMotion = useReducedMotion()
-	const ref = useRef<HTMLDivElement>(null)
-
-	const { scrollYProgress } = useScroll({
-		target: ref,
-		offset: ['start end', 'end start']
-	})
-
-	// Parallax effect - different speeds for different items
-	const y = useTransform(
-		scrollYProgress,
-		[0, 1],
-		shouldReduceMotion ? [0, 0] : [0, (index % 2 === 0 ? -60 : 60)]
-	)
-
-	const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1.05, 1])
-
 	const [isHovered, setIsHovered] = React.useState(false)
 
 	return (
-		<motion.div
-			ref={ref}
-			initial={shouldReduceMotion ? false : { opacity: 0, y: 50 }}
-			whileInView={{ opacity: 1, y: 0 }}
-			viewport={{ once: true, margin: '-50px' }}
-			transition={{
-				type: 'spring',
-				stiffness: 150,
-				damping: 20,
-				delay: shouldReduceMotion ? 0 : index * 0.15
-			}}
-			className="group relative overflow-hidden rounded-2xl aspect-[3/4] md:aspect-square cursor-pointer"
-			onMouseEnter={() => setIsHovered(true)}
-			onMouseLeave={() => setIsHovered(false)}
-		>
+		<Link href={item.link} className="block">
 			<motion.div
-				style={{ y, scale }}
-				className="absolute inset-0"
-				transition={{ type: 'spring', stiffness: 100, damping: 30 }}
+				initial={shouldReduceMotion ? false : { opacity: 0, y: 50 }}
+				whileInView={{ opacity: 1, y: 0 }}
+				viewport={{ once: true, margin: '-50px' }}
+				transition={{
+					type: 'spring',
+					stiffness: 150,
+					damping: 20,
+					delay: shouldReduceMotion ? 0 : index * 0.15
+				}}
+				className="group relative overflow-hidden overflow-y-hidden rounded-2xl aspect-[3/4] md:aspect-[4/5] cursor-pointer flex-shrink-0"
+				style={{ borderRadius: '1rem', touchAction: 'pan-x' }}
+				onMouseEnter={() => setIsHovered(true)}
+				onMouseLeave={() => setIsHovered(false)}
 			>
-				<Image
-					src={item.imageSrc}
-					alt={item.alt}
-					fill
-					sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-					className="object-cover transition-transform duration-700 group-hover:scale-110"
-					priority={index < 2}
-				/>
+			<motion.div
+				style={{ borderRadius: '1rem', overflow: 'hidden' }}
+				className="absolute inset-0 rounded-2xl overflow-hidden"
+			>
+				<div className="absolute inset-0 rounded-2xl overflow-hidden" style={{ borderRadius: '1rem' }}>
+					<Image
+						src={item.imageSrc}
+						alt={item.alt}
+						fill
+						sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+						className="object-cover transition-transform duration-700 group-hover:scale-110"
+						style={{ borderRadius: '1rem' }}
+						priority={index < 2}
+					/>
+				</div>
 
 				{/* Gradient Overlay */}
 				<motion.div
 					animate={shouldReduceMotion ? {} : {
 						opacity: isHovered ? 1 : 0.6,
 					}}
-					className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"
+					className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent rounded-2xl"
+					style={{ borderRadius: '1rem' }}
 				/>
 
 				{/* Animated Border Glow */}
@@ -93,7 +81,7 @@ const ParallaxImage = ({ item, index }: { item: CollectionItem; index: number })
 						repeatDelay: 1
 					}}
 					className="absolute inset-0 border-4 border-brand-primary/50 rounded-2xl pointer-events-none"
-					style={{ opacity: 0 }}
+					style={{ borderRadius: '1rem', opacity: 0 }}
 				/>
 			</motion.div>
 
@@ -104,6 +92,7 @@ const ParallaxImage = ({ item, index }: { item: CollectionItem; index: number })
 					opacity: isHovered ? 1 : 0
 				}}
 				className="absolute bottom-0 left-0 right-0 p-6 text-white z-10"
+				style={{ borderBottomLeftRadius: '1rem', borderBottomRightRadius: '1rem' }}
 			>
 				<motion.div
 					animate={shouldReduceMotion ? {} : {
@@ -145,6 +134,7 @@ const ParallaxImage = ({ item, index }: { item: CollectionItem; index: number })
 				<ShoppingBag className="h-5 w-5 text-brand-primary" />
 			</motion.div>
 		</motion.div>
+		</Link>
 	)
 }
 
@@ -361,28 +351,32 @@ const CollectionGallery = ({ collections: shopifyCollections }: CollectionGaller
 					</ScrollReveal>
 				)}
 
-				{/* Collection Grid with Parallax */}
+				{/* Collection Horizontal Scroll */}
 				{collections.length > 0 ? (
 					<ScrollReveal>
-						<motion.div
-							className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
-							variants={{
-								hidden: { opacity: 0 },
-								visible: {
-									opacity: 1,
-									transition: {
-										staggerChildren: 0.15
+						<div className="overflow-x-auto overflow-y-hidden hide-scrollbar -mx-4 px-4 md:-mx-6 md:px-6" style={{ touchAction: 'pan-x' }}>
+							<motion.div
+								className="flex gap-4 md:gap-6 pb-4"
+								variants={{
+									hidden: { opacity: 0 },
+									visible: {
+										opacity: 1,
+										transition: {
+											staggerChildren: 0.15
+										}
 									}
-								}
-							}}
-							initial="hidden"
-							whileInView="visible"
-							viewport={{ once: true, margin: '-50px' }}
-						>
-							{collections.map((item, index) => (
-								<ParallaxImage key={item.id} item={item} index={index} />
-							))}
-						</motion.div>
+								}}
+								initial="hidden"
+								whileInView="visible"
+								viewport={{ once: true, margin: '-50px' }}
+							>
+								{collections.map((item, index) => (
+									<div key={item.id} className="w-[280px] md:w-[320px] flex-shrink-0">
+										<ParallaxImage item={item} index={index} />
+									</div>
+								))}
+							</motion.div>
+						</div>
 					</ScrollReveal>
 				) : (
 					<div className="text-center py-12 text-muted-foreground">

@@ -37,18 +37,6 @@ const StyleQuizSection = () => {
 							{/* Content */}
 							<div className="relative z-10 p-6 md:p-12 lg:p-16">
 								<div className="max-w-3xl mx-auto text-center space-y-6 md:space-y-8">
-									{/* Badge */}
-									<motion.div
-										initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.8 }}
-										whileInView={{ opacity: 1, scale: 1 }}
-										viewport={{ once: true }}
-										transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-										className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-secondary/30 text-brand-primary font-medium text-sm"
-									>
-										<Sparkles className="h-4 w-4" />
-										Nuovo! Quiz Personalizzato
-									</motion.div>
-
 									{/* Title */}
 									<motion.h2
 										initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
