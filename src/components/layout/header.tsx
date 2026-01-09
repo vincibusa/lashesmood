@@ -43,7 +43,7 @@ const Header = () => {
 	}, []);
 
 	const navigationItems = [
-		{ label: 'Collections', href: '/#collections', icon: LayoutGrid },
+		{ label: 'Collezioni', href: '/#collections', icon: LayoutGrid },
 		{ label: 'Prodotti', href: '/prodotti', icon: Package },
 		{ label: 'Come funziona', href: '/#tutorials', icon: BookOpen },
 		{ label: 'Contatti', href: '/contatti', icon: Mail },

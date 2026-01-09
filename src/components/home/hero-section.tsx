@@ -32,7 +32,7 @@ const HeroSection = () => {
 
 				{/* Hero Content - Centered on mobile, split on desktop */}
 				<div className="relative h-full flex items-end md:items-center z-10">
-					<div className="container-custom w-full">
+					<div className="container-custom w-full pb-16 md:pb-0">
 						<motion.div
 							initial="hidden"
 							animate="visible"
