@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { QuizQuestion, QuizAnswers, QuizState, QuizResult } from '@/types/quiz'
+import { QuizQuestion, QuizAnswers, QuizState, QuizResult, QuizOccasion, QuizEffect, QuizExperience } from '@/types/quiz'
 import QuizQuestionComponent from './quiz-question'
 import QuizResultComponent from './quiz-result'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
@@ -198,6 +198,8 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose }) => {
 	const [result, setResult] = useState<QuizResult | null>(null)
 	const shouldReduceMotion = useReducedMotion()
 
+	const [isMobile, setIsMobile] = useState(false)
+
 	// Reset state when modal opens
 	useEffect(() => {
 		if (isOpen) {
@@ -210,6 +212,16 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose }) => {
 			setResult(null)
 		}
 	}, [isOpen])
+
+	// Check if mobile
+	useEffect(() => {
+		const checkMobile = () => {
+			setIsMobile(window.innerWidth < 768)
+		}
+		checkMobile()
+		window.addEventListener('resize', checkMobile)
+		return () => window.removeEventListener('resize', checkMobile)
+	}, [])
 
 	const handleAnswer = (value: QuizOccasion | QuizEffect | QuizExperience) => {
 		const currentQ = QUESTIONS[state.currentQuestion]
@@ -262,23 +274,25 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose }) => {
 	if (!isOpen) return null
 
 	// Modal Variants
-	const modalVariants = shouldReduceMotion ? {} : {
+	const modalVariants = shouldReduceMotion ? undefined : {
 		hidden: {
 			opacity: 0,
 			y: '100%',
-			transition: { type: 'spring', damping: 25, stiffness: 200 }
+			transition: { type: 'spring' as const, damping: 25, stiffness: 200 }
 		},
 		visible: {
 			opacity: 1,
 			y: 0,
-			transition: { type: 'spring', damping: 25, stiffness: 200 }
+			transition: { type: 'spring' as const, damping: 25, stiffness: 200 }
 		}
 	}
 
-	const desktopVariants = shouldReduceMotion ? {} : {
+	const desktopVariants = shouldReduceMotion ? undefined : {
 		hidden: { opacity: 0, scale: 0.95 },
-		visible: { opacity: 1, scale: 1, transition: { type: 'spring', damping: 20 } }
+		visible: { opacity: 1, scale: 1, transition: { type: 'spring' as const, damping: 20 } }
 	}
+
+	const variants = shouldReduceMotion ? undefined : (isMobile ? modalVariants : desktopVariants)
 
 	return (
 		<AnimatePresence>
@@ -292,14 +306,14 @@ const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose }) => {
 				{/* Mobile Bottom Sheet / Desktop Modal */}
 				<motion.div
 					className="w-full md:w-[90%] lg:w-[700px] max-h-[90vh] bg-white rounded-t-3xl md:rounded-3xl overflow-hidden shadow-2xl flex flex-col"
-					variants={shouldReduceMotion ? undefined : (window.innerWidth < 768 ? modalVariants : desktopVariants)}
-					initial="hidden"
-					animate="visible"
-					exit="hidden"
+					variants={variants}
+					initial={shouldReduceMotion ? undefined : 'hidden'}
+					animate={shouldReduceMotion ? {} : 'visible'}
+					exit={shouldReduceMotion ? undefined : 'hidden'}
 					onClick={(e) => e.stopPropagation()}
 					style={{
 						maxHeight: '90vh',
-						...(window.innerWidth >= 768 ? { borderRadius: '1.5rem' } : { borderRadius: '1.5rem 1.5rem 0 0' })
+						...(isMobile ? { borderRadius: '1.5rem 1.5rem 0 0' } : { borderRadius: '1.5rem' })
 					} as React.CSSProperties}
 				>
 					{/* Header */}

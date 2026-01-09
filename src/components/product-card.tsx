@@ -12,7 +12,6 @@ import { LashesmoodProduct } from '@/types/shopify';
 import { formatPrice, formatDiscount } from '@/lib/utils';
 import { useCart } from '@/context/cart-context';
 import { useReducedMotion } from '@/hooks/use-reduced-motion';
-import { cardTilt3D, fadeInUp, iconBounce } from '@/lib/animations';
 
 interface ProductCardProps {
   product: LashesmoodProduct;
@@ -95,22 +94,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   // Animation variants
-  const cardVariants = shouldReduceMotion ? {} : {
+  const cardVariants = shouldReduceMotion ? undefined : {
     rest: {
       rotateX: 0,
       rotateY: 0,
       scale: 1,
-      transition: { type: 'spring', stiffness: 300, damping: 20 }
+      transition: { type: 'spring' as const, stiffness: 300, damping: 20 }
     },
     hover: {
       rotateX: mousePosition.x,
       rotateY: mousePosition.y,
       scale: 1.02,
-      transition: { type: 'spring', stiffness: 300, damping: 20 }
+      transition: { type: 'spring' as const, stiffness: 300, damping: 20 }
     }
   };
 
-  const overlayVariants = shouldReduceMotion ? {} : {
+  const overlayVariants = shouldReduceMotion ? undefined : {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
@@ -126,9 +125,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      initial="rest"
-      animate={isHovered ? 'hover' : 'rest'}
-      variants={shouldReduceMotion ? undefined : cardVariants}
+      initial={shouldReduceMotion ? false : 'rest'}
+      animate={shouldReduceMotion ? {} : (isHovered ? 'hover' : 'rest')}
+      variants={cardVariants}
       style={shouldReduceMotion ? {} : {
         transformStyle: 'preserve-3d',
         perspective: '1000px'

@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { ScrollReveal } from '@/components/ui/scroll-reveal'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
 import Link from 'next/link'
-import { ShopifyCollection } from '@/types/shopify'
+import { ShopifyCollection, ShopifyProduct } from '@/types/shopify'
 
 interface CollectionItem {
 	id: string
@@ -152,9 +152,8 @@ const FeaturedCollectionBanner = ({ collection }: FeaturedCollectionBannerProps)
 	// Get image: prefer collection image, fallback to first product image
 	const collectionImage = collection.image?.url
 	// Handle both raw and transformed product formats
-	const firstProduct = collection.products?.edges?.[0]?.node as any
-	const firstProductImage = firstProduct?.images?.[0]?.url || 
-		firstProduct?.images?.edges?.[0]?.node?.url
+	const firstProduct = collection.products?.edges?.[0]?.node as ShopifyProduct | undefined
+	const firstProductImage = firstProduct?.images?.[0]?.url
 	const imageSrc = collectionImage || firstProductImage || '/images/placeholder.png'
 	
 	// Extract description (remove HTML tags if present)
@@ -272,9 +271,8 @@ const CollectionGallery = ({ collections: shopifyCollections }: CollectionGaller
 			// Filter out collections without images or products
 			const hasImage = collection.image?.url
 			// Check if products have images (handle raw format from GraphQL)
-			const firstProduct = collection.products?.edges?.[0]?.node as any
-			const hasProductImage = firstProduct?.images?.edges?.[0]?.node?.url ||
-				firstProduct?.images?.[0]?.url // Fallback for transformed format
+			const firstProduct = collection.products?.edges?.[0]?.node as ShopifyProduct | undefined
+			const hasProductImage = firstProduct?.images?.[0]?.url
 			return hasImage || hasProductImage
 		})
 		.slice(0, 4) // Limit to 4 collections for the gallery
@@ -282,9 +280,8 @@ const CollectionGallery = ({ collections: shopifyCollections }: CollectionGaller
 			// Get image: prefer collection image, fallback to first product image
 			const collectionImage = collection.image?.url
 			// Handle raw format from GraphQL (images.edges[].node)
-			const firstProduct = collection.products?.edges?.[0]?.node as any
-			const firstProductImage = firstProduct?.images?.edges?.[0]?.node?.url ||
-				firstProduct?.images?.[0]?.url // Fallback for transformed format
+			const firstProduct = collection.products?.edges?.[0]?.node as ShopifyProduct | undefined
+			const firstProductImage = firstProduct?.images?.[0]?.url
 			const imageSrc = collectionImage || firstProductImage || '/images/placeholder.png'
 			
 			// Get alt text

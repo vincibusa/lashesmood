@@ -6,17 +6,14 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ScrollReveal } from '@/components/ui/scroll-reveal'
 import {
 	slideInLeft,
 	springUp,
 	fadeInUp,
 	staggerContainer,
 } from '@/lib/animations'
-import { useReducedMotion } from '@/hooks/use-reduced-motion'
 
 const HeroSection = () => {
-	const shouldReduceMotion = useReducedMotion()
 
 	return (
 		<section className="relative overflow-hidden">

@@ -2,18 +2,18 @@
 
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { QuizQuestion as QuizQuestionType } from '@/types/quiz'
+import { QuizQuestion as QuizQuestionType, QuizOccasion, QuizEffect, QuizExperience } from '@/types/quiz'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
 
 interface QuizQuestionProps {
 	question: QuizQuestionType
-	onAnswer: (value: any) => void
+	onAnswer: (value: QuizOccasion | QuizEffect | QuizExperience) => void
 }
 
 const QuizQuestionComponent: React.FC<QuizQuestionProps> = ({ question, onAnswer }) => {
 	const shouldReduceMotion = useReducedMotion()
 
-	const optionVariants = shouldReduceMotion ? {} : {
+	const optionVariants = shouldReduceMotion ? undefined : {
 		hidden: { opacity: 0, y: 20 },
 		visible: (i: number) => ({
 			opacity: 1,
@@ -21,7 +21,7 @@ const QuizQuestionComponent: React.FC<QuizQuestionProps> = ({ question, onAnswer
 			transition: {
 				delay: i * 0.1,
 				duration: 0.4,
-				ease: [0.22, 1, 0.36, 1]
+				ease: [0.22, 1, 0.36, 1] as const
 			}
 		})
 	}
@@ -53,8 +53,8 @@ const QuizQuestionComponent: React.FC<QuizQuestionProps> = ({ question, onAnswer
 							key={option.id}
 							custom={index}
 							variants={optionVariants}
-							initial="hidden"
-							animate="visible"
+							initial={shouldReduceMotion ? undefined : 'hidden'}
+							animate={shouldReduceMotion ? {} : 'visible'}
 							whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
 							whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
 							onClick={() => onAnswer(option.value)}
@@ -133,7 +133,7 @@ const QuizQuestionComponent: React.FC<QuizQuestionProps> = ({ question, onAnswer
 
 			{/* Tip */}
 			<div className="text-center text-sm text-muted-foreground pt-2">
-				💡 Scegli l'opzione che ti rappresenta di più
+				💡 Scegli l&apos;opzione che ti rappresenta di più
 			</div>
 		</motion.div>
 	)

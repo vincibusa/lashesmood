@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Play, ChevronLeft, ChevronRight, X, Volume2, VolumeX } from 'lucide-react'
+import { Play, X, Volume2, VolumeX } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ScrollReveal } from '@/components/ui/scroll-reveal'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
@@ -275,7 +275,6 @@ const VideoPlayerModal = ({ video, onClose }: { video: Video | null; onClose: ()
 const VideoTutorialsSection = () => {
 	const shouldReduceMotion = useReducedMotion()
 	const [selectedVideo, setSelectedVideo] = useState<Video | null>(null)
-	const [currentIndex, setCurrentIndex] = useState(0)
 	const scrollRef = useRef<HTMLDivElement>(null)
 
 	// Mock video data
@@ -314,26 +313,6 @@ const VideoTutorialsSection = () => {
 		}
 	]
 
-	const scrollCarousel = (direction: 'left' | 'right') => {
-		if (!scrollRef.current) return
-
-		const scrollAmount = scrollRef.current.offsetWidth * 0.8
-		const currentScroll = scrollRef.current.scrollLeft
-
-		if (direction === 'left') {
-			scrollRef.current.scrollTo({
-				left: currentScroll - scrollAmount,
-				behavior: 'smooth'
-			})
-			setCurrentIndex(prev => Math.max(0, prev - 1))
-		} else {
-			scrollRef.current.scrollTo({
-				left: currentScroll + scrollAmount,
-				behavior: 'smooth'
-			})
-			setCurrentIndex(prev => Math.min(videos.length - 1, prev + 1))
-		}
-	}
 
 	return (
 		<section className="section-padding bg-white">

@@ -151,7 +151,7 @@ const FeaturedProductsSection = ({ products }: FeaturedProductsSectionProps) => 
 						whileInView="visible"
 						viewport={{ once: true, amount: 0.2 }}
 					>
-						{featuredProducts.map((product, index) => (
+						{featuredProducts.map((product) => (
 							<motion.div key={product.id} variants={fadeInUp}>
 								<ProductCard product={product} />
 							</motion.div>

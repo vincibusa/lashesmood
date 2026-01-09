@@ -1,8 +1,8 @@
 'use client'
 
 import React from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, RefreshCw, ShoppingBag, Sparkles } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { RefreshCw, ShoppingBag, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { QuizResult } from '@/types/quiz'

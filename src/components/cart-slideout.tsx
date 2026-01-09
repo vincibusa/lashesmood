@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { X, Plus, Minus, ShoppingBag, Gift, Truck, Loader2, Sparkles, Shield, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/context/cart-context';
 import { formatPrice } from '@/lib/utils';
 import { motion } from 'framer-motion';

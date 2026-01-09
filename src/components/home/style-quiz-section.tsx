@@ -57,7 +57,7 @@ const StyleQuizSection = () => {
 										className="text-lg md:text-xl text-muted-foreground leading-relaxed"
 									>
 										Fai il nostro quiz di 30 secondi e scopri le ciglia perfette per il tuo stile,
-										l'occasione e il tuo livello di esperienza. Risultati personalizzati in tempo reale!
+										l&apos;occasione e il tuo livello di esperienza. Risultati personalizzati in tempo reale!
 									</motion.p>
 
 									{/* Features */}

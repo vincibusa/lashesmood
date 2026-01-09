@@ -62,7 +62,7 @@ export function ScrollReveal({
 		},
 	}
 
-	const MotionComponent = motion[as]
+	const MotionComponent = motion[as] as typeof motion.div
 
 	return (
 		<MotionComponent

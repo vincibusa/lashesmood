@@ -8,7 +8,7 @@ import VideoTutorialsSection from '@/components/home/video-tutorials-section'
 import CollectionGallery from '@/components/home/collection-gallery'
 import ShoppableUGCSection from '@/components/home/shoppable-ugc-section'
 import GiftThreshold from '@/components/gift-threshold'
-import { getCollections, getFeaturedProducts } from '@/lib/shopify'
+import { getCollections } from '@/lib/shopify'
 
 export default async function Home() {
 	const collections = await getCollections()

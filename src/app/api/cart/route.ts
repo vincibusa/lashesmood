@@ -44,10 +44,11 @@ export async function POST(request: NextRequest) {
 				try {
 					cart = await addToCart(cartId, variantId, quantity)
 					console.log('✅ [CART API] Item added to cart:', cart?.id)
-				} catch (addError: any) {
-					if (addError.message.includes('Il carrello specificato non esiste') || 
-						addError.message.includes('Cart not found') ||
-						addError.message.includes('UNAUTHORIZED')) {
+				} catch (addError: unknown) {
+					const errorMessage = addError instanceof Error ? addError.message : String(addError)
+					if (errorMessage.includes('Il carrello specificato non esiste') || 
+						errorMessage.includes('Cart not found') ||
+						errorMessage.includes('UNAUTHORIZED')) {
 						console.warn('⚠️ [CART API] Cart not found, creating a new one.')
 						cart = await createCart(variantId, quantity)
 						console.log('✅ [CART API] New cart created after add failure:', cart?.id)

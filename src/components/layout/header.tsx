@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, User, ShoppingBag, Menu, LayoutGrid, Zap, Package, BookOpen, Mail, LogOut, ShoppingCart } from 'lucide-react';
+import { Search, User, ShoppingBag, Menu, LayoutGrid, Package, BookOpen, Mail, LogOut, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
@@ -58,7 +58,6 @@ const Header = () => {
 		? { backgroundColor: 'transparent', background: 'transparent' }
 		: {};
 
-	const textColorClass = isHomepage && !isScrolled ? 'text-white' : 'text-gray-700';
 	const iconColorClass = isHomepage && !isScrolled ? 'text-white hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100';
 
 	return (
