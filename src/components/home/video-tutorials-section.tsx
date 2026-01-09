@@ -347,13 +347,13 @@ const VideoTutorialsSection = () => {
 
 						<div
 							ref={scrollRef}
-							className="flex gap-4 md:gap-6 overflow-x-auto overflow-y-visible pt-4 pb-4 px-8 md:px-12 snap-x snap-mandatory hide-scrollbar"
+							className="flex gap-4 md:gap-6 overflow-x-auto overflow-y-hidden pt-4 pb-4 px-8 md:px-12 snap-x snap-mandatory hide-scrollbar"
 							style={{ scrollbarWidth: 'none' } as React.CSSProperties}
 						>
 							{videos.map((video, index) => (
 								<div
 									key={video.id}
-									className="flex-shrink-0 w-[90%] md:w-[50%] lg:w-[38%] snap-start"
+									className="flex-shrink-0 w-[90%] md:w-[55%] lg:w-[42%] snap-start"
 								>
 									<VideoCard
 										video={video}

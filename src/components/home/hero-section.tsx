@@ -66,8 +66,8 @@ const HeroSection = () => {
 										size="lg"
 										className="btn-primary w-full sm:w-auto min-h-[56px] text-lg px-6 md:px-8 shadow-lg hover:shadow-xl"
 									>
-										<Link href="/collections/press-go-kit-completo">
-											Scopri le press&go
+										<Link href="/prodotti">
+											Scopri i prodotti
 										</Link>
 									</Button>
 								</motion.div>
@@ -79,7 +79,7 @@ const HeroSection = () => {
 										size="lg"
 										className="w-full sm:w-auto min-h-[56px] text-lg px-6 md:px-8 bg-white/95 hover:bg-white text-brand-accent border-2 border-white/50 hover:border-white transition-all"
 									>
-										<Link href="/come-funziona">
+										<Link href="/#tutorials">
 											PROVA ORA
 										</Link>
 									</Button>
