@@ -150,8 +150,8 @@ const WhyUsSection = () => {
 	const features = [
 		{
 			icon: Eye,
-			title: 'Leggere & Naturali',
-			description: 'Così comode che ti dimentichi di averle, così naturali che tutti noteranno solo il tuo sguardo.',
+			title: 'Leggere & riutilizzabili',
+			description: 'Così comode che ti dimentichi di averle e riutilizzabili per qualsiasi occasione',
 		},
 		{
 			icon: Clock,

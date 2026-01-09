@@ -52,7 +52,7 @@ const HeroSection = () => {
 								variants={fadeInUp}
 								className="text-xl md:text-2xl lg:text-3xl text-white/95 font-light mb-6 md:mb-8 leading-relaxed"
 							>
-								Uno sguardo <em className="italic font-serif text-white">dice tutto,</em> sempre
+								Accendi il tuo sguardo. Cambia mood, cambia ciglia
 							</motion.p>
 
 							{/* CTA Buttons - Mobile: stacked, Desktop: inline */}
