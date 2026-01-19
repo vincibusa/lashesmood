@@ -335,3 +335,13 @@ export interface PagesResponse {
 export interface PageResponse {
   pageByHandle: ShopPolicyPage | null;
 }
+
+export interface ShopPoliciesResponse {
+  shop: {
+    privacyPolicy: ShopPolicy | null;
+    refundPolicy: ShopPolicy | null;
+    shippingPolicy: ShopPolicy | null;
+    termsOfService: ShopPolicy | null;
+    subscriptionPolicy: ShopPolicy | null;
+  };
+}

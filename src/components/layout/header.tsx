@@ -25,8 +25,14 @@ const Header = () => {
 	const [showBanners, setShowBanners] = useState(true);
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [isScrolled, setIsScrolled] = useState(false);
+	const [isMounted, setIsMounted] = useState(false);
 	const { itemCount, toggleCart } = useCart();
 	const { isAuthenticated, isLoading, customerName, handleLogout } = useCustomer();
+
+	// Assicurati che i componenti Radix UI vengano renderizzati solo sul client
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
 
 	const isHomepage = pathname === '/';
 
@@ -83,64 +89,75 @@ const Header = () => {
 					style={shouldBeTransparent ? { backgroundColor: 'transparent', background: 'transparent' } : {}}
 				>
 					{/* Mobile Menu Trigger */}
-					<Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-						<SheetTrigger asChild className="lg:hidden">
-							<Button
-								variant="ghost"
-								size="icon"
-								className={`transition-colors duration-300 ${iconColorClass}`}
-							>
-								<Menu className="h-6 w-6" />
-							</Button>
-						</SheetTrigger>
-						<SheetContent side="left" className="w-[300px]">
-						<SheetTitle className="text-2xl font-bold text-brand-primary mb-8">
-							<Link href="/" onClick={() => setIsMenuOpen(false)}>
-								LASHESMOOD
-							</Link>
-						</SheetTitle>
-							<SheetDescription className="sr-only">
-								Menu di navigazione principale
-							</SheetDescription>
-							<div className="flex flex-col space-y-4 mt-8">
-								{navigationItems.map((item) => {
-									const Icon = item.icon
-									const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-										if (item.href.startsWith('/#')) {
-											const hash = item.href.substring(1)
-											setIsMenuOpen(false)
-											if (pathname === '/') {
-												e.preventDefault()
-												const element = document.querySelector(hash)
-												if (element) {
-													const headerHeight = 80
-													const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-													const offsetPosition = elementPosition - headerHeight
-													window.scrollTo({
-														top: offsetPosition,
-														behavior: 'smooth'
-													})
+					{isMounted ? (
+						<Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+							<SheetTrigger asChild className="lg:hidden">
+								<Button
+									variant="ghost"
+									size="icon"
+									className={`transition-colors duration-300 ${iconColorClass}`}
+								>
+									<Menu className="h-6 w-6" />
+								</Button>
+							</SheetTrigger>
+							<SheetContent side="left" className="w-[300px]">
+							<SheetTitle className="text-2xl font-bold text-brand-primary mb-8">
+								<Link href="/" onClick={() => setIsMenuOpen(false)}>
+									LASHESMOOD
+								</Link>
+							</SheetTitle>
+								<SheetDescription className="sr-only">
+									Menu di navigazione principale
+								</SheetDescription>
+								<div className="flex flex-col space-y-4 mt-8">
+									{navigationItems.map((item) => {
+										const Icon = item.icon
+										const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+											if (item.href.startsWith('/#')) {
+												const hash = item.href.substring(1)
+												setIsMenuOpen(false)
+												if (pathname === '/') {
+													e.preventDefault()
+													const element = document.querySelector(hash)
+													if (element) {
+														const headerHeight = 80
+														const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+														const offsetPosition = elementPosition - headerHeight
+														window.scrollTo({
+															top: offsetPosition,
+															behavior: 'smooth'
+														})
+													}
 												}
+											} else {
+												setIsMenuOpen(false)
 											}
-										} else {
-											setIsMenuOpen(false)
 										}
-									}
-									return (
-										<Link
-											key={item.href}
-											href={item.href}
-											className="flex items-center space-x-3 text-lg font-medium hover:text-brand-primary transition-colors"
-											onClick={handleClick}
-										>
-											<Icon className="h-5 w-5" />
-											<span>{item.label}</span>
-										</Link>
-									)
-								})}
-							</div>
-						</SheetContent>
-					</Sheet>
+										return (
+											<Link
+												key={item.href}
+												href={item.href}
+												className="flex items-center space-x-3 text-lg font-medium hover:text-brand-primary transition-colors"
+												onClick={handleClick}
+											>
+												<Icon className="h-5 w-5" />
+												<span>{item.label}</span>
+											</Link>
+										)
+									})}
+								</div>
+							</SheetContent>
+						</Sheet>
+					) : (
+						<Button
+							variant="ghost"
+							size="icon"
+							className={`lg:hidden transition-colors duration-300 ${iconColorClass}`}
+							onClick={() => setIsMenuOpen(true)}
+						>
+							<Menu className="h-6 w-6" />
+						</Button>
+					)}
 
 					{/* Logo */}
 					<Link href="/" className="flex-1 lg:flex-none">
@@ -220,50 +237,60 @@ const Header = () => {
 								<User className="h-5 w-5" />
 							</Button>
 						) : isAuthenticated ? (
-							<DropdownMenu>
-								<DropdownMenuTrigger asChild>
-									<Button variant="ghost" size="icon" className="relative">
-										<Avatar className="h-8 w-8">
-											<AvatarFallback className="bg-brand-primary text-white text-sm">
-												{customerName?.charAt(0).toUpperCase() ?? 'U'}
-											</AvatarFallback>
-										</Avatar>
-									</Button>
-								</DropdownMenuTrigger>
-								<DropdownMenuContent align="end" className="w-56">
-									<DropdownMenuLabel>
-										<div className="flex flex-col space-y-1">
-											<p className="text-sm font-medium">
-												Ciao, {customerName ?? 'Cliente'}!
-											</p>
-											<p className="text-xs text-gray-500">
-												Il tuo account
-											</p>
-										</div>
-									</DropdownMenuLabel>
-									<DropdownMenuSeparator />
-									<DropdownMenuItem asChild>
-										<Link href="/account" className="flex items-center cursor-pointer">
-											<User className="mr-2 h-4 w-4" />
-											<span>Profilo</span>
-										</Link>
-									</DropdownMenuItem>
-									<DropdownMenuItem asChild>
-										<Link href="/account/orders" className="flex items-center cursor-pointer">
-											<ShoppingCart className="mr-2 h-4 w-4" />
-											<span>I miei ordini</span>
-										</Link>
-									</DropdownMenuItem>
-									<DropdownMenuSeparator />
-									<DropdownMenuItem 
-										onClick={handleLogout}
-										className="text-red-600 focus:text-red-600 cursor-pointer"
-									>
-										<LogOut className="mr-2 h-4 w-4" />
-										<span>Esci</span>
-									</DropdownMenuItem>
-								</DropdownMenuContent>
-							</DropdownMenu>
+							isMounted ? (
+								<DropdownMenu>
+									<DropdownMenuTrigger asChild>
+										<Button variant="ghost" size="icon" className="relative">
+											<Avatar className="h-8 w-8">
+												<AvatarFallback className="bg-brand-primary text-white text-sm">
+													{customerName?.charAt(0).toUpperCase() ?? 'U'}
+												</AvatarFallback>
+											</Avatar>
+										</Button>
+									</DropdownMenuTrigger>
+									<DropdownMenuContent align="end" className="w-56">
+										<DropdownMenuLabel>
+											<div className="flex flex-col space-y-1">
+												<p className="text-sm font-medium">
+													Ciao, {customerName ?? 'Cliente'}!
+												</p>
+												<p className="text-xs text-gray-500">
+													Il tuo account
+												</p>
+											</div>
+										</DropdownMenuLabel>
+										<DropdownMenuSeparator />
+										<DropdownMenuItem asChild>
+											<Link href="/account" className="flex items-center cursor-pointer">
+												<User className="mr-2 h-4 w-4" />
+												<span>Profilo</span>
+											</Link>
+										</DropdownMenuItem>
+										<DropdownMenuItem asChild>
+											<Link href="/account/orders" className="flex items-center cursor-pointer">
+												<ShoppingCart className="mr-2 h-4 w-4" />
+												<span>I miei ordini</span>
+											</Link>
+										</DropdownMenuItem>
+										<DropdownMenuSeparator />
+										<DropdownMenuItem 
+											onClick={handleLogout}
+											className="text-red-600 focus:text-red-600 cursor-pointer"
+										>
+											<LogOut className="mr-2 h-4 w-4" />
+											<span>Esci</span>
+										</DropdownMenuItem>
+									</DropdownMenuContent>
+								</DropdownMenu>
+							) : (
+								<Button variant="ghost" size="icon" className="relative">
+									<Avatar className="h-8 w-8">
+										<AvatarFallback className="bg-brand-primary text-white text-sm">
+											{customerName?.charAt(0).toUpperCase() ?? 'U'}
+										</AvatarFallback>
+									</Avatar>
+								</Button>
+							)
 						) : (
 							<Link href="/account/login">
 								<Button variant="ghost" size="icon" className={iconColorClass}>

@@ -3,7 +3,10 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/cart-context";
 import { CustomerProvider } from "@/context/customer-context";
+import { CookieConsentProvider } from "@/context/cookie-consent-context";
 import AppShell from "@/components/layout/app-shell";
+import CookieConsentBanner from "@/components/cookie-consent-banner";
+import CookiePreferencesModal from "@/components/cookie-preferences-modal";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -42,9 +45,13 @@ export default function RootLayout({
       <body className={`${inter.variable} ${playfair.variable} antialiased min-h-screen flex flex-col`}>
         <CustomerProvider>
           <CartProvider>
-            <AppShell>
-              {children}
-            </AppShell>
+            <CookieConsentProvider>
+              <AppShell>
+                {children}
+              </AppShell>
+              <CookieConsentBanner />
+              <CookiePreferencesModal />
+            </CookieConsentProvider>
           </CartProvider>
         </CustomerProvider>
       </body>

@@ -56,6 +56,17 @@ src/
 
 **Shopify Integration**: All Shopify data flows through `src/lib/shopify.ts` which provides typed wrapper functions around GraphQL queries. Products are transformed from Shopify's format to `LashesmoodProduct` with additional fields (category, benefits, kit contents).
 
+**Shop Policies**: Shop policies (privacy, refund, shipping, terms) are fetched directly from Shopify's Shop Policies API via `shop.privacyPolicy`, `shop.refundPolicy`, etc. These are displayed at `/politiche/[handle]`.
+
+**Cookie Banner**: The Shopify cookie consent banner is integrated via `src/components/cookie-banner.tsx` and automatically loads the Shopify privacy banner script. The banner is configured in Shopify Admin (Settings → Customer Privacy → Cookie banner). 
+
+**Important**: For custom storefronts (headless), the cookie banner requires:
+- Shopify Admin → Settings → Customer privacy → Cookie banner to be enabled
+- Your custom domain (`www.lashesmood.com`) to be authorized for headless storefronts
+- Proper configuration of `NEXT_PUBLIC_SHOPIFY_CHECKOUT_DOMAIN` and `NEXT_PUBLIC_SHOPIFY_STOREFRONT_DOMAIN` in `.env.local`
+
+If you see a 401 error, verify these settings in Shopify Admin. The cookie banner may not be available for all Shopify plans or store configurations.
+
 **State Management**: Uses React Context for global state:
 - `CartProvider` - Cart operations via `/api/cart` route
 - `CustomerProvider` - Authentication via `/api/auth/*` routes
@@ -71,6 +82,10 @@ Required in `.env.local`:
 - `NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN` - Storefront API token
 - `NEXT_PUBLIC_SHOPIFY_COUNTRY` - Country code (default: IT)
 - `NEXT_PUBLIC_SHOPIFY_LANGUAGE` - Language code (default: IT)
+
+Optional (for cookie banner):
+- `NEXT_PUBLIC_SHOPIFY_CHECKOUT_DOMAIN` - Checkout domain (e.g., checkout.yourstore.com)
+- `NEXT_PUBLIC_SHOPIFY_STOREFRONT_DOMAIN` - Storefront root domain (e.g., yourstore.com)
 
 ## Code Style
 

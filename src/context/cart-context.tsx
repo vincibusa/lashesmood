@@ -16,7 +16,7 @@ interface CartContextType {
 	closeCart: () => void
 }
 
-const CartContext = createContext<CartContextType | undefined>(undefined)
+export const CartContext = createContext<CartContextType | undefined>(undefined)
 
 const CART_ID_KEY = 'shopify_cart_id'
 

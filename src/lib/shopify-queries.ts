@@ -725,3 +725,46 @@ export const GET_PAGE_BY_HANDLE_QUERY = `
     }
   }
 `;
+
+export const GET_SHOP_POLICIES_QUERY = `
+  query getShopPolicies($country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+    shop {
+      privacyPolicy {
+        id
+        title
+        body
+        handle
+        url
+      }
+      refundPolicy {
+        id
+        title
+        body
+        handle
+        url
+      }
+      shippingPolicy {
+        id
+        title
+        body
+        handle
+        url
+      }
+      termsOfService {
+        id
+        title
+        body
+        handle
+        url
+      }
+      subscriptionPolicy {
+        id
+        title
+        body
+        handle
+        url
+      }
+    }
+  }
+`;

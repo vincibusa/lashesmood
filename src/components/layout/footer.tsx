@@ -29,6 +29,7 @@ const Footer = () => {
         { label: 'Politica di Reso', href: '/politiche/refund-policy' },
         { label: 'Politica di Spedizione', href: '/politiche/shipping-policy' },
         { label: 'Termini e Condizioni', href: '/politiche/terms-of-service' },
+        { label: 'Gestione Cookie', href: '/cookie' },
       ],
     },
   ];

@@ -16,6 +16,7 @@ import {
 	ShopPolicyPage,
 	PagesResponse,
 	PageResponse,
+	ShopPoliciesResponse,
 } from '@/types/shopify';
 import {
   GET_PRODUCTS_QUERY,
@@ -35,6 +36,7 @@ import {
 	GET_CUSTOMER_ORDER_QUERY,
 	GET_PAGES_QUERY,
 	GET_PAGE_BY_HANDLE_QUERY,
+	GET_SHOP_POLICIES_QUERY,
 } from './shopify-queries';
 
 export interface ShopifyError {
@@ -608,50 +610,33 @@ export async function getCustomerOrderById(
 
 export async function getShopPolicies(): Promise<ShopPolicy[]> {
 	try {
-		// Try to fetch policy pages by querying for common policy handles
-		const policyHandles = [
-			'privacy-policy',
-			'privacy',
-			'refund-policy',
-			'refund',
-			'shipping-policy',
-			'shipping',
-			'terms-of-service',
-			'terms',
-			'politica-privacy',
-			'politica-reso',
-			'politica-spedizione',
-			'termini-condizioni',
-		];
-
-		// Fetch all pages and filter for policy-related ones
-		const data = await shopifyFetch<PagesResponse>({
-			query: GET_PAGES_QUERY,
-			variables: { first: 50 },
+		// Fetch shop policies directly from Shopify
+		const data = await shopifyFetch<ShopPoliciesResponse>({
+			query: GET_SHOP_POLICIES_QUERY,
+			variables: {},
 			revalidate: 3600, // Cache for 1 hour
 		});
 
-		// Filter pages that match policy handles or contain policy-related keywords
-		const policyPages = data.pages.edges
-			.map((edge) => edge.node)
-			.filter((page) => {
-				const handle = page.handle.toLowerCase();
-				return (
-					policyHandles.some((ph) => handle.includes(ph)) ||
-					page.title.toLowerCase().includes('privacy') ||
-					page.title.toLowerCase().includes('reso') ||
-					page.title.toLowerCase().includes('spedizione') ||
-					page.title.toLowerCase().includes('termini') ||
-					page.title.toLowerCase().includes('condizioni')
-				);
-			});
+		// Collect all non-null policies
+		const policies: ShopPolicy[] = [];
+		
+		if (data.shop.privacyPolicy) {
+			policies.push(data.shop.privacyPolicy);
+		}
+		if (data.shop.refundPolicy) {
+			policies.push(data.shop.refundPolicy);
+		}
+		if (data.shop.shippingPolicy) {
+			policies.push(data.shop.shippingPolicy);
+		}
+		if (data.shop.termsOfService) {
+			policies.push(data.shop.termsOfService);
+		}
+		if (data.shop.subscriptionPolicy) {
+			policies.push(data.shop.subscriptionPolicy);
+		}
 
-		return policyPages.map((page) => ({
-			id: page.id,
-			title: page.title,
-			body: page.body,
-			handle: page.handle,
-		}));
+		return policies;
 	} catch (error) {
 		console.error('Error fetching shop policies:', error);
 		return [];
@@ -660,43 +645,56 @@ export async function getShopPolicies(): Promise<ShopPolicy[]> {
 
 export async function getShopPolicyByHandle(handle: string): Promise<ShopPolicy | null> {
 	try {
-		// Map common policy handles to possible Shopify page handles
-		const handleMap: Record<string, string[]> = {
-			'privacy-policy': ['privacy-policy', 'privacy', 'politica-privacy', 'informativa-privacy'],
-			'refund-policy': ['refund-policy', 'refund', 'politica-reso', 'reso'],
-			'shipping-policy': ['shipping-policy', 'shipping', 'politica-spedizione', 'spedizione'],
-			'terms-of-service': ['terms-of-service', 'terms', 'termini-condizioni', 'termini'],
+		// Map common policy handles to Shopify policy types
+		const handleMap: Record<string, 'privacyPolicy' | 'refundPolicy' | 'shippingPolicy' | 'termsOfService' | 'subscriptionPolicy'> = {
+			'privacy-policy': 'privacyPolicy',
+			'privacy': 'privacyPolicy',
+			'politica-privacy': 'privacyPolicy',
+			'informativa-privacy': 'privacyPolicy',
+			'refund-policy': 'refundPolicy',
+			'refund': 'refundPolicy',
+			'politica-reso': 'refundPolicy',
+			'reso': 'refundPolicy',
+			'shipping-policy': 'shippingPolicy',
+			'shipping': 'shippingPolicy',
+			'politica-spedizione': 'shippingPolicy',
+			'spedizione': 'shippingPolicy',
+			'terms-of-service': 'termsOfService',
+			'terms': 'termsOfService',
+			'termini-condizioni': 'termsOfService',
+			'termini': 'termsOfService',
+			'subscription-policy': 'subscriptionPolicy',
+			'subscription': 'subscriptionPolicy',
 		};
 
 		const normalizedHandle = handle.toLowerCase();
-		const possibleHandles = handleMap[normalizedHandle] || [normalizedHandle];
+		const policyType = handleMap[normalizedHandle];
 
-		// Try each possible handle
-		for (const possibleHandle of possibleHandles) {
-			try {
-				const data = await shopifyFetch<PageResponse>({
-					query: GET_PAGE_BY_HANDLE_QUERY,
-					variables: { handle: possibleHandle },
-					revalidate: 3600,
-				});
+		// Fetch shop policies
+		const data = await shopifyFetch<ShopPoliciesResponse>({
+			query: GET_SHOP_POLICIES_QUERY,
+			variables: {},
+			revalidate: 3600,
+		});
 
-				if (data.pageByHandle) {
-					return {
-						id: data.pageByHandle.id,
-						title: data.pageByHandle.title,
-						body: data.pageByHandle.body,
-						handle: data.pageByHandle.handle,
-					};
-				}
-			} catch (err) {
-				// Continue to next handle if this one fails
-				continue;
+		// If we have a direct mapping, use it
+		if (policyType) {
+			const policy = data.shop[policyType];
+			if (policy) {
+				return policy;
 			}
 		}
 
-		// If direct lookup fails, try fetching all policies and filtering
-		const policies = await getShopPolicies();
-		return policies.find((p) => p.handle.toLowerCase() === normalizedHandle) || null;
+		// Otherwise, try to find by handle in all policies
+		const allPolicies = [
+			data.shop.privacyPolicy,
+			data.shop.refundPolicy,
+			data.shop.shippingPolicy,
+			data.shop.termsOfService,
+			data.shop.subscriptionPolicy,
+		].filter((p): p is ShopPolicy => p !== null);
+
+		return allPolicies.find((p) => p.handle.toLowerCase() === normalizedHandle) || null;
 	} catch (error) {
 		console.error('Error fetching shop policy:', error);
 		return null;
