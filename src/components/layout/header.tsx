@@ -23,7 +23,6 @@ import { usePathname } from 'next/navigation';
 const Header = () => {
 	const pathname = usePathname();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
-	const [showBanners, setShowBanners] = useState(true);
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [isMounted, setIsMounted] = useState(false);
@@ -38,12 +37,7 @@ const Header = () => {
 	const isHomepage = pathname === '/';
 
 	useEffect(() => {
-		const handleScroll = () => {
-			const scrollY = window.scrollY;
-			setShowBanners(scrollY < 50);
-			setIsScrolled(scrollY > 20);
-		};
-
+		const handleScroll = () => setIsScrolled(window.scrollY > 20);
 		handleScroll();
 		window.addEventListener('scroll', handleScroll);
 		return () => window.removeEventListener('scroll', handleScroll);
@@ -71,15 +65,6 @@ const Header = () => {
 
 	return (
 		<header className={headerClasses} style={headerStyle}>
-			{/* Banner - Free Shipping (only one banner now) */}
-			<div className={`banner-shipping transition-all duration-300 ${showBanners ? 'h-auto opacity-100' : 'h-0 opacity-0 overflow-hidden'}`}>
-				<div className={`container-custom ${shouldBeTransparent ? '!bg-transparent' : ''}`}>
-					<p className="text-center py-2 px-4 font-medium text-sm">
-						<strong>SPEDIZIONE GRATUITA</strong> 24-72h per ordini superiori a 49,99EUR
-					</p>
-				</div>
-			</div>
-
 			{/* Main Header */}
 			<div
 				className={`container-custom ${shouldBeTransparent ? '!bg-transparent' : ''}`}
