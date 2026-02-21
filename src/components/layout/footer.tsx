@@ -17,7 +17,6 @@ const Footer = () => {
     {
       title: 'Supporto',
       links: [
-        { label: 'FAQ', href: '/faq' },
         { label: 'Spedizioni e Resi', href: '/politiche/shipping-policy' },
       ],
     },
