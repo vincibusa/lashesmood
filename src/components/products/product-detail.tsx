@@ -170,22 +170,6 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 
 					{/* Product Info */}
 					<div className="space-y-6">
-						{/* Breadcrumb */}
-						<nav className="text-sm text-gray-500">
-							<Link href="/" className="hover:text-brand-primary">
-								Home
-							</Link>
-							<span className="mx-2">/</span>
-							<Link
-								href="/collections/press-go-kit-completo"
-								className="hover:text-brand-primary"
-							>
-								Press&GO!
-							</Link>
-							<span className="mx-2">/</span>
-							<span className="text-gray-900">{product.title}</span>
-						</nav>
-
 						{/* Vendor */}
 						<Link href={`/collections/vendors?q=${product.vendor}`}>
 							<p className="text-brand-primary font-medium hover:underline">
@@ -232,7 +216,7 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 							</span>
 							{hasDiscount && (
 								<>
-									<span className="text-xl text-muted-foreground line-through">
+									<span className="text-xl text-muted-foreground strike-diagonal inline-block">
 										{formatPrice(parseFloat(originalPrice!), '€')}
 									</span>
 									<Badge className="bg-red-500 text-white font-bold px-3 py-1">
@@ -313,6 +297,39 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 							</ul>
 						</div>
 
+					</div>
+				</div>
+
+				{/* Accessori omaggio - primi 50 pezzi */}
+				<div className="mt-16 pt-12 border-t border-border">
+					<div className="max-w-2xl mx-auto text-center mb-8">
+						<h3 className="font-playfair text-2xl md:text-3xl font-bold text-foreground mb-2">
+							Accessori omaggio
+						</h3>
+						<p className="text-muted-foreground text-sm md:text-base">
+							Per i primi <strong className="text-foreground">50 pezzi</strong> venduti
+							riceverai in regalo questi accessori per la cura e l’applicazione delle tue ciglia.
+						</p>
+					</div>
+					<div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-3xl mx-auto">
+						<div className="relative aspect-square rounded-2xl overflow-hidden border border-border bg-muted shadow-sm">
+							<Image
+								src={encodeURI('/FRA_9997-Modifica (1).jpg')}
+								alt="Accessorio omaggio: box Lashesmood con pennello per ciglia"
+								fill
+								className="object-cover"
+								sizes="(max-width: 640px) 100vw, 50vw"
+							/>
+						</div>
+						<div className="relative aspect-square rounded-2xl overflow-hidden border border-border bg-muted shadow-sm">
+							<Image
+								src={encodeURI('/FRA_9998-Modifica (1).jpg')}
+								alt="Accessorio omaggio: box Lashesmood con pinzetta"
+								fill
+								className="object-cover"
+								sizes="(max-width: 640px) 100vw, 50vw"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
