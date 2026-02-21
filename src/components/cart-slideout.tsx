@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { X, Plus, Minus, ShoppingBag, Gift, Truck, Loader2, Sparkles, Shield, Check } from 'lucide-react';
+import { X, Plus, Minus, ShoppingBag, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { useCart } from '@/context/cart-context';
@@ -17,22 +17,28 @@ const CartSlideout = () => {
   const total = cart ? parseFloat(cart.cost.totalAmount.amount) : 0;
   const subtotal = cart ? parseFloat(cart.cost.subtotalAmount.amount) : 0;
 
-  // Log cart for debugging
-  console.log('🛒 [CART SLIDEOUT] Cart:', {
-    hasCart: !!cart,
-    checkoutUrl: cart?.checkoutUrl,
-    itemCount,
-  });
-
-  const giftThreshold = 42.00;
-  const freeShippingThreshold = 49.99;
-  const remainingForGift = Math.max(0, giftThreshold - subtotal);
-  const remainingForShipping = Math.max(0, freeShippingThreshold - subtotal);
-  const giftEligible = subtotal >= giftThreshold;
-  const freeShippingEligible = subtotal >= freeShippingThreshold;
-
   const cartLines = cart?.lines.edges || [];
   const hasItems = cartLines.length > 0;
+
+  // Checkout URL: force host to Shopify checkout domain so the link always opens on the correct store
+  const checkoutDomain =
+    typeof process.env.NEXT_PUBLIC_SHOPIFY_CHECKOUT_DOMAIN === 'string'
+      ? process.env.NEXT_PUBLIC_SHOPIFY_CHECKOUT_DOMAIN
+      : process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN
+  const rawCheckoutUrl = cart?.checkoutUrl ?? ''
+  const checkoutUrl =
+    rawCheckoutUrl && checkoutDomain
+      ? rawCheckoutUrl.startsWith('/')
+        ? `https://${checkoutDomain}${rawCheckoutUrl}`
+        : (() => {
+            try {
+              const u = new URL(rawCheckoutUrl)
+              return `https://${checkoutDomain}${u.pathname}${u.search}`
+            } catch {
+              return rawCheckoutUrl
+            }
+          })()
+      : rawCheckoutUrl
 
   return (
     <Sheet open={isOpen} onOpenChange={closeCart}>
@@ -82,99 +88,6 @@ const CartSlideout = () => {
           ) : (
             /* Cart Items */
             <div className="p-6 space-y-6">
-              {/* Progress Indicators */}
-              <div className="space-y-3">
-                {/* Gift Progress */}
-                {!giftEligible && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="bg-gradient-to-br from-brand-light to-white border border-brand-primary/20 rounded-2xl p-4 shadow-sm"
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-full bg-brand-primary/10 flex items-center justify-center">
-                        <Gift className="h-5 w-5 text-brand-primary" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-foreground">
-                          Aggiungi {formatPrice(remainingForGift, '€')} per il regalo gratuito!
-                        </p>
-                      </div>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${Math.min(100, (subtotal / giftThreshold) * 100)}%` }}
-                        transition={{ duration: 0.5, ease: 'easeOut' }}
-                        className="bg-gradient-to-r from-brand-primary to-brand-secondary rounded-full h-2.5"
-                      />
-                    </div>
-                  </motion.div>
-                )}
-
-                {giftEligible && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-2xl p-4"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
-                        <Check className="h-5 w-5 text-green-600" />
-                      </div>
-                      <span className="text-sm font-semibold text-green-700">
-                        🎉 Hai diritto al regalo gratuito!
-                      </span>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* Free Shipping Progress */}
-                {!freeShippingEligible && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-2xl p-4 shadow-sm"
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
-                        <Truck className="h-5 w-5 text-blue-600" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-blue-700">
-                          Aggiungi {formatPrice(remainingForShipping, '€')} per la spedizione gratuita!
-                        </p>
-                      </div>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${Math.min(100, (subtotal / freeShippingThreshold) * 100)}%` }}
-                        transition={{ duration: 0.5, ease: 'easeOut' }}
-                        className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full h-2.5"
-                      />
-                    </div>
-                  </motion.div>
-                )}
-
-                {freeShippingEligible && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-2xl p-4"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
-                        <Check className="h-5 w-5 text-green-600" />
-                      </div>
-                      <span className="text-sm font-semibold text-green-700">
-                        ✅ Spedizione gratuita inclusa!
-                      </span>
-                    </div>
-                  </motion.div>
-                )}
-              </div>
-
               {/* Cart Items */}
               <div className="space-y-4">
                 {cartLines.map(({ node: line }, index) => {
@@ -306,18 +219,14 @@ const CartSlideout = () => {
               )}
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground">Spedizione</span>
-                <span className="font-semibold text-foreground">
-                  {freeShippingEligible ? (
-                    <span className="text-green-600">Gratuita</span>
-                  ) : (
-                    <>€ 4.99</>
-                  )}
+                <span className="font-semibold text-foreground text-sm text-muted-foreground">
+                  da calcolare al checkout
                 </span>
               </div>
               <div className="flex justify-between items-center pt-3 border-t border-border/50">
                 <span className="font-playfair text-xl font-bold text-foreground">Totale</span>
                 <span className="font-playfair text-2xl font-bold text-brand-primary">
-                  € {(total + (freeShippingEligible ? 0 : 4.99)).toFixed(2)}
+                  € {total.toFixed(2)}
                 </span>
               </div>
             </div>
@@ -326,9 +235,9 @@ const CartSlideout = () => {
             <Button
               className="w-full bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
               asChild
-              disabled={isLoading}
+              disabled={isLoading || !checkoutUrl}
             >
-              <a href={cart.checkoutUrl} target="_blank" rel="noopener noreferrer">
+              <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -354,22 +263,6 @@ const CartSlideout = () => {
                 Continua Shopping
               </Link>
             </Button>
-
-            {/* Trust Badges */}
-            <div className="flex items-center justify-center gap-4 pt-4 border-t border-border/50">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Shield className="h-4 w-4 text-brand-primary" />
-                <span>Pagamento sicuro</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Truck className="h-4 w-4 text-brand-primary" />
-                <span>Spedizione veloce</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Sparkles className="h-4 w-4 text-brand-primary" />
-                <span>Garanzia</span>
-              </div>
-            </div>
           </div>
         )}
       </SheetContent>

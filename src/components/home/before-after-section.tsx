@@ -10,8 +10,8 @@ const BeforeAfterSection = () => {
 				</h2>
 				<div className="max-w-2xl mx-auto">
 					<BeforeAfterSlider
-						beforeImage="https://ciglissime.com/cdn/shop/files/prima_4c4033af-0ac8-4bdf-b6d6-fa7391b691fa.jpg?v=1757260023&width=3840"
-						afterImage="https://ciglissime.com/cdn/shop/files/dopo_5eb92ee6-462e-4bfa-8028-4e97cd16221f.jpg?v=1757260023&width=3840"
+						beforeImage="/images/FRA_9546-Modifica-Modifica.jpg"
+						afterImage="/images/FRA_9737-Modifica.jpg"
 						beforeAlt="Prima - senza Lashesmood"
 						afterAlt="Dopo - con Lashesmood"
 					/>

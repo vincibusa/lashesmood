@@ -12,24 +12,15 @@ const ProductsGrid = ({ products }: ProductsGridProps) => {
 	return (
 		<section className="section-padding bg-white">
 			<div className="container-custom">
-				{/* Filters & Sort */}
-				<div className="flex items-center justify-between mb-12">
+				<div className="mb-12">
 					<p className="text-muted-foreground font-medium">
 						{products.length} prodott{products.length === 1 ? 'o' : 'i'}
 					</p>
-					<div className="flex items-center space-x-3">
-						<Button variant="outline" size="sm" className="rounded-xl">
-							Filtri
-						</Button>
-						<Button variant="outline" size="sm" className="rounded-xl">
-							Ordina per
-						</Button>
-					</div>
 				</div>
 
 				{/* Products Grid */}
 				{products.length > 0 ? (
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
 						{products.map((product) => (
 							<ProductCard key={product.id} product={product} />
 						))}

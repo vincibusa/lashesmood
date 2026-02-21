@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Search, User, ShoppingBag, Menu, LayoutGrid, Package, BookOpen, Mail, LogOut, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from '@/components/ui/sheet';
@@ -51,7 +52,7 @@ const Header = () => {
 	const navigationItems = [
 		{ label: 'Collezioni', href: '/#collections', icon: LayoutGrid },
 		{ label: 'Prodotti', href: '/prodotti', icon: Package },
-		{ label: 'Come funziona', href: '/#tutorials', icon: BookOpen },
+		{ label: 'Come funziona', href: '/come-funziona', icon: BookOpen },
 		{ label: 'Contatti', href: '/contatti', icon: Mail },
 	];
 
@@ -85,13 +86,13 @@ const Header = () => {
 				style={shouldBeTransparent ? { backgroundColor: 'transparent', background: 'transparent' } : {}}
 			>
 				<div
-					className={`flex items-center justify-between py-4 ${shouldBeTransparent ? 'bg-transparent' : ''}`}
+					className={`grid grid-cols-[1fr_auto_1fr] lg:flex lg:flex-row lg:items-center lg:justify-between py-3 ${shouldBeTransparent ? 'bg-transparent' : ''}`}
 					style={shouldBeTransparent ? { backgroundColor: 'transparent', background: 'transparent' } : {}}
 				>
-					{/* Mobile Menu Trigger */}
+					{/* Mobile Menu Trigger - left cell on mobile */}
 					{isMounted ? (
 						<Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-							<SheetTrigger asChild className="lg:hidden">
+							<SheetTrigger asChild className="lg:hidden justify-self-start">
 								<Button
 									variant="ghost"
 									size="icon"
@@ -101,9 +102,15 @@ const Header = () => {
 								</Button>
 							</SheetTrigger>
 							<SheetContent side="left" className="w-[300px]">
-							<SheetTitle className="text-2xl font-bold text-brand-primary mb-8">
-								<Link href="/" onClick={() => setIsMenuOpen(false)}>
-									LASHESMOOD
+							<SheetTitle className="mb-8">
+								<Link href="/" onClick={() => setIsMenuOpen(false)} className="block">
+									<Image
+										src="/logo.svg"
+										alt="Lashesmood"
+										width={160}
+										height={42}
+										className="h-10 w-auto object-contain"
+									/>
 								</Link>
 							</SheetTitle>
 								<SheetDescription className="sr-only">
@@ -152,24 +159,27 @@ const Header = () => {
 						<Button
 							variant="ghost"
 							size="icon"
-							className={`lg:hidden transition-colors duration-300 ${iconColorClass}`}
+							className={`lg:hidden justify-self-start transition-colors duration-300 ${iconColorClass}`}
 							onClick={() => setIsMenuOpen(true)}
 						>
 							<Menu className="h-6 w-6" />
 						</Button>
 					)}
 
-					{/* Logo */}
-					<Link href="/" className="flex-1 lg:flex-none">
-						<div className="text-center lg:text-left">
-							<h1 className={`text-2xl lg:text-3xl font-bold tracking-tight transition-colors duration-300 ${
-								shouldBeTransparent ? 'text-white' : 'text-brand-primary'
-							}`}>
-								LASHESMOOD
-							</h1>
-						</div>
+					{/* Logo - centered on mobile, left on desktop */}
+					<Link href="/" className="flex justify-center lg:flex-none lg:justify-start">
+						<Image
+							src="/logo.svg"
+							alt="Lashesmood - Extension ciglia semipermanenti"
+							width={180}
+							height={48}
+							className="h-10 w-auto lg:h-12 object-contain"
+							priority
+						/>
 					</Link>
 
+					{/* Desktop Nav + Right Actions - right cell on mobile */}
+					<div className="flex flex-1 justify-end lg:justify-between lg:items-center">
 					{/* Desktop Navigation */}
 					<nav className="hidden lg:flex items-center space-x-8 flex-1 justify-center">
 						{navigationItems.map((item) => {
@@ -311,6 +321,7 @@ const Header = () => {
 								</Badge>
 							)}
 						</Button>
+					</div>
 					</div>
 				</div>
 			</div>

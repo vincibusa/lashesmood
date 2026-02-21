@@ -413,9 +413,6 @@ const CollectionGallery = ({ collections: shopifyCollections }: CollectionGaller
 								</Link>
 							</Button>
 						</motion.div>
-						<p className="text-sm text-muted-foreground mt-4">
-							Spedizione gratuita per ordini superiori a €50
-						</p>
 					</motion.div>
 				</ScrollReveal>
 			</div>

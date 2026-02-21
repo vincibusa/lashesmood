@@ -1,19 +1,23 @@
 import React from 'react'
 import Image from 'next/image'
-import { Card } from '@/components/ui/card'
+import type { ProductType } from '@/components/come-funziona/types'
 
-const PositioningGuide = () => {
+interface PositioningGuideProps {
+	productType: ProductType
+}
+
+const PositioningGuide = (_props: PositioningGuideProps) => {
 	return (
-		<section className="section-padding bg-brand-light">
+		<section id="posizionamento" className="section-padding bg-brand-light">
 			<div className="container-custom">
 				<div className="max-w-4xl mx-auto">
-					<div className="text-center mb-12">
+					<div className="text-center mb-12 max-w-xl mx-auto">
 						<Image
-							src="https://ciglissime.com/cdn/shop/files/clean_girl_press.jpg?v=1750417193&width=1500"
-							alt="Guida posizionamento ciuffetti"
+							src="/images/FRA_9737-Modifica.jpg"
+							alt="Guida al posizionamento dei ciuffetti sulla rima cigliare"
 							width={800}
 							height={400}
-							className="w-full rounded-xl shadow-lg"
+							className="w-full rounded-2xl shadow-md border border-border object-cover"
 						/>
 					</div>
 
@@ -22,37 +26,13 @@ const PositioningGuide = () => {
 							La <em className="italic text-brand-primary">magia</em> è nel
 							posizionarle bene
 						</h2>
-						<p className="text-xl text-gray-700 mb-8">
+						<p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-xl mx-auto">
 							La durata dipende tutta da <em className="italic">come</em> le
 							applichi!
 						</p>
 
-						<div className="grid md:grid-cols-2 gap-8 text-left">
-							<Card className="p-6">
-								<h3 className="font-bold text-lg mb-3 flex items-center">
-									<span className="text-brand-primary mr-2">✨</span>
-									Con le Regular
-								</h3>
-								<p className="text-gray-700">
-									Posiziona i ciuffetti a circa{' '}
-									<strong>1-2 mm dalla rima cigliare</strong>.
-								</p>
-							</Card>
-
-							<Card className="p-6">
-								<h3 className="font-bold text-lg mb-3 flex items-center">
-									<span className="text-brand-primary mr-2">✨</span>
-									Con le Press&Go
-								</h3>
-								<p className="text-gray-700">
-									Appoggiali <strong>esattamente sulla rima</strong>: niente
-									spazi, devono fondersi con le tue ciglia naturali.
-								</p>
-							</Card>
-						</div>
-
-						<p className="text-gray-600 mt-6 italic">
-							Ricorda: se sono messe bene non sentirai alcun fastidio 💖
+						<p className="text-muted-foreground mt-8 italic text-center max-w-md mx-auto">
+							Ricorda: se sono messe bene non sentirai alcun fastidio
 						</p>
 					</div>
 				</div>

@@ -20,7 +20,7 @@ const HeroSection = () => {
 				{/* Background Image with subtle overlay */}
 				<div className="absolute inset-0">
 					<Image
-						src="https://ciglissime.com/cdn/shop/files/IMG_1518_9X16-_2.jpg?v=1758388075&width=3840"
+						src="/hero.jpg"
 						alt="Lashesmood Hero - Ciglia magnetiche"
 						fill
 						className="object-cover"
@@ -68,19 +68,6 @@ const HeroSection = () => {
 									>
 										<Link href="/prodotti">
 											Scopri i prodotti
-										</Link>
-									</Button>
-								</motion.div>
-
-								<motion.div variants={fadeInUp}>
-									<Button
-										asChild
-										variant="outline"
-										size="lg"
-										className="w-full sm:w-auto min-h-[56px] text-lg px-6 md:px-8 bg-white/95 hover:bg-white text-brand-accent border-2 border-white/50 hover:border-white transition-all"
-									>
-										<Link href="/#tutorials">
-											PROVA ORA
 										</Link>
 									</Button>
 								</motion.div>

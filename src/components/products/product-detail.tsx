@@ -3,13 +3,18 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Star, Clock, Truck, Shield, HeadphonesIcon, ShoppingBag } from 'lucide-react'
+import { Star, Clock, Truck, Shield, HeadphonesIcon, ShoppingBag, BookOpen, ChevronLeft, ChevronRight, ZoomIn, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Card, CardContent } from '@/components/ui/card'
+import {
+	Dialog,
+	DialogContent,
+	DialogTitle,
+} from '@/components/ui/dialog'
 import { LashesmoodProduct } from '@/types/shopify'
 import { formatPrice, formatDiscount } from '@/lib/utils'
 import { useCart } from '@/context/cart-context'
+import { ProductSchema, BreadcrumbSchema } from '@/components/seo/product-schema'
 
 interface ProductDetailProps {
 	product: LashesmoodProduct
@@ -17,6 +22,8 @@ interface ProductDetailProps {
 
 const ProductDetail = ({ product }: ProductDetailProps) => {
 	const [isAdding, setIsAdding] = useState(false)
+	const [lightboxOpen, setLightboxOpen] = useState(false)
+	const [lightboxIndex, setLightboxIndex] = useState(0)
 	const { addToCart } = useCart()
 	const originalPrice = product.compareAtPriceRange?.minVariantPrice.amount
 	const salePrice = product.priceRange.minVariantPrice.amount
@@ -26,12 +33,13 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 		? formatDiscount(parseFloat(originalPrice!), parseFloat(salePrice))
 		: 0
 
-	const customerReview = {
-		name: 'Denise',
-		text: "È già il secondo acquisto, le prime sono state le Clean Girl ed ogni applicazione è arrivata a durarmi anche due settimane, per cui soddisfatta ho deciso di provare un altro modello un po' più voluminoso, le Glamour Black. Le adoro",
-		rating: 5,
-		verified: true,
+	const images = product.images
+	const openLightbox = (index: number) => {
+		setLightboxIndex(index)
+		setLightboxOpen(true)
 	}
+	const goPrev = () => setLightboxIndex((i) => (i <= 0 ? images.length - 1 : i - 1))
+	const goNext = () => setLightboxIndex((i) => (i >= images.length - 1 ? 0 : i + 1))
 
 	const handleAddToCart = async () => {
 		// Get the first available variant
@@ -52,22 +60,43 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 	}
 
 	return (
-		<section className="section-padding">
+		<>
+			<ProductSchema product={product} />
+			<BreadcrumbSchema
+				items={[
+					{ name: 'Home', url: 'https://lashesmood.com' },
+					{ name: 'Press&GO!', url: 'https://lashesmood.com/collections/press-go-kit-completo' },
+					{ name: product.title, url: `https://lashesmood.com/products/${product.handle}` },
+				]}
+			/>
+			<section className="section-padding">
 			<div className="container-custom">
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
 					{/* Product Images */}
 					<div className="space-y-4">
-						{/* Main Image */}
-						<div className="aspect-square overflow-hidden rounded-2xl bg-gray-100 shadow-lg">
+						{/* Main Image - click to open lightbox */}
+						<div
+							className="aspect-square overflow-hidden rounded-2xl bg-gray-100 shadow-lg cursor-zoom-in relative group"
+							onClick={() => openLightbox(0)}
+							onKeyDown={(e) => e.key === 'Enter' && openLightbox(0)}
+							role="button"
+							tabIndex={0}
+							aria-label="Apri immagine a schermo intero"
+						>
 							{product.images[0] && (
-								<Image
-									src={product.images[0].url}
-									alt={product.images[0].altText || product.title}
-									width={600}
-									height={600}
-									className="w-full h-full object-cover"
-									priority
-								/>
+								<>
+									<Image
+										src={product.images[0].url}
+										alt={product.images[0].altText || product.title}
+										width={600}
+										height={600}
+										className="w-full h-full object-cover transition-transform group-hover:scale-105"
+										priority
+									/>
+									<div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/20 transition-colors">
+										<ZoomIn className="h-12 w-12 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg" aria-hidden />
+									</div>
+								</>
 							)}
 						</div>
 
@@ -76,7 +105,12 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 							{product.images.slice(0, 4).map((image, index) => (
 								<div
 									key={image.id}
-									className="aspect-square overflow-hidden rounded-xl bg-gray-100 cursor-pointer hover:opacity-80 transition-all hover:scale-105 border-2 border-transparent hover:border-brand-primary/30"
+									className="aspect-square overflow-hidden rounded-xl bg-gray-100 cursor-pointer hover:opacity-90 transition-all hover:scale-105 border-2 border-transparent hover:border-brand-primary/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
+									onClick={() => openLightbox(index)}
+									onKeyDown={(e) => e.key === 'Enter' && openLightbox(index)}
+									role="button"
+									tabIndex={0}
+									aria-label={`Visualizza immagine ${index + 1}`}
 								>
 									<Image
 										src={image.url}
@@ -89,6 +123,50 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 							))}
 						</div>
 					</div>
+
+					{/* Lightbox */}
+					<Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+						<DialogContent className="max-w-4xl w-[95vw] p-0 gap-0 border-0 bg-black/95 overflow-hidden [&>button]:text-white [&>button]:hover:bg-white/20 [&>button]:right-2 [&>button]:top-2">
+							<DialogTitle className="sr-only">
+								{product.title} - Immagine {lightboxIndex + 1}
+							</DialogTitle>
+							<div className="relative flex items-center justify-center min-h-[70vh] py-4">
+								{images[lightboxIndex] && (
+									<Image
+										src={images[lightboxIndex].url}
+										alt={images[lightboxIndex].altText || `${product.title} ${lightboxIndex + 1}`}
+										width={1200}
+										height={1200}
+										className="max-h-[70vh] w-auto object-contain"
+										unoptimized={false}
+									/>
+								)}
+								{images.length > 1 && (
+									<>
+										<button
+											type="button"
+											onClick={(e) => { e.stopPropagation(); goPrev() }}
+											className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
+											aria-label="Immagine precedente"
+										>
+											<ChevronLeft className="h-8 w-8" />
+										</button>
+										<button
+											type="button"
+											onClick={(e) => { e.stopPropagation(); goNext() }}
+											className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
+											aria-label="Immagine successiva"
+										>
+											<ChevronRight className="h-8 w-8" />
+										</button>
+									</>
+								)}
+							</div>
+							<p className="text-center text-white/80 text-sm pb-4">
+								{lightboxIndex + 1} / {images.length}
+							</p>
+						</DialogContent>
+					</Dialog>
 
 					{/* Product Info */}
 					<div className="space-y-6">
@@ -140,6 +218,13 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 							{product.title}
 						</h1>
 
+						{/* Description under title */}
+						{product.description && (
+							<p className="text-lg leading-relaxed text-muted-foreground">
+								{product.description}
+							</p>
+						)}
+
 						{/* Price */}
 						<div className="flex items-baseline gap-4 pt-2">
 							<span className="font-playfair text-4xl font-bold text-brand-primary">
@@ -156,30 +241,6 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 								</>
 							)}
 						</div>
-
-						{/* Customer Review Highlight */}
-						{customerReview && (
-							<Card className="bg-gradient-to-br from-brand-light to-white border border-brand-primary/20 rounded-2xl shadow-sm">
-								<CardContent className="p-6">
-									<div className="flex items-center gap-3 mb-3">
-										<div className="flex">
-											{[...Array(5)].map((_, i) => (
-												<Star
-													key={i}
-													className="h-4 w-4 fill-yellow-400 text-yellow-400"
-												/>
-											))}
-										</div>
-										<span className="font-playfair font-semibold text-foreground">
-											{customerReview.name}
-										</span>
-									</div>
-									<p className="text-sm text-muted-foreground italic leading-relaxed">
-										&quot;{customerReview.text}&quot;
-									</p>
-								</CardContent>
-							</Card>
-						)}
 
 						{/* Countdown Timer */}
 						<div className="bg-red-50 border border-red-200 rounded-xl p-4">
@@ -202,6 +263,18 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 							{isAdding ? 'Aggiunta in corso...' : 'Aggiungi al carrello'}
 						</Button>
 
+						{(product.category === 'press-go' || product.category === 'regular') && (
+							<p className="text-center">
+								<Link
+									href={`/come-funziona?tipo=${product.category}`}
+									className="inline-flex items-center gap-2 text-sm font-medium text-brand-primary hover:underline"
+								>
+									<BookOpen className="h-4 w-4 shrink-0" aria-hidden />
+									Come si applica?
+								</Link>
+							</p>
+						)}
+
 						{/* Trust Badges */}
 						<div className="grid grid-cols-2 gap-4 pt-2">
 							<div className="flex items-start gap-3 p-4 bg-white border border-border/50 rounded-xl hover:shadow-md transition-shadow">
@@ -213,18 +286,6 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 								</div>
 							</div>
 							<div className="flex items-start gap-3 p-4 bg-white border border-border/50 rounded-xl hover:shadow-md transition-shadow">
-								<Shield className="h-5 w-5 text-brand-primary mt-0.5 flex-shrink-0" />
-								<div>
-									<p className="font-semibold text-sm text-foreground">Paga anche alla consegna</p>
-								</div>
-							</div>
-							<div className="flex items-start gap-3 p-4 bg-white border border-border/50 rounded-xl hover:shadow-md transition-shadow">
-								<Shield className="h-5 w-5 text-brand-primary mt-0.5 flex-shrink-0" />
-								<div>
-									<p className="font-semibold text-sm text-foreground">Garanzia di rimborso 15gg</p>
-								</div>
-							</div>
-							<div className="flex items-start gap-3 p-4 bg-white border border-border/50 rounded-xl hover:shadow-md transition-shadow">
 								<HeadphonesIcon className="h-5 w-5 text-brand-primary mt-0.5 flex-shrink-0" />
 								<div>
 									<p className="font-semibold text-sm text-foreground">Assistenza 24/7</p>
@@ -232,16 +293,31 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 							</div>
 						</div>
 
-						{/* Shipping Info */}
-						<div className="bg-green-50 border border-green-200 rounded-xl p-4">
-							<p className="text-green-700 font-medium">
-								Pronto da spedire - Arrivo previsto gio 2 ottobre
-							</p>
+						{/* Vantaggi */}
+						<div className="pt-6">
+							<h3 className="font-playfair text-xl font-bold text-foreground mb-4">Vantaggi</h3>
+							<ul className="space-y-3">
+								{(product.benefits || [
+									'Applicazione facile e veloce',
+									'Lunga durata',
+									'Aspetto naturale',
+									'Riutilizzabili',
+								]).map((benefit, index) => (
+									<li key={index} className="flex items-start gap-3">
+										<div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-brand-primary/10 flex items-center justify-center">
+											<Check className="h-3 w-3 text-brand-primary" />
+										</div>
+										<span className="text-muted-foreground text-sm leading-relaxed">{benefit}</span>
+									</li>
+								))}
+							</ul>
 						</div>
+
 					</div>
 				</div>
 			</div>
 		</section>
+		</>
 	)
 }
 

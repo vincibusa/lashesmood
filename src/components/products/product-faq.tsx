@@ -11,17 +11,57 @@ const ProductFAQ = () => {
 		{
 			question: "Cos'è LASHESMOOD?",
 			answer:
-				'Lashesmood è un sistema di Lash Extension semi-permanente che puoi applicare a casa da solə in meno di 2 minuti. Ogni paia di ciglia può avere una durata dai 5-10 giorni, la scelta è tua!',
+				'LASHESMOOD nasce come brand di ciglia magnetiche di alta qualità (e non solo), creato per esaltare lo sguardo in modo elegante, confortevole e veloce. Una nuova idea di bellezza: raffinata e senza compromessi.',
+		},
+		{
+			question: 'Qual è la differenza rispetto alle ciglia classiche?',
+			answer:
+				'Le ciglia classiche richiedono colla, applicazione precisa e tempi più lunghi. Le LASHESMOOD sono magnetiche, si applicano in pochi secondi, senza colla, e offrono comfort, riutilizzo ed eleganza in ogni momento.',
+		},
+		{
+			question: 'Sono facili da applicare?',
+			answer:
+				'Sì. Le LASHESMOOD sono progettate per essere semplici e intuitive. Come per ogni gesto di make-up, è richiesta solo un minimo di pratica: dopo poche applicazioni diventano rapide, naturali e senza sforzo.',
+		},
+		{
+			question: 'Sono riutilizzabili?',
+			answer:
+				"Si, sono riutilizzabili più volte per un lungo periodo. Con una corretta applicazione e una pulizia delicata che avviene semplicemente togliendo l'eccesso di mascara con un cotton-fioc dopo ogni utilizzo e riposte nel proprio pack mantengono forma ed eleganza a lungo nel tempo.",
+		},
+		{
+			question: 'Quanto tempo richiede l\'applicazione?',
+			answer:
+				"All'inizio possono essere necessari alcuni minuti. Con un pizzico di manualità, come per tutte le ciglia sintetiche, l'applicazione diventa via via sempre più rapida, fino a richiedere solo pochi istanti.",
+		},
+		{
+			question: 'Quanto durano durante la giornata?',
+			answer:
+				'Se applicate correttamente, le LASHESMOOD possono restare perfettamente in posizione per tutto il giorno, facendo attenzione a movimenti bruschi e rimuovendole prima di andare a dormire.',
+		},
+		{
+			question: 'Come si possono rimuovere?',
+			answer:
+				'Si rimuovono facilmente con le dita sfilandole delicatamente dall\'occhio.',
 		},
 		{
 			question: 'Possono rovinare le ciglia naturali?',
 			answer:
-				'Assolutamente no. LASHESMOOD permette di non intaccare minimamente la salute delle tue ciglia. Nessuna sensazione di pesantezza, ti sembrerà di non averle addosso.',
+				'No. Le LASHESMOOD non utilizzano colla e non esercitano trazione sulle ciglia naturali. Se applicate e rimosse correttamente, non interferiscono col ciglio naturale in nessun modo e garantiscono un utilizzo sicuro e delicato per chiunque le voglia indossare.',
 		},
 		{
-			question: 'LASHESMOOD sono Waterproof?',
+			question: 'Contengono sostanze tossiche?',
 			answer:
-				"Lashesmood sono resistenti all'acqua. Puoi fare la doccia, nuotare, fare sport acquatici mentre indossi Lashesmood. L'unica raccomandazione è attendere 24 ore prima di bagnarle dopo l'applicazione.",
+				'No. Le LASHESMOOD sono realizzate in fibre sintetiche cosmetiche, vegan e cruelty-free, prive di sostanze tossiche. I materiali sono selezionati per essere sicuri per il contatto con l\'area perioculare e conformi agli standard di utilizzo cosmetico.',
+		},
+		{
+			question: 'Sono resistenti all\'acqua?',
+			answer:
+				'Sì. Le LASHESMOOD presentano una resistenza all\'umidità e agli schizzi, ma non sono progettate per l\'immersione in acqua. Per preservarne adesione, forma e durata, si consiglia l\'applicazione a make-up completato.',
+		},
+		{
+			question: 'Come posso iniziare?',
+			answer:
+				'Semplicemente acquistando il tuo primo kit LASHESMOOD. Ogni prodotto è pensato per accompagnarti fin dal primo utilizzo, rendendo l\'esperienza intuitiva e immediata.',
 		},
 	]
 
