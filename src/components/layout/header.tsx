@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, User, ShoppingBag, Menu, LayoutGrid, Package, BookOpen, Mail, LogOut, ShoppingCart } from 'lucide-react';
+import { Search, User, ShoppingBag, Menu, LayoutGrid, Package, BookOpen, LogOut, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
@@ -47,7 +47,6 @@ const Header = () => {
 		{ label: 'Collezioni', href: '/#collections', icon: LayoutGrid },
 		{ label: 'Prodotti', href: '/prodotti', icon: Package },
 		{ label: 'Come funziona', href: '/come-funziona', icon: BookOpen },
-		{ label: 'Contatti', href: '/contatti', icon: Mail },
 	];
 
 	// Determine header background and shadow based on homepage, scroll state, and search state

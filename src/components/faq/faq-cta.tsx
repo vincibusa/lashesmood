@@ -76,7 +76,7 @@ const FAQCTA = () => {
 									size="lg"
 									className="bg-white text-brand-primary hover:bg-brand-secondary hover:text-white font-semibold px-8 py-4 shadow-xl hover:shadow-2xl transition-all duration-300"
 								>
-									<Link href="/contatti" className="flex items-center gap-2">
+									<Link href="/faq" className="flex items-center gap-2">
 										<Mail className="h-5 w-5" />
 										Contattaci
 										<motion.div
