@@ -42,50 +42,69 @@
 :root {
   --radius: 0.75rem;
 
+  /*
+   * Lashesmood – equivalenti esadecimali (per riferimento)
+   * ---------------------------------
+   * --background, --brand-cream   → #FEFEFE
+   * --card, --popover            → #FFFFFF
+   * --foreground, --brand-accent → #3D3D42
+   * --primary-foreground         → #FFFFFF
+   * --primary, --ring, --brand-primary        → #E07A8B
+   * --secondary, --accent, --brand-rose        → #F8DDE3
+   * --muted, --brand-light       → #FAFAFA
+   * --muted-foreground           → #848489
+   * --border                     → #EBEBEB
+   * --input                      → #FAFAFA
+   * --destructive                → #DC2626
+   * --brand-muted                → #F5F5F5
+   * Hover primary                → #D96A7C
+   * Hover secondary               → #F5D5DB
+   */
+
   /* Lashesmood Brand Colors - Minimal & Luminoso (Glossier-inspired) */
 
   /* Backgrounds - Pure white and ultra-light cream */
   --background: oklch(0.995 0.002 90); /* #FEFEFE - Near white */
-  --card: oklch(1 0 0); /* Pure white */
+  --card: oklch(1 0 0); /* #FFFFFF - Pure white */
   --popover: oklch(1 0 0);
 
   /* Foreground - Soft dark gray (not pure black) */
-  --foreground: oklch(0.25 0.01 270); /* #333333 - Soft dark */
+  --foreground: oklch(0.25 0.01 270); /* #3D3D42 - Soft dark */
   --card-foreground: oklch(0.25 0.01 270);
   --popover-foreground: oklch(0.25 0.01 270);
   --secondary-foreground: oklch(0.25 0.01 270);
   --accent-foreground: oklch(0.25 0.01 270);
-  --primary-foreground: oklch(1 0 0); /* White on pink */
+  --primary-foreground: oklch(1 0 0); /* #FFFFFF - White on pink */
 
   /* Primary - Softer pink (more subtle) */
-  --primary: oklch(0.75 0.10 340); /* Softer pink */
+  --primary: oklch(0.75 0.10 340); /* #E07A8B - Softer pink */
   --brand-primary: oklch(0.75 0.10 340);
 
   /* Secondary - Very light pink */
-  --secondary: oklch(0.95 0.03 340); /* Very light pink */
+  --secondary: oklch(0.95 0.03 340); /* #F8DDE3 - Very light pink */
   --brand-secondary: oklch(0.95 0.03 340);
 
   /* Accent - Same as secondary */
   --accent: oklch(0.95 0.03 340);
 
   /* Muted - Ultra light gray */
-  --muted: oklch(0.98 0.002 90); /* Very light gray */
-  --muted-foreground: oklch(0.55 0.01 270); /* Medium gray */
+  --muted: oklch(0.98 0.002 90); /* #FAFAFA - Very light gray */
+  --muted-foreground: oklch(0.55 0.01 270); /* #848489 - Medium gray */
 
   /* Borders and inputs */
-  --border: oklch(0.92 0.002 90); /* Subtle border */
-  --input: oklch(0.98 0.002 90); /* Light input */
-  --ring: oklch(0.75 0.10 340); /* Pink focus ring */
+  --border: oklch(0.92 0.002 90); /* #EBEBEB - Subtle border */
+  --input: oklch(0.98 0.002 90); /* #FAFAFA - Light input */
+  --ring: oklch(0.75 0.10 340); /* #E07A8B - Pink focus ring */
 
   /* Destructive - Keep red for errors */
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: oklch(0.577 0.245 27.325); /* #DC2626 */
 
   /* Custom Lashesmood variables */
-  --brand-accent: oklch(0.25 0.01 270); /* Soft dark for accents */
-  --brand-light: oklch(0.98 0.002 90); /* Ultra light */
-  --brand-muted: oklch(0.96 0.002 90); /* Muted */
-  --brand-rose: oklch(0.95 0.03 340); /* Light pink */
-  --brand-cream: oklch(0.995 0.002 90); /* Near white */
+  --brand-accent: oklch(0.25 0.01 270); /* #3D3D42 - Soft dark for accents */
+  --brand-light: oklch(0.98 0.002 90); /* #FAFAFA - Ultra light */
+  --brand-muted: oklch(0.96 0.002 90); /* #F5F5F5 - Muted */
+  --brand-rose: oklch(0.95 0.03 340); /* #F8DDE3 - Light pink */
+  --brand-cream: oklch(0.995 0.002 90); /* #FEFEFE - Near white */
 }
 
 @layer base {

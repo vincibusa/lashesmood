@@ -19,12 +19,23 @@ const HeroSection = () => {
 			<div className="relative w-full h-screen">
 				{/* Background Image with subtle overlay */}
 				<div className="absolute inset-0">
+					{/* Mobile: vertical 9:16 product shot */}
+					<Image
+						src="/9_16.jpg"
+						alt="Lashesmood - Ciglia semipermanenti"
+						fill
+						className="object-cover md:hidden"
+						priority
+						sizes="100vw"
+					/>
+					{/* Desktop: hero image */}
 					<Image
 						src="/hero.jpg"
 						alt="Lashesmood Hero - Ciglia magnetiche"
 						fill
-						className="object-cover"
+						className="object-cover hidden md:block"
 						priority
+						sizes="100vw"
 					/>
 					{/* Gradient overlay - more subtle for minimal look */}
 					<div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent md:bg-gradient-to-r md:from-black/40 md:to-transparent" />
